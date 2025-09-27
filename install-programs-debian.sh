@@ -2,6 +2,14 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
+# Versão: 2.0 - Corrigido para problemas de repositórios e chaves GPG
+
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.0"
+echo "======================================================"
+echo "📅 Data: $(date)"
+echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
+echo "🔧 Versão: 2.0 (Corrigido para repositórios e chaves GPG)"
+echo ""
 
 set -e
 
@@ -76,6 +84,8 @@ sudo rm -f /etc/apt/sources.list.d/vscode.list
 sudo rm -f /etc/apt/sources.list.d/google-chrome.list
 sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
 sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
+sudo rm -f /usr/share/keyrings/microsoft.gpg
+sudo rm -f /usr/share/keyrings/google.gpg
 echo "✓ Repositórios conflitantes removidos"
 
 # Adicionar repositório do VSCode
@@ -88,9 +98,15 @@ if [ ! -f "/etc/apt/trusted.gpg.d/microsoft.gpg" ]; then
         echo "✓ Repositório VSCode configurado"
     else
         echo "⚠️  gpg não encontrado, tentando método alternativo..."
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-        echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-        echo "✓ Repositório VSCode configurado (método alternativo)"
+        if command -v apt-key &> /dev/null; then
+            wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+            echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+            echo "✓ Repositório VSCode configurado (método alternativo)"
+        else
+            echo "⚠️  apt-key também não encontrado, configurando sem assinatura..."
+            echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+            echo "✓ Repositório VSCode configurado (sem assinatura)"
+        fi
     fi
 else
     echo "✓ Repositório VSCode já existe"
@@ -106,9 +122,15 @@ if [ ! -f "/etc/apt/trusted.gpg.d/google.gpg" ]; then
         echo "✓ Repositório Google Chrome configurado"
     else
         echo "⚠️  gpg não encontrado, tentando método alternativo..."
-        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-        echo "✓ Repositório Google Chrome configurado (método alternativo)"
+        if command -v apt-key &> /dev/null; then
+            wget -qO- https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+            echo "✓ Repositório Google Chrome configurado (método alternativo)"
+        else
+            echo "⚠️  apt-key também não encontrado, configurando sem assinatura..."
+            echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+            echo "✓ Repositório Google Chrome configurado (sem assinatura)"
+        fi
     fi
 else
     echo "✓ Repositório Google Chrome já existe"
