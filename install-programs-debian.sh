@@ -86,7 +86,15 @@ sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
 sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
 sudo rm -f /usr/share/keyrings/microsoft.gpg
 sudo rm -f /usr/share/keyrings/google.gpg
+sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
+sudo rm -f /etc/apt/sources.list.d/brave-browser-release.list
 echo "✓ Repositórios conflitantes removidos"
+
+# Limpar cache do apt para evitar conflitos
+echo "Limpando cache do apt..."
+sudo apt clean
+sudo apt autoclean
+echo "✓ Cache do apt limpo"
 
 # Adicionar repositório do VSCode
 echo "Configurando repositório do VSCode..."
@@ -137,7 +145,17 @@ else
 fi
 
 # Atualizar lista de pacotes
-sudo apt update
+echo "Atualizando lista de pacotes..."
+sudo apt update || {
+    echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
+    # Limpar repositórios problemáticos
+    sudo rm -f /etc/apt/sources.list.d/*.list
+    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
+    sudo rm -f /usr/share/keyrings/*.gpg
+    echo "✓ Repositórios problemáticos removidos"
+    echo "Tentando atualizar novamente..."
+    sudo apt update
+}
 
 # Instalar Flatpak
 echo "Instalando Flatpak..."
