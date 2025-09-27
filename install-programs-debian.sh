@@ -2,19 +2,20 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
-# Versão: 2.2 - Limpeza automática de repositórios integrada
+# Versão: 2.3 - Limpeza agressiva de repositórios integrada
 
-echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.2"
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.3"
 echo "======================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
-echo "🔧 Versão: 2.2 (Limpeza automática de repositórios integrada)"
+echo "🔧 Versão: 2.3 (Limpeza agressiva de repositórios integrada)"
 echo ""
 echo "🎯 INICIANDO VERSÃO AFF7.0.1"
 echo "============================="
 echo "✅ Versão correta identificada"
-echo "✅ Limpeza automática de repositórios integrada"
+echo "✅ Limpeza agressiva de repositórios integrada"
 echo "✅ Resolução automática de conflitos"
+echo "✅ Teste de atualização integrado"
 echo ""
 
 set -e
@@ -40,32 +41,48 @@ limpar_repositorios() {
     echo "🧹 Limpando repositórios conflitantes..."
     echo "========================================"
     
-    # Limpar todos os repositórios problemáticos
-    echo "Removendo repositórios conflitantes..."
+    # Limpar TODOS os repositórios problemáticos (mais agressivo)
+    echo "Removendo TODOS os repositórios conflitantes..."
     sudo rm -f /etc/apt/sources.list.d/vscode.list
     sudo rm -f /etc/apt/sources.list.d/google-chrome.list
     sudo rm -f /etc/apt/sources.list.d/brave-browser-release.list
     sudo rm -f /etc/apt/sources.list.d/spotify.list
     sudo rm -f /etc/apt/sources.list.d/microsoft.list
+    sudo rm -f /etc/apt/sources.list.d/*.list
     
-    # Limpar todas as chaves GPG conflitantes
-    echo "Removendo chaves GPG conflitantes..."
+    # Limpar TODAS as chaves GPG conflitantes (mais agressivo)
+    echo "Removendo TODAS as chaves GPG conflitantes..."
     sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/brave-browser-archive-keyring.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/spotify.gpg
+    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
     
-    # Limpar chaves do keyrings
-    echo "Removendo chaves do keyrings..."
+    # Limpar TODAS as chaves do keyrings (mais agressivo)
+    echo "Removendo TODAS as chaves do keyrings..."
     sudo rm -f /usr/share/keyrings/microsoft.gpg
     sudo rm -f /usr/share/keyrings/google.gpg
     sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
     sudo rm -f /usr/share/keyrings/spotify.gpg
+    sudo rm -f /usr/share/keyrings/*.gpg
     
     # Limpar cache do apt
     echo "Limpando cache do apt..."
     sudo apt clean
     sudo apt autoclean
+    
+    # Forçar atualização sem repositórios externos
+    echo "Testando atualização básica..."
+    sudo apt update --allow-releaseinfo-change || {
+        echo "⚠️  Ainda há conflitos, limpando mais agressivamente..."
+        sudo rm -f /etc/apt/sources.list.d/*.list
+        sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
+        sudo rm -f /usr/share/keyrings/*.gpg
+        sudo apt clean
+        sudo apt autoclean
+        echo "Tentando novamente..."
+        sudo apt update --allow-releaseinfo-change
+    }
     
     echo "✅ Limpeza de repositórios concluída!"
 }
