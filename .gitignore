@@ -1,0 +1,38 @@
+# Arquivos temporários de instalação
+*.rpm
+*.deb
+*.AppImage
+*.tar.gz
+*.zip
+
+# Arquivos de log
+*.log
+install.log
+
+# Arquivos de configuração local
+config.local
+.env
+
+# Arquivos de backup
+*.bak
+*.backup
+*~
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Diretórios temporários
+temp/
+tmp/
+cache/
+
+# Arquivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos de teste
+test-*
+debug-*
