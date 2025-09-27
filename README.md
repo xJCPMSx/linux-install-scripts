@@ -57,25 +57,29 @@ Este repositório contém scripts para instalação automática de programas ess
 ./install-programs-debian.sh
 ```
 
-### Teste de Repositórios (Opcional)
+### **Instalação Manual**
 ```bash
-# Teste a disponibilidade dos programas sem instalar
-./install-programs.sh --test
-```
+# Clonar o repositório
+git clone https://github.com/xJCPMSx/opensuse-install-script.git
+cd opensuse-install-script
 
-### Ajuda
-```bash
-# Mostrar opções disponíveis
-./install-programs.sh --help
+# Executar script para openSUSE
+./install-programs.sh
+
+# Ou executar script para Debian/Ubuntu
+./install-programs-debian.sh
 ```
 
 ## 📁 Estrutura dos Arquivos
 
 ```
-📦 Script pós instalação/
-├── 📄 install-programs.sh    # Script principal (tudo em um)
-├── 📄 setup-libfprint.sh     # Script original para libfprint
-└── 📄 README.md              # Este arquivo
+📦 opensuse-install-script/
+├── 📄 install-programs.sh           # Script para openSUSE
+├── 📄 install-programs-debian.sh    # Script para Debian/Ubuntu
+├── 📄 README.md                     # Documentação principal
+├── 📄 README-DEBIAN.md              # Documentação Debian/Ubuntu
+├── 📄 upload-to-github.sh          # Script de upload
+└── 📄 .gitignore                    # Configuração Git
 ```
 
 ## ✨ Características do Script
@@ -155,8 +159,8 @@ fprintd-enroll
 git config --global user.name 'Seu Nome'
 git config --global user.email 'seu.email@exemplo.com'
 
-# Configuração completa com GitHub (recomendado)
-/home/juca/Documentos/Gerenciar Git/configurar-github.sh
+# Para configuração completa com GitHub, consulte:
+# https://github.com/xJCPMSx/opensuse-install-script
 ```
 
 ## 🐛 Solução de Problemas
@@ -164,7 +168,7 @@ git config --global user.email 'seu.email@exemplo.com'
 ### Repositórios Problemáticos
 Se encontrar erros com repositórios:
 ```bash
-./clean-repos.sh
+# O script principal já inclui limpeza automática de repositórios
 ./install-programs.sh
 ```
 
@@ -179,18 +183,35 @@ git --version
 
 ## 📝 Requisitos
 
-- **Sistema:** openSUSE Tumbleweed
+### **🟢 openSUSE**
+- **Sistema:** openSUSE Tumbleweed ou Leap
+- **Permissões:** sudo (para instalação de pacotes)
+- **Conexão:** Internet para download de pacotes
+
+### **🟠 Debian/Ubuntu**
+- **Sistema:** Ubuntu 20.04+, Debian 11+, Linux Mint 20+
 - **Permissões:** sudo (para instalação de pacotes)
 - **Conexão:** Internet para download de pacotes
 
 ## 🤝 Contribuições
 
-Para adicionar novos programas ao script:
+Para adicionar novos programas aos scripts:
 
+### **🟢 openSUSE**
 1. Edite `install-programs.sh`
 2. Adicione a verificação de disponibilidade
 3. Inclua fallback para download direto se necessário
 4. Atualize a lista de programas no final do script
+
+### **🟠 Debian/Ubuntu**
+1. Edite `install-programs-debian.sh`
+2. Adicione a verificação de disponibilidade
+3. Inclua fallback para download direto se necessário
+4. Atualize a lista de programas no final do script
+
+### **📝 Documentação**
+1. Atualize `README.md` para mudanças gerais
+2. Atualize `README-DEBIAN.md` para mudanças específicas do Debian
 
 ## 📄 Licença
 
