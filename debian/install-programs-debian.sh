@@ -152,28 +152,14 @@ check_success "ferramentas adicionais"
 # Configurar repositórios adicionais
 echo "Configurando repositórios adicionais..."
 
-# Adicionar repositório do VSCode
-echo "Configurando repositório do VSCode..."
-if [ ! -f "/etc/apt/trusted.gpg.d/microsoft.gpg" ]; then
-    # Verificar se gpg está disponível
-    if command -v gpg &> /dev/null; then
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-        echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-        echo "✓ Repositório VSCode configurado"
-    else
-        echo "⚠️  gpg não encontrado, tentando método alternativo..."
-        if command -v apt-key &> /dev/null; then
-            wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-            echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-            echo "✓ Repositório VSCode configurado (método alternativo)"
-        else
-            echo "⚠️  apt-key também não encontrado, configurando sem assinatura..."
-            echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-            echo "✓ Repositório VSCode configurado (sem assinatura)"
-        fi
-    fi
+# VSCode - Instalar via Flatpak para evitar conflitos
+echo "Configurando VSCode via Flatpak..."
+if flatpak list | grep -q "com.visualstudio.code"; then
+    echo "✓ VSCode já está instalado via Flatpak"
 else
-    echo "✓ Repositório VSCode já existe"
+    echo "Instalando VSCode via Flatpak..."
+    flatpak install -y flathub com.visualstudio.code
+    check_success "VSCode (via Flatpak)"
 fi
 
 # Adicionar repositório do Google Chrome
@@ -202,16 +188,7 @@ fi
 
 # Atualizar lista de pacotes
 echo "Atualizando lista de pacotes..."
-sudo apt update || {
-    echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
-    # Limpar repositórios problemáticos
-    sudo rm -f /etc/apt/sources.list.d/*.list
-    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
-    sudo rm -f /usr/share/keyrings/*.gpg
-    echo "✓ Repositórios problemáticos removidos"
-    echo "Tentando atualizar novamente..."
-    sudo apt update
-}
+sudo apt update
 
 # Instalar Flatpak
 echo "Instalando Flatpak..."
@@ -368,8 +345,24 @@ fi
 
 # Java (OpenJDK)
 echo "Instalando Java (OpenJDK)..."
-sudo apt install -y openjdk-11-jdk openjdk-11-jre
-check_success "Java"
+# Tentar instalar OpenJDK 11 primeiro
+if sudo apt install -y openjdk-11-jdk openjdk-11-jre; then
+    echo "✓ Java OpenJDK 11 instalado"
+else
+    echo "⚠️  OpenJDK 11 não encontrado, tentando OpenJDK 17..."
+    if sudo apt install -y openjdk-17-jdk openjdk-17-jre; then
+        echo "✓ Java OpenJDK 17 instalado"
+    else
+        echo "⚠️  OpenJDK 17 não encontrado, tentando OpenJDK 21..."
+        if sudo apt install -y openjdk-21-jdk openjdk-21-jre; then
+            echo "✓ Java OpenJDK 21 instalado"
+        else
+            echo "⚠️  Nenhuma versão do OpenJDK encontrada, tentando instalação genérica..."
+            sudo apt install -y default-jdk default-jre
+            check_success "Java (default-jdk)"
+        fi
+    fi
+fi
 
 # Node.js
 echo "Instalando Node.js..."
