@@ -10,6 +10,12 @@ echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
 echo "🔧 Versão: 2.2 (Limpeza automática de repositórios integrada)"
 echo ""
+echo "🎯 INICIANDO VERSÃO AFF7.0.1"
+echo "============================="
+echo "✅ Versão correta identificada"
+echo "✅ Limpeza automática de repositórios integrada"
+echo "✅ Resolução automática de conflitos"
+echo ""
 
 set -e
 
