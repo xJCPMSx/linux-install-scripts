@@ -1,222 +1,95 @@
-# 🚀 Script de Instalação Automática - Linux
+# Scripts de Instalação Automática - Linux
 
-Este repositório contém scripts para instalação automática de programas essenciais em sistemas Linux, incluindo editores, navegadores, ferramentas de desenvolvimento e drivers.
+Scripts automatizados para instalação de programas essenciais em diferentes distribuições Linux.
 
-## 📦 **Versões Disponíveis**
+## 🐧 Distribuições Suportadas
 
-### 🟢 **openSUSE** (`install-programs.sh`)
-- **Sistemas:** openSUSE Tumbleweed, Leap
-- **Gerenciador:** zypper + rpm
-- **Repositórios:** zypper addrepo
+### openSUSE
+- **Script:** `opensuse/install-programs.sh`
+- **Documentação:** `docs/README.md`
+- **Sistemas:** openSUSE Leap, Tumbleweed
 
-### 🟠 **Debian/Ubuntu** (`install-programs-debian.sh`)
-- **Sistemas:** Ubuntu, Debian, Linux Mint, Pop!_OS, Elementary OS
-- **Gerenciador:** apt + dpkg
-- **Repositórios:** add-apt-repository
+### Debian/Ubuntu
+- **Script:** `debian/install-programs-debian.sh`
+- **Documentação:** `docs/README-DEBIAN.md`
+- **Sistemas:** Debian, Ubuntu, Linux Mint, Pop!_OS, Elementary OS, Zorin OS, Kali Linux
 
-## 📋 Programas Instalados
+## 📁 Estrutura do Projeto
 
-### 🎯 **Programas Principais**
-- **AnyDesk** - Acesso remoto
-- **Spotify** - Música (via Flatpak)
-- **VSCode** - Editor de código com extensões úteis
-- **Cursor** - Editor com IA integrada
-- **Google Chrome** - Navegador web
-- **Brave Browser** - Navegador alternativo
-- **Firefox** - Navegador alternativo
-- **Java (OpenJDK 11)** - Runtime Java
-- **Node.js e npm** - Runtime JavaScript
-- **Osu!** - Jogo de ritmo (via Flatpak ou AppImage)
-- **Ícones no Menu** - Criação automática de ícones para Cursor e Osu!
-
-### 🔧 **Ferramentas de Desenvolvimento**
-- **Compiladores:** gcc, gcc-c++, cmake, ninja, git, meson
-- **Dependências:** glib2-devel, libgusb-devel, gobject-introspection-devel, cairo-devel, libopenssl-devel, libgudev-1_0-devel, gtk-doc
-- **Ferramentas adicionais:** curl, wget, unzip, tar, vim, nano, htop, neofetch, tree, file, which, make, autoconf, automake, libtool, pkg-config
-
-### 🎨 **Drivers e Hardware**
-- **Driver Huion Tablet** - Suporte para tablets gráficos Huion
-- **Dependências libfprint** - Para leitores de impressão digital
-
-### ⚙️ **Configuração Automática**
-- **Git** - Verificação e configuração de credenciais
-- **SSH** - Verificação de chaves SSH para GitHub
-- **Java** - Configuração como alternativa padrão
+```
+├── opensuse/                    # Scripts para openSUSE
+│   └── install-programs.sh
+├── debian/                      # Scripts para Debian/Ubuntu
+│   └── install-programs-debian.sh
+├── scripts/                     # Scripts auxiliares
+│   └── upload-to-github.sh
+├── docs/                       # Documentação
+│   ├── README.md
+│   └── README-DEBIAN.md
+├── .gitignore
+└── README.md                    # Este arquivo
+```
 
 ## 🚀 Como Usar
 
-### **🟢 openSUSE**
+### Para openSUSE:
 ```bash
-# Execute o script para openSUSE
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
+chmod +x install-programs.sh
 ./install-programs.sh
 ```
 
-### **🟠 Debian/Ubuntu**
+### Para Debian/Ubuntu:
 ```bash
-# Execute o script para Debian/Ubuntu
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
+chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
-### **Instalação Manual**
-```bash
-# Clonar o repositório
-git clone https://github.com/xJCPMSx/opensuse-install-script.git
-cd opensuse-install-script
+## 📦 Programas Instalados
 
-# Executar script para openSUSE
-./install-programs.sh
+### openSUSE
+- AnyDesk, Spotify, VSCode, Chrome, Brave, Java, Node.js
+- Firefox, Cursor, Osu!
+- Compiladores e ferramentas de desenvolvimento
+- Driver da Huion Tablet
 
-# Ou executar script para Debian/Ubuntu
-./install-programs-debian.sh
-```
+### Debian/Ubuntu
+- AnyDesk, Spotify, VSCode, Chrome, Brave, Java, Node.js
+- Firefox, Cursor, Osu!
+- Compiladores e ferramentas de desenvolvimento
+- Driver da Huion Tablet
 
-## 📁 Estrutura dos Arquivos
+## 🔧 Funcionalidades
 
-```
-📦 opensuse-install-script/
-├── 📄 install-programs.sh           # Script para openSUSE
-├── 📄 install-programs-debian.sh    # Script para Debian/Ubuntu
-├── 📄 README.md                     # Documentação principal
-├── 📄 README-DEBIAN.md              # Documentação Debian/Ubuntu
-├── 📄 upload-to-github.sh          # Script de upload
-└── 📄 .gitignore                    # Configuração Git
-```
+- **Instalação automática** de programas essenciais
+- **Configuração de repositórios** necessários
+- **Instalação de dependências** de desenvolvimento
+- **Configuração do Git** com autenticação
+- **Criação de ícones** para aplicativos AppImage
+- **Limpeza automática** de conflitos de repositórios (Debian/Ubuntu)
 
-## ✨ Características do Script
+## 📋 Requisitos
 
-### 🔍 **Verificações Inteligentes**
-- Verifica se repositórios já existem antes de adicionar
-- Testa disponibilidade de programas nos repositórios
-- Fallback automático para download direto quando necessário
-- Limpeza automática de repositórios problemáticos
-
-### 🛡️ **Instalação Robusta**
-- Verificação de sucesso para cada instalação
-- Mensagens informativas sobre o status de cada operação
-- Opções de linha de comando para teste e ajuda
-- Tudo em um único script
-
-### 🎯 **Instalação Específica por Programa**
-
-#### **Spotify**
-- Instalação via **Flatpak** (mais confiável que repositórios RPM)
-- Configuração automática do repositório Flathub
-
-#### **Cursor**
-- Verificação nos repositórios primeiro
-- **Suporte a AppImage** - detecta se já está instalado como AppImage
-- **Detecção por diretório** - reconhece instalação via diretório `.cursor`
-- Download direto do site oficial se necessário
-- **AppImage:** `https://download.cursor.sh/linux/appImage/x64`
-- **RPM:** `https://download.cursor.sh/linux/rpm/x86_64`
-
-#### **Brave Browser**
-- **Instalação via Flatpak** (método preferido)
-- **Download direto** se Flatpak falhar
-- **URL:** `https://brave-browser-rpm-release.s3.brave.com/brave-browser-stable.rpm`
-
-#### **Firefox**
-- **Instalação via Flatpak** (método preferido)
-- **Instalação via zypper** se Flatpak falhar
-- **Pacote:** `MozillaFirefox`
-
-#### **AnyDesk**
-- Verificação de disponibilidade nos repositórios
-- Download direto se não encontrado
-
-#### **Driver Huion**
-- Verificação de disponibilidade
-- Instruções para instalação manual se necessário
-
-#### **Ícones no Menu do Sistema**
-- **Cursor:** Aparece em "Desenvolvimento" ou "Utilitários"
-- **Osu!:** Aparece em "Jogos"
-- **Firefox:** Aparece em "Rede" ou "Navegadores"
-- **Arquivos:** `~/.local/share/applications/` e `~/.local/share/icons/`
-- **Atualização:** Automática após execução do script
-
-## 🔧 Pós-Instalação
-
-### Configurações Recomendadas
-
-1. **Reinicie o sistema** para garantir que todos os drivers funcionem
-2. **Configure o Git:**
-   ```bash
-   git config --global user.name "Seu Nome"
-   git config --global user.email "seu.email@exemplo.com"
-   ```
-3. **Teste os programas instalados**
-
-### Teste do libfprint
-```bash
-# Para testar o leitor de impressão digital
-fprintd-enroll
-```
-
-### Configuração do Git
-```bash
-# Configuração básica do Git
-git config --global user.name 'Seu Nome'
-git config --global user.email 'seu.email@exemplo.com'
-
-# Para configuração completa com GitHub, consulte:
-# https://github.com/xJCPMSx/opensuse-install-script
-```
-
-## 🐛 Solução de Problemas
-
-### Repositórios Problemáticos
-Se encontrar erros com repositórios:
-```bash
-# O script principal já inclui limpeza automática de repositórios
-./install-programs.sh
-```
-
-### Verificação de Instalação
-```bash
-# Verificar versões instaladas
-java -version
-node --version
-npm --version
-git --version
-```
-
-## 📝 Requisitos
-
-### **🟢 openSUSE**
-- **Sistema:** openSUSE Tumbleweed ou Leap
-- **Permissões:** sudo (para instalação de pacotes)
-- **Conexão:** Internet para download de pacotes
-
-### **🟠 Debian/Ubuntu**
-- **Sistema:** Ubuntu 20.04+, Debian 11+, Linux Mint 20+
-- **Permissões:** sudo (para instalação de pacotes)
-- **Conexão:** Internet para download de pacotes
+- Sistema Linux suportado
+- Acesso de administrador (sudo)
+- Conexão com a internet
+- Git configurado (opcional)
 
 ## 🤝 Contribuições
 
-Para adicionar novos programas aos scripts:
-
-### **🟢 openSUSE**
-1. Edite `install-programs.sh`
-2. Adicione a verificação de disponibilidade
-3. Inclua fallback para download direto se necessário
-4. Atualize a lista de programas no final do script
-
-### **🟠 Debian/Ubuntu**
-1. Edite `install-programs-debian.sh`
-2. Adicione a verificação de disponibilidade
-3. Inclua fallback para download direto se necessário
-4. Atualize a lista de programas no final do script
-
-### **📝 Documentação**
-1. Atualize `README.md` para mudanças gerais
-2. Atualize `README-DEBIAN.md` para mudanças específicas do Debian
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas mudanças
+4. Push para a branch
+5. Abra um Pull Request
 
 ## 📄 Licença
 
-Este projeto é de uso livre. Sinta-se à vontade para modificar e distribuir conforme necessário.
+Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
----
+## 🔗 Links
 
-**Desenvolvido para facilitar a configuração inicial do openSUSE** 🐧✨
+- **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
+- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
+- **Releases:** https://github.com/xJCPMSx/linux-install-scripts/releases

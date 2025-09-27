@@ -3,7 +3,7 @@
 # Script para fazer upload do projeto para o GitHub
 # Execute este script após criar o repositório no GitHub
 
-echo "🚀 Upload para GitHub - Script de Instalação openSUSE"
+echo "🚀 Upload para GitHub - Scripts de Instalação Linux"
 echo "=================================================="
 echo ""
 
@@ -26,7 +26,7 @@ echo ""
 
 # Solicitar URL do repositório GitHub
 echo "📝 Digite a URL do seu repositório GitHub:"
-echo "   Exemplo: https://github.com/seu-usuario/opensuse-install-script.git"
+echo "   Exemplo: https://github.com/seu-usuario/linux-install-scripts.git"
 read -p "URL: " REPO_URL
 
 if [ -z "$REPO_URL" ]; then
