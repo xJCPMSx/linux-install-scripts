@@ -59,6 +59,13 @@ limpar_repositorios() {
     sudo rm -f /usr/share/keyrings/spotify.gpg
     sudo rm -f /usr/share/keyrings/*.gpg
     
+    # Limpar configurações específicas do Microsoft
+    echo "Removendo configurações específicas do Microsoft..."
+    sudo rm -f /etc/apt/sources.list.d/microsoft.list
+    sudo rm -f /etc/apt/sources.list.d/vscode.list
+    sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
+    sudo rm -f /usr/share/keyrings/microsoft.gpg
+    
     # Limpar cache do apt
     echo "Limpando cache do apt..."
     sudo apt clean
@@ -216,8 +223,24 @@ fi
 # Spotify via Flatpak
 echo "Instalando Spotify via Flatpak..."
 if ! flatpak list | grep -q "com.spotify.Client"; then
-    flatpak install -y flathub com.spotify.Client
-    check_success "Spotify"
+    # Limpar cache do Flatpak antes de instalar
+    echo "Limpando cache do Flatpak..."
+    flatpak uninstall --unused -y 2>/dev/null || true
+    flatpak repair 2>/dev/null || true
+    
+    # Tentar instalar Spotify
+    if flatpak install -y flathub com.spotify.Client; then
+        echo "✓ Spotify instalado via Flatpak"
+    else
+        echo "⚠️  Falha na instalação via Flatpak, tentando método alternativo..."
+        # Método alternativo: instalar via snap
+        if command -v snap &> /dev/null; then
+            sudo snap install spotify
+            check_success "Spotify (via snap)"
+        else
+            echo "⚠️  Snap não disponível, Spotify não instalado"
+        fi
+    fi
 else
     echo "✓ Spotify já está instalado"
 fi
