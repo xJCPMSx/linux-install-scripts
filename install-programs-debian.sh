@@ -47,7 +47,19 @@ check_success "compiladores"
 
 # Instalar dependências de desenvolvimento
 echo "Instalando dependências de desenvolvimento..."
-sudo apt install -y libglib2.0-dev libgusb-dev libgobject-introspection-dev libcairo2-dev libssl-dev libgudev-1.0-dev gtk-doc-tools
+# Instalar pacotes básicos primeiro
+sudo apt install -y libglib2.0-dev libcairo2-dev libssl-dev gtk-doc-tools
+
+# Tentar instalar pacotes específicos com fallbacks
+echo "   Instalando libgusb-dev..."
+sudo apt install -y libgusb-dev || echo "⚠️  libgusb-dev não encontrado, continuando..."
+
+echo "   Instalando libgirepository1.0-dev..."
+sudo apt install -y libgirepository1.0-dev || echo "⚠️  libgirepository1.0-dev não encontrado, continuando..."
+
+echo "   Instalando libgudev-1.0-dev..."
+sudo apt install -y libgudev-1.0-dev || sudo apt install -y libudev-dev || echo "⚠️  libgudev não encontrado, continuando..."
+
 check_success "dependências de desenvolvimento"
 
 # Instalar ferramentas adicionais úteis
