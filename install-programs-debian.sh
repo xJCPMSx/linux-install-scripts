@@ -2,13 +2,13 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
-# Versão: 2.0 - Corrigido para problemas de repositórios e chaves GPG
+# Versão: 2.2 - Limpeza automática de repositórios integrada
 
-echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.0"
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.2"
 echo "======================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
-echo "🔧 Versão: 2.0 (Corrigido para repositórios e chaves GPG)"
+echo "🔧 Versão: 2.2 (Limpeza automática de repositórios integrada)"
 echo ""
 
 set -e
@@ -78,23 +78,43 @@ check_success "ferramentas adicionais"
 # Configurar repositórios adicionais
 echo "Configurando repositórios adicionais..."
 
-# Limpar repositórios conflitantes existentes
-echo "Limpando repositórios conflitantes..."
-sudo rm -f /etc/apt/sources.list.d/vscode.list
-sudo rm -f /etc/apt/sources.list.d/google-chrome.list
-sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
-sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
-sudo rm -f /usr/share/keyrings/microsoft.gpg
-sudo rm -f /usr/share/keyrings/google.gpg
-sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
-sudo rm -f /etc/apt/sources.list.d/brave-browser-release.list
-echo "✓ Repositórios conflitantes removidos"
+# Função para limpar repositórios conflitantes
+limpar_repositorios() {
+    echo "🧹 Limpando repositórios conflitantes..."
+    echo "========================================"
+    
+    # Limpar todos os repositórios problemáticos
+    echo "Removendo repositórios conflitantes..."
+    sudo rm -f /etc/apt/sources.list.d/vscode.list
+    sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+    sudo rm -f /etc/apt/sources.list.d/brave-browser-release.list
+    sudo rm -f /etc/apt/sources.list.d/spotify.list
+    sudo rm -f /etc/apt/sources.list.d/microsoft.list
+    
+    # Limpar todas as chaves GPG conflitantes
+    echo "Removendo chaves GPG conflitantes..."
+    sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
+    sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
+    sudo rm -f /etc/apt/trusted.gpg.d/brave-browser-archive-keyring.gpg
+    sudo rm -f /etc/apt/trusted.gpg.d/spotify.gpg
+    
+    # Limpar chaves do keyrings
+    echo "Removendo chaves do keyrings..."
+    sudo rm -f /usr/share/keyrings/microsoft.gpg
+    sudo rm -f /usr/share/keyrings/google.gpg
+    sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    sudo rm -f /usr/share/keyrings/spotify.gpg
+    
+    # Limpar cache do apt
+    echo "Limpando cache do apt..."
+    sudo apt clean
+    sudo apt autoclean
+    
+    echo "✅ Limpeza de repositórios concluída!"
+}
 
-# Limpar cache do apt para evitar conflitos
-echo "Limpando cache do apt..."
-sudo apt clean
-sudo apt autoclean
-echo "✓ Cache do apt limpo"
+# Executar limpeza de repositórios
+limpar_repositorios
 
 # Adicionar repositório do VSCode
 echo "Configurando repositório do VSCode..."
