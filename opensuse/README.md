@@ -1,23 +1,7 @@
-# Scripts de Instalação Linux
+# Script de Instalação Automática - openSUSE
 
 ## 📋 Descrição
-Coleção de scripts automatizados para instalação de programas essenciais em diferentes distribuições Linux, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
-
-## 🐧 Distribuições Suportadas
-
-### **openSUSE**
-- **openSUSE Leap 15.3+**
-- **openSUSE Tumbleweed**
-- **SUSE Linux Enterprise**
-
-### **Debian/Ubuntu**
-- **Debian 11+** (Bullseye, Bookworm)
-- **Ubuntu 20.04+** (LTS e não-LTS)
-- **Linux Mint 20+**
-- **Pop!_OS 20.04+**
-- **Elementary OS 6+**
-- **Zorin OS 16+**
-- **Kali Linux Rolling**
+Script automatizado para instalação de programas essenciais no openSUSE, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
 
 ## 🎯 Programas Instalados
 
@@ -43,33 +27,32 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 
 ## 🚀 Como Usar
 
-### **openSUSE:**
+### **Instalação Rápida:**
 ```bash
-# Baixar e executar
+# Baixar o script
 wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/opensuse/install-programs.sh
+
+# Tornar executável
 chmod +x install-programs.sh
+
+# Executar
 ./install-programs.sh
 ```
 
-### **Debian/Ubuntu:**
+### **Instalação Manual:**
 ```bash
-# Baixar e executar
-wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/debian/install-programs-debian.sh
-chmod +x install-programs-debian.sh
-./install-programs-debian.sh
+# Clonar o repositório
+git clone https://github.com/xJCPMSx/opensuse-install-script.git
+cd opensuse-install-script/opensuse
+
+# Executar
+./install-programs.sh
 ```
 
-## 📁 Estrutura do Projeto
-```
-linux-install-scripts/
-├── opensuse/
-│   ├── install-programs.sh
-│   └── README.md
-├── debian/
-│   ├── install-programs-debian.sh
-│   └── README.md
-└── README.md
-```
+## 📋 Pré-requisitos
+- **Sistema:** openSUSE Leap 15.3+ ou Tumbleweed
+- **Permissões:** Acesso sudo
+- **Conexão:** Internet estável
 
 ## 🔧 Funcionalidades
 
@@ -81,9 +64,9 @@ linux-install-scripts/
 - ✅ Configurações básicas
 
 ### **Configurações Incluídas:**
-- ✅ Java com fallback inteligente
+- ✅ Java como alternativa padrão
 - ✅ Git com autenticação
-- ✅ Ícones para aplicativos
+- ✅ Ícones para Cursor e Osu!
 - ✅ Extensões do VSCode
 
 ## 🎮 Jogos Incluídos
@@ -118,20 +101,9 @@ linux-install-scripts/
 - **Extensões** do VSCode instaladas automaticamente
 
 ## 📊 Compatibilidade
-
-### **openSUSE:**
 - ✅ **openSUSE Leap 15.3+**
 - ✅ **openSUSE Tumbleweed**
 - ✅ **SUSE Linux Enterprise**
-
-### **Debian/Ubuntu:**
-- ✅ **Debian 11+** (Bullseye, Bookworm)
-- ✅ **Ubuntu 20.04+** (LTS e não-LTS)
-- ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
-- ✅ **Elementary OS 6+**
-- ✅ **Zorin OS 16+**
-- ✅ **Kali Linux Rolling**
 
 ## 🎯 Características
 - **Instalação automática** de todos os programas
@@ -141,18 +113,18 @@ linux-install-scripts/
 - **Interface amigável** com progresso visual
 
 ## 📝 Notas
-- Os scripts detectam automaticamente a distribuição
-- Instalam apenas programas que não estão presentes
-- Configuram automaticamente as alternativas do Java
-- Criam ícones personalizados para aplicativos
+- O script detecta automaticamente a versão do openSUSE
+- Instala apenas programas que não estão presentes
+- Configura automaticamente as alternativas do Java
+- Cria ícones personalizados para aplicativos
 
 ## 🔗 Links Úteis
 - **Repositório:** https://github.com/xJCPMSx/opensuse-install-script
 - **Issues:** https://github.com/xJCPMSx/opensuse-install-script/issues
-- **Documentação:** READMEs específicos em cada pasta
+- **Documentação:** Este README
 
 ## 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
 ---
-**🎉 Desenvolvido para facilitar a configuração de ambientes de desenvolvimento em diferentes distribuições Linux!**
+**🎉 Desenvolvido para facilitar a configuração de ambientes de desenvolvimento no openSUSE!**
