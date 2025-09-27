@@ -37,7 +37,7 @@ check_success "sistema"
 
 # Instalar dependências essenciais
 echo "Instalando dependências essenciais..."
-sudo apt install -y curl wget gnupg2 software-properties-common apt-transport-https ca-certificates lsb-release
+sudo apt install -y curl wget gnupg software-properties-common apt-transport-https ca-certificates lsb-release
 check_success "dependências essenciais"
 
 # Instalar compiladores e ferramentas de desenvolvimento
@@ -70,16 +70,48 @@ check_success "ferramentas adicionais"
 # Configurar repositórios adicionais
 echo "Configurando repositórios adicionais..."
 
+# Limpar repositórios conflitantes existentes
+echo "Limpando repositórios conflitantes..."
+sudo rm -f /etc/apt/sources.list.d/vscode.list
+sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
+echo "✓ Repositórios conflitantes removidos"
+
 # Adicionar repositório do VSCode
-if ! apt-key list | grep -q "Microsoft"; then
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-    echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+echo "Configurando repositório do VSCode..."
+if [ ! -f "/etc/apt/trusted.gpg.d/microsoft.gpg" ]; then
+    # Verificar se gpg está disponível
+    if command -v gpg &> /dev/null; then
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+        echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+        echo "✓ Repositório VSCode configurado"
+    else
+        echo "⚠️  gpg não encontrado, tentando método alternativo..."
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+        echo "✓ Repositório VSCode configurado (método alternativo)"
+    fi
+else
+    echo "✓ Repositório VSCode já existe"
 fi
 
 # Adicionar repositório do Google Chrome
-if ! apt-key list | grep -q "Google"; then
-    wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/google.gpg > /dev/null
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+echo "Configurando repositório do Google Chrome..."
+if [ ! -f "/etc/apt/trusted.gpg.d/google.gpg" ]; then
+    # Verificar se gpg está disponível
+    if command -v gpg &> /dev/null; then
+        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/google.gpg > /dev/null
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        echo "✓ Repositório Google Chrome configurado"
+    else
+        echo "⚠️  gpg não encontrado, tentando método alternativo..."
+        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        echo "✓ Repositório Google Chrome configurado (método alternativo)"
+    fi
+else
+    echo "✓ Repositório Google Chrome já existe"
 fi
 
 # Atualizar lista de pacotes
