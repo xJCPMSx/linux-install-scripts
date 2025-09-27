@@ -1,6 +1,18 @@
-# 🚀 Script de Instalação Automática - openSUSE
+# 🚀 Script de Instalação Automática - Linux
 
-Este repositório contém scripts para instalação automática de programas essenciais no openSUSE, incluindo editores, navegadores, ferramentas de desenvolvimento e drivers.
+Este repositório contém scripts para instalação automática de programas essenciais em sistemas Linux, incluindo editores, navegadores, ferramentas de desenvolvimento e drivers.
+
+## 📦 **Versões Disponíveis**
+
+### 🟢 **openSUSE** (`install-programs.sh`)
+- **Sistemas:** openSUSE Tumbleweed, Leap
+- **Gerenciador:** zypper + rpm
+- **Repositórios:** zypper addrepo
+
+### 🟠 **Debian/Ubuntu** (`install-programs-debian.sh`)
+- **Sistemas:** Ubuntu, Debian, Linux Mint, Pop!_OS, Elementary OS
+- **Gerenciador:** apt + dpkg
+- **Repositórios:** add-apt-repository
 
 ## 📋 Programas Instalados
 
@@ -33,10 +45,16 @@ Este repositório contém scripts para instalação automática de programas ess
 
 ## 🚀 Como Usar
 
-### Instalação Completa
+### **🟢 openSUSE**
 ```bash
-# Execute o script principal (instalação completa)
+# Execute o script para openSUSE
 ./install-programs.sh
+```
+
+### **🟠 Debian/Ubuntu**
+```bash
+# Execute o script para Debian/Ubuntu
+./install-programs-debian.sh
 ```
 
 ### Teste de Repositórios (Opcional)
