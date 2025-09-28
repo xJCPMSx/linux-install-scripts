@@ -4,10 +4,13 @@
 # Versão: 1.0-beta
 # Data: 2025-09-28
 
-# Suprimir warnings do GTK/Zenity
+# Suprimir warnings do GTK/Zenity e corrigir transparência
 export GTK_IM_MODULE=""
 export QT_IM_MODULE=""
 export XMODIFIERS=""
+export GTK_THEME="Adwaita"
+export GTK_CSD=0
+export GDK_BACKEND="x11"
 
 # Cores para output
 RED='\033[0;31m'
@@ -17,9 +20,21 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Função para executar zenity com supressão de warnings
+# Função para executar zenity com supressão de warnings e correção de transparência
 run_zenity() {
-    zenity "$@" 2>/dev/null
+    # Adicionar opções para corrigir transparência
+    local args=("$@")
+    
+    # Se for um diálogo de informação, adicionar opções de visibilidade
+    if [[ "${args[0]}" == "--info" ]]; then
+        zenity "${args[@]}" --no-wrap --width=500 --height=300 2>/dev/null
+    elif [[ "${args[0]}" == "--list" ]]; then
+        zenity "${args[@]}" --no-wrap --width=600 --height=400 2>/dev/null
+    elif [[ "${args[0]}" == "--question" ]]; then
+        zenity "${args[@]}" --no-wrap --width=500 --height=300 2>/dev/null
+    else
+        zenity "${args[@]}" 2>/dev/null
+    fi
 }
 
 # Função para mostrar menu principal
