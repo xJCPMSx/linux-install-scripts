@@ -130,8 +130,19 @@ check_success "ferramentas adicionais"
 
 # Instalar Flatpak primeiro
 echo "Instalando Flatpak..."
-sudo apt install -y flatpak
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+if ! command -v flatpak &> /dev/null; then
+    sudo apt install -y flatpak
+    echo "✓ Flatpak instalado"
+else
+    echo "✓ Flatpak já está instalado"
+fi
+
+if ! flatpak remote-list | grep -q "flathub"; then
+    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    echo "✓ Repositório Flathub adicionado"
+else
+    echo "✓ Repositório Flathub já configurado"
+fi
 check_success "Flatpak"
 
 # Configurar repositórios adicionais
