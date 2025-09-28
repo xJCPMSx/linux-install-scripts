@@ -174,13 +174,12 @@ linux-install-scripts/
 - ✅ **GNOME** - Suporte ao GNOME Shell
 - ✅ **XFCE** - Compatibilidade com XFCE
 - ✅ **Menu de aplicações** - Entradas no menu
-- ✅ **Atalhos desktop** - Ícones na área de trabalho
 
 ### **⚙️ Configuração:**
 - ✅ **Arquivo de configuração** - Personalização completa
+- ✅ **Seleção de programas** - Escolha quais programas instalar
 - ✅ **Configurações por usuário** - Adaptável às necessidades
 - ✅ **Níveis de log** - Controle de verbosidade
-- ✅ **Opções de backup** - Configuração de backup
 - ✅ **Interface** - Configurações da GUI
 
 ## 🎯 Características Principais
@@ -199,6 +198,13 @@ linux-install-scripts/
 - **Extensões VSCode** instaladas automaticamente
 - **Configuração personalizável** via config.conf
 
+### **⚙️ Controle de Instalação:**
+- **Arquivo `config/config.conf`** - Controle total sobre a instalação
+- **Seleção de programas** - Escolha exatamente o que instalar
+- **Configurações de repositórios** - Controle sobre fontes de software
+- **Configurações de backup** - Personalize o sistema de backup
+- **Configurações de log** - Controle a verbosidade e rotação
+
 ### **💾 Backup e Segurança:**
 - **Backup automático** antes da instalação
 - **Logs detalhados** para troubleshooting
@@ -207,7 +213,6 @@ linux-install-scripts/
 
 ### **🖥️ Interface e Integração:**
 - **GUI interativa** com Zenity
-- **Integração desktop** (KDE, GNOME, XFCE)
 - **Menu de aplicações** nativo
 - **Atalhos** na área de trabalho
 
@@ -224,14 +229,37 @@ linux-install-scripts/
 - **Múltiplas formas de instalação** (repositórios, Flatpak, AppImage)
 - **Backup automático** antes de grandes mudanças
 - **Logs detalhados** para troubleshooting
-- **Integração nativa** com desktops (KDE, GNOME, XFCE)
 
 ## 💡 Exemplos de Uso
+
+### **⚙️ Configuração Personalizada:**
+```bash
+# 1. Editar arquivo de configuração
+nano config/config.conf
+
+# 2. Personalizar programas a instalar
+[INSTALLATION]
+INSTALL_ANYDESK=true      # AnyDesk
+INSTALL_SPOTIFY=true       # Spotify
+INSTALL_VSCODE=true        # VSCode
+INSTALL_CURSOR=false       # Cursor (desabilitado)
+INSTALL_CHROME=true        # Google Chrome
+INSTALL_BRAVE=false        # Brave (desabilitado)
+INSTALL_FIREFOX=false      # Firefox (desabilitado)
+INSTALL_JAVA=true          # Java OpenJDK
+INSTALL_NODEJS=true        # Node.js
+INSTALL_OSU=true           # Osu!
+INSTALL_COMPILERS=true     # GCC, G++, Make, CMake
+INSTALL_DEVELOPMENT_DEPS=true # Dependências de desenvolvimento
+
+# 3. Executar instalação personalizada
+./auto-install.sh
+```
 
 ### **🖥️ Interface Gráfica:**
 ```bash
 # Executar GUI
-./gui/gui-install.sh
+./gui-install.sh
 
 # Menu principal com opções:
 # 1. 🚀 Instalação Automática
@@ -243,20 +271,6 @@ linux-install-scripts/
 # 7. ❓ Ajuda
 ```
 
-### **💾 Sistema de Backup:**
-```bash
-# Criar backup completo
-./backup/backup.sh create
-
-# Listar backups disponíveis
-./backup/backup.sh list
-
-# Restaurar backup específico
-./backup/backup.sh restore ~/.linux-install-scripts/backup/backup-20250928-103000
-
-# Ver estatísticas
-./backup/backup.sh stats
-```
 
 
 ### **🐳 Docker:**
@@ -272,15 +286,44 @@ cd docker
 docker-compose up -d
 ```
 
-### **🖥️ Integração Desktop:**
+### **⚙️ Configuração Personalizada:**
 ```bash
-# Integrar com desktop atual
-./desktop/desktop-integration.sh
+# Editar arquivo de configuração
+nano config/config.conf
 
-# Resultado:
-# - Entradas no menu de aplicações
-# - Atalhos na área de trabalho
-# - Integração com KDE/GNOME/XFCE
+# Exemplo de configuração:
+[INSTALLATION]
+# Escolha quais programas instalar (true/false)
+INSTALL_ANYDESK=true
+INSTALL_SPOTIFY=true
+INSTALL_VSCODE=true
+INSTALL_CURSOR=true
+INSTALL_CHROME=true
+INSTALL_BRAVE=false
+INSTALL_FIREFOX=false
+INSTALL_JAVA=true
+INSTALL_NODEJS=true
+INSTALL_OSU=true
+INSTALL_COMPILERS=true
+INSTALL_DEVELOPMENT_DEPS=true
+
+# Configurações de repositórios
+[REPOSITORIES]
+CLEAN_CONFLICTS=true
+ADD_VSCODE_REPO=true
+ADD_CHROME_REPO=true
+ADD_FLATPAK=true
+
+# Configurações de backup
+[BACKUP]
+BACKUP_BEFORE_INSTALL=true
+KEEP_BACKUPS=5
+
+# Configurações de log
+[LOGGING]
+LOG_LEVEL=INFO
+LOG_ROTATION=true
+LOG_MAX_SIZE=10MB
 ```
 
 ## 🔗 Links Úteis

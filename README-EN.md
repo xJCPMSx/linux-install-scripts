@@ -96,26 +96,7 @@ chmod +x uninstall.sh
 ./uninstall.sh
 ```
 
-### **💾 Backup System:**
-```bash
-# Create system backup
-./backup/backup.sh create
 
-# List available backups
-./backup/backup.sh list
-
-# Restore backup
-./backup/backup.sh restore /path/to/backup
-
-# View statistics
-./backup/backup.sh stats
-```
-
-### **🖥️ Desktop Integration:**
-```bash
-# Integrate with KDE, GNOME, XFCE
-./desktop/desktop-integration.sh
-```
 
 ### **🐳 Docker:**
 ```bash
@@ -139,15 +120,11 @@ linux-install-scripts/
 ├── 🔧 config/
 │   └── config.conf             # Customizable configurations
 ├── 🖥️ gui-install.sh           # Unified graphical interface
-├── 💾 backup/
-│   └── backup.sh               # Backup system
 ├── 🐳 docker/
 │   ├── Dockerfile              # Containerization
 │   └── docker-compose.yml      # Orchestration
 ├── 🔄 .github/workflows/
 │   └── ci.yml                  # CI/CD
-├── 🖥️ desktop/
-│   └── desktop-integration.sh  # Desktop integration
 ├── opensuse/
 │   ├── install-programs.sh
 │   ├── README.md
@@ -174,18 +151,6 @@ linux-install-scripts/
 - ✅ **Main menu** - Easy navigation between features
 - ✅ **Visual progress** - Progress bar during installation
 
-### **💾 Backup System:**
-- ✅ **Automatic backup** - Creates backup before installation
-- ✅ **Restoration** - Restores configurations from backup
-- ✅ **Automatic cleanup** - Removes old backups
-- ✅ **Statistics** - Shows backup information
-- ✅ **Configurations** - Backup of repositories and settings
-
-### **📝 Logging System:**
-- ✅ **Detailed logs** - Records all operations
-- ✅ **Log levels** - INFO, SUCCESS, WARNING, ERROR
-- ✅ **Automatic rotation** - Manages log size
-- ✅ **Statistics** - Execution summary
 - ✅ **Troubleshooting** - Facilitates problem resolution
 
 ### **🐳 Containerization:**
@@ -220,9 +185,7 @@ linux-install-scripts/
 - **Automatic distribution detection** and script execution
 - **Smart installation** - doesn't reinstall existing programs
 - **Multiple installation methods** (repositories, Flatpak, AppImage)
-- **Automatic backup** before major changes
 - **Detailed logging** for troubleshooting
-- **Native desktop integration** (KDE, GNOME, XFCE)
 
 ## 🔗 Useful Links
 - **Repository:** https://github.com/xJCPMSx/linux-install-scripts

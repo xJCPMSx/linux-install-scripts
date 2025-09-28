@@ -67,14 +67,6 @@ chmod +x install-programs.sh
 
 ### **💾 Sistema de Backup:**
 ```bash
-# Criar backup do sistema
-./backup/backup.sh create
-
-# Listar backups disponíveis
-./backup/backup.sh list
-
-# Restaurar backup
-./backup/backup.sh restore /caminho/do/backup
 ```
 
 ### **🖥️ Interface Gráfica:**
