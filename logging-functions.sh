@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Sistema de Logs Detalhados
+# Sistema de Logging Unificado para Linux Install Scripts
 # Versão: 1.0-beta
 # Data: 2025-09-28
 
@@ -9,7 +9,6 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
@@ -70,40 +69,36 @@ log_error() {
 log_debug() {
     local message="$1"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    if [ "$DEBUG" = "true" ]; then
-        echo -e "${PURPLE}[DEBUG]${NC} $message"
-        echo "[$timestamp] [DEBUG] $message" >> "$LOG_FILE"
-    fi
+    echo -e "${CYAN}[DEBUG]${NC} $message"
+    echo "[$timestamp] [DEBUG] $message" >> "$LOG_FILE"
 }
 
-# Função para log de comando
-log_command() {
-    local command="$1"
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] [COMMAND] Executando: $command" >> "$LOG_FILE"
-    
-    # Executar comando e capturar output
-    local output
-    local exit_code
-    output=$(eval "$command" 2>&1)
-    exit_code=$?
-    
-    echo "[$timestamp] [COMMAND] Exit code: $exit_code" >> "$LOG_FILE"
-    echo "[$timestamp] [COMMAND] Output: $output" >> "$LOG_FILE"
-    
-    return $exit_code
+# Função para verificar se o comando foi executado com sucesso (com logging)
+check_success() {
+    local program="$1"
+    if [ $? -eq 0 ]; then
+        log_success "$program instalado com sucesso"
+    else
+        log_error "Erro ao instalar $program"
+        log_warning "Continuando com os próximos programas..."
+    fi
 }
 
 # Função para rotação de logs
 rotate_logs() {
+    # Verificar tamanho do log atual
     if [ -f "$LOG_FILE" ] && [ $(stat -f%z "$LOG_FILE" 2>/dev/null || stat -c%s "$LOG_FILE" 2>/dev/null) -gt $MAX_LOG_SIZE ]; then
-        log_info "Log file too large, rotating..."
+        log_info "Log atingiu tamanho máximo. Rotacionando..."
         mv "$LOG_FILE" "$LOG_FILE.old"
         touch "$LOG_FILE"
     fi
     
-    # Manter apenas os últimos N arquivos de log
-    ls -t "$LOG_DIR"/install-*.log | tail -n +$((MAX_LOG_FILES + 1)) | xargs -r rm -f
+    # Limpar logs antigos
+    local log_count=$(ls -1 "$LOG_DIR"/install-*.log* 2>/dev/null | wc -l)
+    if [ "$log_count" -gt "$MAX_LOG_FILES" ]; then
+        log_info "Removendo logs antigos..."
+        ls -1t "$LOG_DIR"/install-*.log* | tail -n +$((MAX_LOG_FILES + 1)) | xargs rm -f
+    fi
 }
 
 # Função para finalizar o sistema de logs
@@ -111,35 +106,29 @@ finish_logger() {
     local exit_code="$1"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
-    if [ "$exit_code" = "0" ]; then
-        echo "[$timestamp] [INFO] Instalação concluída com sucesso" >> "$LOG_FILE"
-        log_success "Sistema de logs finalizado - Log salvo em: $LOG_FILE"
+    if [ "$exit_code" -eq 0 ]; then
+        log_success "Script finalizado com sucesso!"
     else
-        echo "[$timestamp] [ERROR] Instalação falhou com código: $exit_code" >> "$LOG_FILE"
-        log_error "Sistema de logs finalizado - Log salvo em: $LOG_FILE"
+        log_error "Script finalizado com erros (código: $exit_code)"
     fi
     
     echo "==========================================" >> "$LOG_FILE"
-    echo "Fim do log - $(date)" >> "$LOG_FILE"
+    echo "Log finalizado em: $timestamp" >> "$LOG_FILE"
     echo "==========================================" >> "$LOG_FILE"
+    
+    # Rotacionar logs se necessário
+    rotate_logs
 }
 
-# Função para mostrar estatísticas do log
+# Função para mostrar estatísticas de logs
 show_log_stats() {
-    if [ -f "$LOG_FILE" ]; then
-        echo -e "${CYAN}📊 Estatísticas do Log:${NC}"
-        echo "Arquivo: $LOG_FILE"
-        echo "Tamanho: $(du -h "$LOG_FILE" | cut -f1)"
-        echo "Linhas: $(wc -l < "$LOG_FILE")"
-        echo ""
-        echo -e "${CYAN}📈 Resumo:${NC}"
-        echo "Sucessos: $(grep -c "\[SUCCESS\]" "$LOG_FILE")"
-        echo "Avisos: $(grep -c "\[WARNING\]" "$LOG_FILE")"
-        echo "Erros: $(grep -c "\[ERROR\]" "$LOG_FILE")"
-        echo "Comandos: $(grep -c "\[COMMAND\]" "$LOG_FILE")"
-    fi
+    echo -e "${CYAN}📊 Estatísticas de Logs:${NC}"
+    echo "=========================================="
+    echo "📁 Diretório: $LOG_DIR"
+    echo "📄 Log atual: $LOG_FILE"
+    echo "📏 Tamanho: $(du -h "$LOG_FILE" 2>/dev/null | cut -f1 || echo "N/A")"
+    echo "📊 Total de logs: $(ls -1 "$LOG_DIR"/install-*.log* 2>/dev/null | wc -l)"
+    echo "🗂️ Logs disponíveis:"
+    ls -lh "$LOG_DIR"/install-*.log* 2>/dev/null | awk '{print "  " $9 " (" $5 ")"}' || echo "  Nenhum log encontrado"
+    echo "=========================================="
 }
-
-# Exportar funções para uso em outros scripts
-export -f log_info log_success log_warning log_error log_debug log_command
-export -f init_logger finish_logger show_log_stats rotate_logs
