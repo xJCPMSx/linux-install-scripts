@@ -30,6 +30,7 @@ detect_distribution() {
     echo -e "${YELLOW}🔍 Detectando distribuição Linux...${NC}"
     
     if [ -f /etc/os-release ]; then
+        # shellcheck source=/dev/null
         . /etc/os-release
         DISTRO=$ID
         VERSION=$VERSION_ID
