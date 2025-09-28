@@ -4,6 +4,11 @@
 # Versão: 1.0-beta
 # Data: 2025-09-28
 
+# Suprimir warnings do GTK/Zenity
+export GTK_IM_MODULE=""
+export QT_IM_MODULE=""
+export XMODIFIERS=""
+
 # Verificar se zenity está disponível
 if ! command -v zenity &> /dev/null; then
     echo "❌ Zenity não encontrado. Instalando..."
@@ -25,9 +30,15 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
+# Função para executar zenity com supressão de warnings
+run_zenity() {
+    # Suprimir warnings do GTK
+    zenity "$@" 2>/dev/null
+}
+
 # Função para mostrar tela de boas-vindas
 show_welcome() {
-    zenity --info \
+    run_zenity --info \
         --title="Linux Install Scripts" \
         --text="<b>🚀 Linux Install Scripts v1.0-beta</b>\n\nBem-vindo ao instalador automático de programas para Linux!\n\nEste assistente irá guiá-lo através da instalação de programas essenciais para desenvolvimento e uso diário." \
         --width=500 \
