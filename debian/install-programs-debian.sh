@@ -137,7 +137,7 @@ else
     echo "✓ Flatpak já está instalado"
 fi
 
-if ! flatpak remote-list | grep -q "flathub"; then
+if ! sudo flatpak remote-list | grep -q "flathub"; then
     sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     echo "✓ Repositório Flathub adicionado"
 else
@@ -150,11 +150,11 @@ echo "Configurando repositórios adicionais..."
 
 # VSCode - Instalar via Flatpak para evitar conflitos
 echo "Configurando VSCode via Flatpak..."
-if flatpak list | grep -q "com.visualstudio.code"; then
+if sudo flatpak list | grep -q "com.visualstudio.code"; then
     echo "✓ VSCode já está instalado via Flatpak"
 else
     echo "Instalando VSCode via Flatpak..."
-    flatpak install -y flathub com.visualstudio.code
+    sudo flatpak install -y flathub com.visualstudio.code
     check_success "VSCode (via Flatpak)"
 fi
 
@@ -212,8 +212,8 @@ fi
 
 # Spotify via Flatpak
 echo "Instalando Spotify via Flatpak..."
-if ! flatpak list | grep -q "com.spotify.Client"; then
-    flatpak install -y flathub com.spotify.Client
+if ! sudo flatpak list | grep -q "com.spotify.Client"; then
+    sudo flatpak install -y flathub com.spotify.Client
     check_success "Spotify"
 else
     echo "✓ Spotify já está instalado"
@@ -287,7 +287,7 @@ if ! command -v brave &> /dev/null && ! command -v brave-browser &> /dev/null; t
     echo "⚠️  Brave Browser não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
     
-    if flatpak install -y flathub com.brave.Browser; then
+    if sudo flatpak install -y flathub com.brave.Browser; then
         echo "✓ Brave Browser instalado via Flatpak"
     else
         echo "   Flatpak falhou, tentando download direto..."
@@ -346,11 +346,11 @@ fi
 # Osu! (Jogo de ritmo)
 echo "Instalando Osu!..."
 USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
-if ! flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Applications/osu.AppImage" ]; then
+if ! sudo flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Applications/osu.AppImage" ]; then
     echo "⚠️  Osu! não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
     
-    if flatpak install -y flathub com.github.ppy.osu; then
+    if sudo flatpak install -y flathub com.github.ppy.osu; then
         echo "✓ Osu! instalado via Flatpak"
     else
         echo "   Flatpak falhou, tentando download direto..."
