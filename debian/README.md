@@ -38,7 +38,23 @@ Script automatizado para instalação de programas essenciais em sistemas basead
 
 ## 🚀 Como Usar
 
-### **Instalação Rápida:**
+### **🎯 Instalação Automática (Recomendado):**
+```bash
+# Detecção automática da distribuição
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
+chmod +x auto-install.sh
+./auto-install.sh
+```
+
+### **🖥️ Interface Gráfica:**
+```bash
+# Interface gráfica interativa
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
+chmod +x gui/gui-install.sh
+./gui/gui-install.sh
+```
+
+### **📋 Instalação Manual:**
 ```bash
 # Baixar o script
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
@@ -50,14 +66,22 @@ chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
-### **Instalação Manual:**
+### **💾 Sistema de Backup:**
 ```bash
-# Clonar o repositório
-git clone https://github.com/xJCPMSx/linux-install-scripts.git
-cd linux-install-scripts/debian
+# Criar backup do sistema
+./backup/backup.sh create
 
-# Executar
-./install-programs-debian.sh
+# Listar backups disponíveis
+./backup/backup.sh list
+
+# Restaurar backup
+./backup/backup.sh restore /caminho/do/backup
+```
+
+### **🖥️ Integração Desktop:**
+```bash
+# Integrar com KDE, GNOME, XFCE
+./desktop/desktop-integration.sh
 ```
 
 ## 📋 Pré-requisitos

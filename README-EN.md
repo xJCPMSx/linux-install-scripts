@@ -54,7 +54,25 @@ Collection of automated scripts for installing essential programs on different L
 
 ## 🚀 How to Use
 
-### **openSUSE:**
+### **🎯 Automatic Installation (Recommended):**
+```bash
+# Automatic distribution detection
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
+chmod +x auto-install.sh
+./auto-install.sh
+```
+
+### **🖥️ Graphical Interface (GUI):**
+```bash
+# Interactive graphical interface
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
+chmod +x gui/gui-install.sh
+./gui/gui-install.sh
+```
+
+### **📋 Manual Installation by Distribution:**
+
+#### **openSUSE:**
 ```bash
 # Download and run
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
@@ -62,7 +80,7 @@ chmod +x install-programs.sh
 ./install-programs.sh
 ```
 
-### **Debian/Ubuntu:**
+#### **Debian/Ubuntu:**
 ```bash
 # Download and run
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
@@ -70,33 +88,136 @@ chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
+### **🗑️ Uninstallation:**
+```bash
+# Remove all installed programs
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/uninstall.sh
+chmod +x uninstall.sh
+./uninstall.sh
+```
+
+### **💾 Backup System:**
+```bash
+# Create system backup
+./backup/backup.sh create
+
+# List available backups
+./backup/backup.sh list
+
+# Restore backup
+./backup/backup.sh restore /path/to/backup
+
+# View statistics
+./backup/backup.sh stats
+```
+
+### **🖥️ Desktop Integration:**
+```bash
+# Integrate with KDE, GNOME, XFCE
+./desktop/desktop-integration.sh
+```
+
+### **🐳 Docker:**
+```bash
+# Build Docker image
+docker build -f docker/Dockerfile -t linux-install-scripts .
+
+# Run with Docker Compose
+cd docker
+docker-compose up -d
+```
+
 ## 📁 Project Structure
 ```
 linux-install-scripts/
+├── 🎯 auto-install.sh          # Automatic detection
+├── 🗑️ uninstall.sh             # Uninstallation script
+├── 📄 LICENSE                   # MIT License
+├── 📋 CHANGELOG.md             # Version history
+├── 📖 README.md                # Documentation (Portuguese)
+├── 📖 README-EN.md             # Documentation (English)
+├── 🔧 config/
+│   └── config.conf             # Customizable configurations
+├── 🖥️ gui/
+│   └── gui-install.sh          # Graphical interface
+├── 💾 backup/
+│   └── backup.sh               # Backup system
+├── 📝 logs/
+│   └── logger.sh               # Logging system
+├── 🐳 docker/
+│   ├── Dockerfile              # Containerization
+│   └── docker-compose.yml      # Orchestration
+├── 🔄 .github/workflows/
+│   └── ci.yml                  # CI/CD
+├── 🖥️ desktop/
+│   └── desktop-integration.sh  # Desktop integration
 ├── opensuse/
 │   ├── install-programs.sh
-│   └── README.md
-├── debian/
-│   ├── install-programs-debian.sh
-│   └── README.md
-├── README.md
-└── README-EN.md
+│   ├── README.md
+│   └── README-EN.md
+└── debian/
+    ├── install-programs-debian.sh
+    ├── README.md
+    └── README-EN.md
 ```
 
 ## 🔧 Features
 
-### **Automatic Installation:**
-- ✅ Required repositories
-- ✅ GPG keys
-- ✅ System dependencies
-- ✅ Main programs
-- ✅ Basic configurations
+### **🎯 Basic Features:**
+- ✅ **Automatic detection** - Identifies distribution and runs appropriate script
+- ✅ **Smart installation** - Doesn't reinstall existing programs
+- ✅ **Multi-distribution support** - openSUSE, Debian, Ubuntu and derivatives
+- ✅ **Robust checks** - Detects installations in different ways
+- ✅ **Intelligent fallback** - Multiple installation options
 
-### **Included Configurations:**
-- ✅ Java with intelligent fallback
-- ✅ Git with authentication
-- ✅ Icons for applications
-- ✅ VSCode extensions
+### **🖥️ Graphical Interface:**
+- ✅ **Interactive GUI** - User-friendly interface with Zenity
+- ✅ **Program selection** - Choose which programs to install
+- ✅ **Advanced settings** - Customizable options
+- ✅ **Main menu** - Easy navigation between features
+- ✅ **Visual progress** - Progress bar during installation
+
+### **💾 Backup System:**
+- ✅ **Automatic backup** - Creates backup before installation
+- ✅ **Restoration** - Restores configurations from backup
+- ✅ **Automatic cleanup** - Removes old backups
+- ✅ **Statistics** - Shows backup information
+- ✅ **Configurations** - Backup of repositories and settings
+
+### **📝 Logging System:**
+- ✅ **Detailed logs** - Records all operations
+- ✅ **Log levels** - INFO, SUCCESS, WARNING, ERROR
+- ✅ **Automatic rotation** - Manages log size
+- ✅ **Statistics** - Execution summary
+- ✅ **Troubleshooting** - Facilitates problem resolution
+
+### **🐳 Containerization:**
+- ✅ **Docker** - Complete containerization
+- ✅ **Docker Compose** - Service orchestration
+- ✅ **Multiple environments** - Development, test, production
+- ✅ **Exposed ports** - For web development
+- ✅ **Isolation** - Controlled environment
+
+### **🔄 CI/CD:**
+- ✅ **GitHub Actions** - Automatic testing
+- ✅ **Automatic build** - Image construction
+- ✅ **Automatic deploy** - Production deployment
+- ✅ **Code quality** - Analysis and validation
+- ✅ **Security** - Vulnerability checks
+
+### **🖥️ Desktop Integration:**
+- ✅ **KDE** - Complete KDE integration
+- ✅ **GNOME** - GNOME Shell support
+- ✅ **XFCE** - XFCE compatibility
+- ✅ **Application menu** - Menu entries
+- ✅ **Desktop shortcuts** - Desktop icons
+
+### **⚙️ Configuration:**
+- ✅ **Configuration file** - Complete customization
+- ✅ **User settings** - Adaptable to needs
+- ✅ **Log levels** - Verbosity control
+- ✅ **Backup options** - Backup configuration
+- ✅ **Interface** - GUI settings
 
 ## 🔧 Automatic Configurations
 - **Java** configured as default alternative

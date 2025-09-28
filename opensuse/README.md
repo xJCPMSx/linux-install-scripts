@@ -37,7 +37,23 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 
 ## 🚀 Como Usar
 
-### **Instalação Rápida:**
+### **🎯 Instalação Automática (Recomendado):**
+```bash
+# Detecção automática da distribuição
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
+chmod +x auto-install.sh
+./auto-install.sh
+```
+
+### **🖥️ Interface Gráfica:**
+```bash
+# Interface gráfica interativa
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
+chmod +x gui/gui-install.sh
+./gui/gui-install.sh
+```
+
+### **📋 Instalação Manual:**
 ```bash
 # Baixar o script
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
@@ -49,14 +65,22 @@ chmod +x install-programs.sh
 ./install-programs.sh
 ```
 
-### **Instalação Manual:**
+### **💾 Sistema de Backup:**
 ```bash
-# Clonar o repositório
-git clone https://github.com/xJCPMSx/linux-install-scripts.git
-cd linux-install-scripts/opensuse
+# Criar backup do sistema
+./backup/backup.sh create
 
-# Executar
-./install-programs.sh
+# Listar backups disponíveis
+./backup/backup.sh list
+
+# Restaurar backup
+./backup/backup.sh restore /caminho/do/backup
+```
+
+### **🖥️ Integração Desktop:**
+```bash
+# Integrar com KDE, GNOME, XFCE
+./desktop/desktop-integration.sh
 ```
 
 ## 📋 Pré-requisitos
