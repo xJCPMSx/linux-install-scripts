@@ -99,26 +99,6 @@ chmod +x uninstall.sh
 ./uninstall.sh
 ```
 
-### **💾 Sistema de Backup:**
-```bash
-# Criar backup do sistema
-./backup/backup.sh create
-
-# Listar backups disponíveis
-./backup/backup.sh list
-
-# Restaurar backup
-./backup/backup.sh restore /caminho/do/backup
-
-# Ver estatísticas
-./backup/backup.sh stats
-```
-
-### **🖥️ Integração com Desktop:**
-```bash
-# Integrar com KDE, GNOME, XFCE
-./desktop/desktop-integration.sh
-```
 
 ### **🐳 Docker:**
 ```bash
@@ -142,15 +122,11 @@ linux-install-scripts/
 ├── 📖 README-EN.md             # Documentação (english)
 ├── 🔧 config/
 │   └── config.conf             # Configurações personalizáveis
-├── 💾 backup/
-│   └── backup.sh               # Sistema de backup
 ├── 🐳 docker/
 │   ├── Dockerfile              # Containerização
 │   └── docker-compose.yml      # Orquestração
 ├── 🔄 .github/workflows/
 │   └── ci.yml                  # CI/CD
-├── 🖥️ desktop/
-│   └── desktop-integration.sh  # Integração desktop
 ├── opensuse/
 │   ├── install-programs.sh
 │   ├── README.md
@@ -177,18 +153,6 @@ linux-install-scripts/
 - ✅ **Menu principal** - Navegação fácil entre funcionalidades
 - ✅ **Progresso visual** - Barra de progresso durante instalação
 
-### **💾 Sistema de Backup:**
-- ✅ **Backup automático** - Cria backup antes da instalação
-- ✅ **Restauração** - Restaura configurações do backup
-- ✅ **Limpeza automática** - Remove backups antigos
-- ✅ **Estatísticas** - Mostra informações dos backups
-- ✅ **Configurações** - Backup de repositórios e configurações
-
-### **📝 Sistema de Logs:**
-- ✅ **Logs detalhados** - Registra todas as operações
-- ✅ **Níveis de log** - INFO, SUCCESS, WARNING, ERROR
-- ✅ **Rotação automática** - Gerencia tamanho dos logs
-- ✅ **Estatísticas** - Resumo de execuções
 - ✅ **Troubleshooting** - Facilita resolução de problemas
 
 ### **🐳 Containerização:**
