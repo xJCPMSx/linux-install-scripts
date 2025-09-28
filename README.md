@@ -80,17 +80,7 @@ chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
-### **🚀 Funcionalidades Avançadas:**
-
-#### **🖥️ Interface Gráfica:**
-```bash
-# Interface gráfica para seleção de programas
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
-chmod +x gui-install.sh
-./gui-install.sh
-```
-
-#### **🗑️ Desinstalação:**
+### **🗑️ Desinstalação:**
 ```bash
 # Remover todos os programas instalados
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/uninstall.sh
@@ -98,47 +88,15 @@ chmod +x uninstall.sh
 ./uninstall.sh
 ```
 
-#### **💾 Backup:**
-```bash
-# Criar backup das configurações
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/backup.sh
-chmod +x backup.sh
-./backup.sh
-```
-
-#### **🐳 Docker:**
-```bash
-# Construir e executar container
-docker build -t linux-install-scripts .
-docker run -it linux-install-scripts
-
-# Ou usar docker-compose
-docker-compose up --build
-```
-
-#### **⚙️ Configuração:**
-```bash
-# Personalizar instalação
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/config.conf
-# Editar config.conf conforme necessário
-```
-
 ## 📁 Estrutura do Projeto
 ```
 linux-install-scripts/
 ├── auto-install.sh          # 🎯 Detecção automática
 ├── uninstall.sh             # 🗑️  Script de desinstalação
-├── backup.sh                # 💾 Sistema de backup
-├── gui-install.sh           # 🖥️  Interface gráfica
-├── logger.sh                # 📝 Sistema de logs
-├── config.conf              # ⚙️  Arquivo de configuração
-├── Dockerfile               # 🐳 Containerização
-├── docker-compose.yml       # 🐳 Orquestração
 ├── LICENSE                   # 📄 Licença MIT
 ├── CHANGELOG.md             # 📋 Histórico de versões
 ├── README.md                # 📖 Documentação (português)
 ├── README-EN.md             # 📖 Documentation (english)
-├── .github/workflows/ci.yml # 🔄 CI/CD
 ├── opensuse/
 │   ├── install-programs.sh
 │   ├── README.md
@@ -176,15 +134,9 @@ linux-install-scripts/
 - ✅ **LICENSE** - Licença MIT
 - ✅ **Badges informativos** - Status e compatibilidade
 
-### **🚀 Funcionalidades Avançadas:**
+### **🚀 Funcionalidades Especiais:**
 - ✅ **Script de desinstalação** - Remoção completa de programas
-- ✅ **Sistema de backup** - Backup automático de configurações
-- ✅ **Interface gráfica** - GUI para seleção de programas
-- ✅ **Arquivo de configuração** - Personalização da instalação
-- ✅ **Sistema de logs** - Logs detalhados para troubleshooting
-- ✅ **Containerização** - Docker e docker-compose
-- ✅ **CI/CD** - Testes automáticos com GitHub Actions
-- ✅ **Integração com desktop** - KDE, GNOME, XFCE
+- ✅ **Detecção automática** - Identifica distribuição e executa script apropriado
 
 ## 🔧 Configurações Automáticas
 - **Java** configurado como alternativa padrão
