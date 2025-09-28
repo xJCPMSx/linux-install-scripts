@@ -60,6 +60,12 @@ cd linux-install-scripts/debian
 - **Permissions:** Sudo access
 - **Connection:** Stable internet
 
+### **🖥️ Graphical Interface:**
+```bash
+# Interactive graphical interface (in project root)
+../gui-install.sh
+```
+
 ## 🔧 Features
 
 ### **Automatic Installation:**

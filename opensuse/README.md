@@ -77,6 +77,12 @@ chmod +x install-programs.sh
 ./backup/backup.sh restore /caminho/do/backup
 ```
 
+### **🖥️ Interface Gráfica:**
+```bash
+# Interface gráfica interativa (na raiz do projeto)
+../gui-install.sh
+```
+
 ### **🖥️ Integração Desktop:**
 ```bash
 # Integrar com KDE, GNOME, XFCE

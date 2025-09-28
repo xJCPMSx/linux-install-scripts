@@ -67,10 +67,10 @@ chmod +x auto-install.sh
 
 ### **🖥️ Interface Gráfica (GUI):**
 ```bash
-# Interface gráfica interativa
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
-chmod +x gui/gui-install.sh
-./gui/gui-install.sh
+# Interface gráfica interativa (detecta automaticamente zenity/kdialog)
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
+chmod +x gui-install.sh
+./gui-install.sh
 ```
 
 ### **📋 Instalação Manual por Distribuição:**
@@ -135,14 +135,13 @@ docker-compose up -d
 linux-install-scripts/
 ├── 🎯 auto-install.sh          # Detecção automática
 ├── 🗑️ uninstall.sh             # Script de desinstalação
+├── 🖥️ gui-install.sh           # Interface gráfica unificada
 ├── 📄 LICENSE                   # Licença MIT
 ├── 📋 CHANGELOG.md             # Histórico de versões
 ├── 📖 README.md                # Documentação (português)
 ├── 📖 README-EN.md             # Documentação (english)
 ├── 🔧 config/
 │   └── config.conf             # Configurações personalizáveis
-├── 🖥️ gui/
-│   └── gui-install.sh          # Interface gráfica
 ├── 💾 backup/
 │   └── backup.sh               # Sistema de backup
 ├── 📝 logs/

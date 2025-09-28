@@ -64,10 +64,10 @@ chmod +x auto-install.sh
 
 ### **🖥️ Graphical Interface (GUI):**
 ```bash
-# Interactive graphical interface
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
-chmod +x gui/gui-install.sh
-./gui/gui-install.sh
+# Interactive graphical interface (auto-detects zenity/kdialog)
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
+chmod +x gui-install.sh
+./gui-install.sh
 ```
 
 ### **📋 Manual Installation by Distribution:**
