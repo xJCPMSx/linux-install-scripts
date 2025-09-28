@@ -219,14 +219,7 @@ else
     echo "✓ Spotify já está instalado"
 fi
 
-# VSCode
-echo "Instalando VSCode..."
-if ! command -v code &> /dev/null; then
-    sudo apt install -y code
-    check_success "VSCode"
-else
-    echo "✓ VSCode já está instalado"
-fi
+# VSCode já foi instalado via Flatpak na seção anterior
 
 # Cursor (Editor com IA)
 echo "Instalando Cursor..."
