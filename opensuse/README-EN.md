@@ -74,47 +74,16 @@ cd linux-install-scripts/opensuse
 - ✅ Icons for Cursor and Osu!
 - ✅ VSCode extensions
 
-## 🎮 Included Games
-- **Osu!** - Rhythm game with music
-  - Downloaded as AppImage
-  - Custom icon
-  - System integration
-
-## 🛠️ Development Tools
-- **Complete compilers** (GCC, G++, Make, CMake)
-- **Java OpenJDK** with automatic configuration
-- **Node.js** with npm
-- **Git** with authentication configuration
-- **VSCode** with useful extensions
-- **Cursor** (AI editor)
-
-## 🌐 Browsers
-- **Google Chrome** - Main browser
-- **Brave Browser** - Privacy-focused
-- **Firefox** - Alternative browser
-
-## 📱 Applications
-- **Spotify** - Music streaming
-- **AnyDesk** - Remote access
-- **Osu!** - Rhythm game
-
-## 🔧 Automatic Configurations
-- **Java** configured as default alternative
-- **Git** with authentication configuration
-- **Icons** for custom applications
-- **VSCode extensions** installed automatically
-
-## 📊 Compatibility
-- ✅ **openSUSE Leap 15.3+**
-- ✅ **openSUSE Tumbleweed**
-- ✅ **SUSE Linux Enterprise**
-
-## 🎯 Characteristics
+## 🎯 Main Characteristics
 - **Automatic installation** of all programs
 - **Intelligent configuration** of dependencies
 - **Robust fallback** for different versions
 - **Automatic cleanup** of conflicts
 - **User-friendly interface** with visual progress
+- **Java** configured as default alternative
+- **Git** with authentication configuration
+- **Icons** for custom applications
+- **VSCode extensions** installed automatically
 
 ## 📝 Notes
 - The script automatically detects the openSUSE version

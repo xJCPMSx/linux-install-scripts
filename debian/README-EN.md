@@ -76,52 +76,16 @@ cd linux-install-scripts/debian
 - ✅ Icons for Cursor and Osu!
 - ✅ VSCode extensions
 
-## 🎮 Included Games
-- **Osu!** - Rhythm game with music
-  - Downloaded as AppImage
-  - Custom icon
-  - System integration
-
-## 🛠️ Development Tools
-- **Complete compilers** (GCC, G++, Make, CMake)
-- **Java OpenJDK** with intelligent fallback
-- **Node.js** with npm
-- **Git** with authentication configuration
-- **VSCode** via Flatpak (no conflicts)
-- **Cursor** (AI editor)
-
-## 🌐 Browsers
-- **Google Chrome** - Main browser
-- **Brave Browser** - Privacy-focused (via Flatpak)
-- **Firefox** - Alternative browser
-
-## 📱 Applications
-- **Spotify** - Music streaming (multiple methods)
-- **AnyDesk** - Remote access
-- **Osu!** - Rhythm game
-
-## 🔧 Automatic Configurations
-- **Java** with multiple fallback for different versions
-- **Git** with authentication configuration
-- **Icons** for custom applications
-- **VSCode extensions** installed automatically
-- **Automatic cleanup** of repository conflicts
-
-## 📊 Compatibility
-- ✅ **Debian 11+** (Bullseye, Bookworm)
-- ✅ **Ubuntu 20.04+** (LTS and non-LTS)
-- ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
-- ✅ **Elementary OS 6+**
-- ✅ **Zorin OS 16+**
-- ✅ **Kali Linux Rolling**
-
-## 🎯 Special Features
+## 🎯 Main Characteristics
 - **VSCode via Flatpak** - Avoids repository conflicts
 - **Java with multiple fallback** - 11→17→21→default
 - **Spotify with triple fallback** - Flatpak→snap→repository
 - **Automatic cleanup** of repository conflicts
 - **Robust installation** with intelligent fallbacks
+- **Java** with multiple fallback for different versions
+- **Git** with authentication configuration
+- **Icons** for custom applications
+- **VSCode extensions** installed automatically
 
 ## 🔧 Troubleshooting
 - **Repository conflicts:** Integrated automatic cleanup

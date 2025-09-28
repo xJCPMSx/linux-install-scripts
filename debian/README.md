@@ -81,52 +81,16 @@ cd linux-install-scripts/debian
 - ✅ Ícones para Cursor e Osu!
 - ✅ Extensões do VSCode
 
-## 🎮 Jogos Incluídos
-- **Osu!** - Jogo de ritmo com música
-  - Baixado como AppImage
-  - Ícone personalizado
-  - Integração com sistema
-
-## 🛠️ Ferramentas de Desenvolvimento
-- **Compiladores completos** (GCC, G++, Make, CMake)
-- **Java OpenJDK** com fallback inteligente
-- **Node.js** com npm
-- **Git** com configuração de autenticação
-- **VSCode** via Flatpak (sem conflitos)
-- **Cursor** (editor com IA)
-
-## 🌐 Navegadores
-- **Google Chrome** - Navegador principal
-- **Brave Browser** - Foco em privacidade (via Flatpak)
-- **Firefox** - Navegador alternativo
-
-## 📱 Aplicativos
-- **Spotify** - Streaming de música (múltiplos métodos)
-- **AnyDesk** - Acesso remoto
-- **Osu!** - Jogo de ritmo
-
-## 🔧 Configurações Automáticas
-- **Java** com fallback múltiplo para diferentes versões
-- **Git** com configuração de autenticação
-- **Ícones** para aplicativos personalizados
-- **Extensões** do VSCode instaladas automaticamente
-- **Limpeza** automática de conflitos de repositórios
-
-## 📊 Compatibilidade
-- ✅ **Debian 11+** (Bullseye, Bookworm)
-- ✅ **Ubuntu 20.04+** (LTS e não-LTS)
-- ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
-- ✅ **Elementary OS 6+**
-- ✅ **Zorin OS 16+**
-- ✅ **Kali Linux Rolling**
-
-## 🎯 Características Especiais
+## 🎯 Características Principais
 - **VSCode via Flatpak** - Evita conflitos de repositórios
 - **Java com fallback múltiplo** - 11→17→21→default
 - **Spotify com fallback triplo** - Flatpak→snap→repositório
 - **Limpeza automática** de conflitos de repositórios
 - **Instalação robusta** com fallbacks inteligentes
+- **Java** com fallback múltiplo para diferentes versões
+- **Git** com configuração de autenticação
+- **Ícones** para aplicativos personalizados
+- **Extensões** do VSCode instaladas automaticamente
 
 ## 🔧 Resolução de Problemas
 - **Conflitos de repositórios:** Limpeza automática integrada
