@@ -74,10 +74,12 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN apt-get update && apt-get install -y firefox \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Spotify via Snap (mais compatível com Docker)
-# Nota: Flatpak não funciona bem em containers Docker devido às restrições de namespace
-RUN apt-get update && apt-get install -y snapd \
-    && snap install spotify \
+# Instalar Spotify via repositório oficial (compatível com Docker)
+# Nota: Flatpak e Snap não funcionam bem em containers Docker devido às restrições de namespace
+RUN curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | apt-key add - \
+    && echo "deb http://repository.spotify.com stable non-free" > /etc/apt/sources.list.d/spotify.list \
+    && apt-get update \
+    && apt-get install -y spotify-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar Brave Browser via repositório oficial
