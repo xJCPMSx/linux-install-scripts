@@ -233,11 +233,11 @@ linux-install-scripts/
 - **Atualizações automáticas** e gerenciamento simplificado
 
 #### **📦 Snap:**
-- **Instalação automática** no script Debian/Ubuntu
+- **Instalação automática** em ambos os scripts
 - **Sistema universal** da Canonical
 - **Aplicações containerizadas** com dependências isoladas
 - **Rollback automático** em caso de problemas
-- **⚠️ Nota:** Snap não está disponível no openSUSE (não suportado oficialmente)
+- **Repositório Snappy** configurado automaticamente no openSUSE
 
 #### **🎯 Benefícios:**
 - **Compatibilidade universal** - Funciona em qualquer distribuição

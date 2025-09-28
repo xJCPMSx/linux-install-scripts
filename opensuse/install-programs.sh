@@ -165,18 +165,25 @@ else
     echo "✓ Repositório Flathub já existe"
 fi
 
-# Instalar Snap (se disponível)
+# Instalar Snap
 echo "Instalando Snap..."
 if ! command -v snap &> /dev/null; then
-    if sudo zypper install -y snapd 2>/dev/null; then
-        echo "✓ Snap instalado"
-    else
-        echo "⚠️  Snap não disponível no openSUSE - pulando instalação"
-        echo "   Snap não é suportado oficialmente no openSUSE"
-    fi
+    echo "   Adicionando repositório Snappy..."
+    sudo zypper addrepo --refresh https://download.opensuse.org/repositories/system:/snappy/openSUSE_Tumbleweed snappy
+    sudo zypper refresh
+    
+    echo "   Instalando snapd..."
+    sudo zypper install -y snapd
+    
+    echo "   Configurando serviços..."
+    sudo systemctl enable --now snapd
+    sudo systemctl enable --now snapd.apparmor
+    
+    echo "✓ Snap instalado e configurado"
 else
     echo "✓ Snap já está instalado"
 fi
+check_success "Snap"
 
 # Atualizar repositórios após adicionar novos
 sudo zypper refresh
