@@ -61,6 +61,7 @@ confirm_uninstall() {
     echo -e "${RED}   - Java (OpenJDK)${NC}"
     echo -e "${RED}   - Node.js${NC}"
     echo -e "${RED}   - Osu!${NC}"
+    echo -e "${RED}   - youtube-dl${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
     echo -e "${RED}   - Ícones personalizados${NC}"
@@ -107,10 +108,19 @@ uninstall_opensuse() {
     echo -e "${YELLOW}Removendo Node.js...${NC}"
     sudo zypper remove -y nodejs npm 2>/dev/null || echo "Node.js não encontrado"
     
+    # Desinstalar youtube-dl
+    echo -e "${YELLOW}Removendo youtube-dl...${NC}"
+    sudo zypper remove -y youtube-dl yt-dlp 2>/dev/null || echo "youtube-dl não encontrado"
+    
+    # Desinstalar Snap
+    echo -e "${YELLOW}Removendo Snap...${NC}"
+    sudo zypper remove -y snapd 2>/dev/null || echo "Snap não encontrado"
+    
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
     sudo zypper removerepo google-chrome 2>/dev/null || echo "Repositório Google Chrome não encontrado"
     sudo zypper removerepo spotify 2>/dev/null || echo "Repositório Spotify não encontrado"
+    sudo zypper removerepo snappy 2>/dev/null || echo "Repositório Snappy não encontrado"
     
     # Remover chaves GPG
     echo -e "${YELLOW}Removendo chaves GPG...${NC}"
@@ -158,6 +168,14 @@ uninstall_debian() {
     # Desinstalar Node.js
     echo -e "${YELLOW}Removendo Node.js...${NC}"
     sudo apt remove -y nodejs npm 2>/dev/null || echo "Node.js não encontrado"
+    
+    # Desinstalar youtube-dl
+    echo -e "${YELLOW}Removendo youtube-dl...${NC}"
+    sudo apt remove -y youtube-dl 2>/dev/null || echo "youtube-dl não encontrado"
+    
+    # Desinstalar Snap
+    echo -e "${YELLOW}Removendo Snap...${NC}"
+    sudo apt remove -y snapd 2>/dev/null || echo "Snap não encontrado"
     
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
