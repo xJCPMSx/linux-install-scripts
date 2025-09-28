@@ -7,6 +7,11 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-2.6-brightgreen.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
+## 🌍 Languages / Idiomas
+
+- [🇺🇸 English](README-EN.md)
+- [🇧🇷 Português](README.md) *(Atual)*
+
 ## 📋 Descrição
 Script automatizado para instalação de programas essenciais em sistemas baseados em Debian/Ubuntu, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
 
