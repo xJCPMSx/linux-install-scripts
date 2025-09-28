@@ -3,12 +3,16 @@
 # Script de instalação automática para openSUSE
 # Instala programas essenciais, dependências e drivers
 # Inclui: limpeza de repositórios, teste de disponibilidade e instalação completa
+# Versão: 1.0-beta - Versão beta para testes
 
 set -e
 
-echo "=========================================="
-echo "Script de Instalação Automática - openSUSE"
-echo "=========================================="
+echo "🚀 Script de Instalação Automática - openSUSE v1.0-beta"
+echo "======================================================"
+echo "📅 Data: $(date)"
+echo "🐧 Sistema: $(uname -s) $(uname -r)"
+echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
+echo ""
 
 # Função para verificar se o comando foi executado com sucesso
 check_success() {

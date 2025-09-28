@@ -2,13 +2,13 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
-# Versão: 2.6 - Correções definitivas
+# Versão: 1.0-beta - Versão beta para testes
 
-echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.6"
-echo "======================================================"
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v1.0-beta"
+echo "============================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
-echo "🔧 Versão: 2.6 (Correções definitivas)"
+echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
 echo ""
 
 set -e

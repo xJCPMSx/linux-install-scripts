@@ -21,7 +21,7 @@ show_header() {
     echo -e "${CYAN}========================================${NC}"
     echo -e "${BLUE}📅 Data: $(date)${NC}"
     echo -e "${BLUE}🐧 Sistema: $(uname -s) $(uname -r)${NC}"
-    echo -e "${BLUE}🔧 Versão: Uninstall v1.0${NC}"
+    echo -e "${BLUE}🔧 Versão: Uninstall v1.0-beta${NC}"
     echo ""
 }
 
