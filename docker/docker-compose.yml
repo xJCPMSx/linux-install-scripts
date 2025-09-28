@@ -1,0 +1,90 @@
+# Docker Compose para Linux Install Scripts
+# Versão: 1.0-beta
+# Data: 2025-09-28
+
+version: '3.8'
+
+services:
+  # Serviço principal
+  linux-install-scripts:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: linux-install-scripts
+    hostname: linux-install-scripts
+    restart: unless-stopped
+    environment:
+      - TZ=America/Sao_Paulo
+      - LANG=pt_BR.UTF-8
+      - DISPLAY=${DISPLAY}
+    volumes:
+      # Montar diretório de trabalho
+      - ../:/home/developer/linux-install-scripts
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Montar diretório home do usuário
+      - ${HOME}:/home/developer/host-home
+      # Montar configurações
+      - ${HOME}/.config:/home/developer/.config
+      - ${HOME}/.local:/home/developer/.local
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+      - "5000:5000"
+    networks:
+      - linux-install-network
+    privileged: true
+    stdin_open: true
+    tty: true
+
+  # Serviço de desenvolvimento
+  dev-environment:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: dev-environment
+    hostname: dev-environment
+    restart: unless-stopped
+    environment:
+      - TZ=America/Sao_Paulo
+      - LANG=pt_BR.UTF-8
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ../:/home/developer/workspace
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}:/home/developer/host-home
+    ports:
+      - "3001:3000"
+      - "8081:8080"
+      - "5001:5000"
+    networks:
+      - linux-install-network
+    depends_on:
+      - linux-install-scripts
+
+  # Serviço de teste
+  test-environment:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: test-environment
+    hostname: test-environment
+    restart: "no"
+    environment:
+      - TZ=America/Sao_Paulo
+      - LANG=pt_BR.UTF-8
+    volumes:
+      - ../:/home/developer/workspace
+    networks:
+      - linux-install-network
+    command: ["/bin/bash", "-c", "cd /home/developer/workspace && ./ci/test.sh"]
+
+networks:
+  linux-install-network:
+    driver: bridge
+    name: linux-install-network
+
+volumes:
+  # Volume para dados persistentes
+  linux-install-data:
+    driver: local
+    name: linux-install-data
