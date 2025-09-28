@@ -45,7 +45,7 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 ### **openSUSE:**
 ```bash
 # Baixar e executar
-wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/opensuse/install-programs.sh
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
 chmod +x install-programs.sh
 ./install-programs.sh
 ```
@@ -53,7 +53,7 @@ chmod +x install-programs.sh
 ### **Debian/Ubuntu:**
 ```bash
 # Baixar e executar
-wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/debian/install-programs-debian.sh
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
 chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
@@ -121,8 +121,8 @@ linux-install-scripts/
 - Criam ícones personalizados para aplicativos
 
 ## 🔗 Links Úteis
-- **Repositório:** https://github.com/xJCPMSx/opensuse-install-script
-- **Issues:** https://github.com/xJCPMSx/opensuse-install-script/issues
+- **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
+- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
 - **Documentação:** READMEs específicos em cada pasta
 
 ## 📄 Licença

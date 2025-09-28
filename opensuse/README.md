@@ -29,7 +29,7 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 ### **Instalação Rápida:**
 ```bash
 # Baixar o script
-wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/opensuse/install-programs.sh
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
 
 # Tornar executável
 chmod +x install-programs.sh
@@ -41,8 +41,8 @@ chmod +x install-programs.sh
 ### **Instalação Manual:**
 ```bash
 # Clonar o repositório
-git clone https://github.com/xJCPMSx/opensuse-install-script.git
-cd opensuse-install-script/opensuse
+git clone https://github.com/xJCPMSx/linux-install-scripts.git
+cd linux-install-scripts/opensuse
 
 # Executar
 ./install-programs.sh
@@ -117,8 +117,8 @@ cd opensuse-install-script/opensuse
 - Cria ícones personalizados para aplicativos
 
 ## 🔗 Links Úteis
-- **Repositório:** https://github.com/xJCPMSx/opensuse-install-script
-- **Issues:** https://github.com/xJCPMSx/opensuse-install-script/issues
+- **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
+- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
 - **Documentação:** Este README
 
 ## 📄 Licença

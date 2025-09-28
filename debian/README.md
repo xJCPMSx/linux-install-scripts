@@ -29,7 +29,7 @@ Script automatizado para instalação de programas essenciais em sistemas basead
 ### **Instalação Rápida:**
 ```bash
 # Baixar o script
-wget https://raw.githubusercontent.com/xJCPMSx/opensuse-install-script/main/debian/install-programs-debian.sh
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
 
 # Tornar executável
 chmod +x install-programs-debian.sh
@@ -41,8 +41,8 @@ chmod +x install-programs-debian.sh
 ### **Instalação Manual:**
 ```bash
 # Clonar o repositório
-git clone https://github.com/xJCPMSx/opensuse-install-script.git
-cd opensuse-install-script/debian
+git clone https://github.com/xJCPMSx/linux-install-scripts.git
+cd linux-install-scripts/debian
 
 # Executar
 ./install-programs-debian.sh
@@ -130,8 +130,8 @@ cd opensuse-install-script/debian
 - Resolve automaticamente conflitos de repositórios
 
 ## 🔗 Links Úteis
-- **Repositório:** https://github.com/xJCPMSx/opensuse-install-script
-- **Issues:** https://github.com/xJCPMSx/opensuse-install-script/issues
+- **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
+- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
 - **Documentação:** Este README
 
 ## 📄 Licença
