@@ -286,45 +286,6 @@ cd docker
 docker-compose up -d
 ```
 
-### **⚙️ Configuração Personalizada:**
-```bash
-# Editar arquivo de configuração
-nano config/config.conf
-
-# Exemplo de configuração:
-[INSTALLATION]
-# Escolha quais programas instalar (true/false)
-INSTALL_ANYDESK=true
-INSTALL_SPOTIFY=true
-INSTALL_VSCODE=true
-INSTALL_CURSOR=true
-INSTALL_CHROME=true
-INSTALL_BRAVE=false
-INSTALL_FIREFOX=false
-INSTALL_JAVA=true
-INSTALL_NODEJS=true
-INSTALL_OSU=true
-INSTALL_COMPILERS=true
-INSTALL_DEVELOPMENT_DEPS=true
-
-# Configurações de repositórios
-[REPOSITORIES]
-CLEAN_CONFLICTS=true
-ADD_VSCODE_REPO=true
-ADD_CHROME_REPO=true
-ADD_FLATPAK=true
-
-# Configurações de backup
-[BACKUP]
-BACKUP_BEFORE_INSTALL=true
-KEEP_BACKUPS=5
-
-# Configurações de log
-[LOGGING]
-LOG_LEVEL=INFO
-LOG_ROTATION=true
-LOG_MAX_SIZE=10MB
-```
 
 ## 🔗 Links Úteis
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts

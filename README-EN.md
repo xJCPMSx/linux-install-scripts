@@ -144,6 +144,13 @@ linux-install-scripts/
 - ✅ **Robust checks** - Detects installations in different ways
 - ✅ **Intelligent fallback** - Multiple installation options
 
+### **⚙️ Custom Configuration:**
+- ✅ **Configuration file** - `config/config.conf` for complete control
+- ✅ **Program selection** - Choose exactly what to install
+- ✅ **Repository settings** - Control software sources
+- ✅ **Backup settings** - Customize backup system
+- ✅ **Log settings** - Control verbosity and rotation
+
 ### **🖥️ Graphical Interface:**
 - ✅ **Interactive GUI** - User-friendly interface with Zenity
 - ✅ **Program selection** - Choose which programs to install
@@ -186,6 +193,59 @@ linux-install-scripts/
 - **Smart installation** - doesn't reinstall existing programs
 - **Multiple installation methods** (repositories, Flatpak, AppImage)
 - **Detailed logging** for troubleshooting
+
+## 💡 Usage Examples
+
+### **⚙️ Custom Configuration:**
+```bash
+# 1. Edit configuration file
+nano config/config.conf
+
+# 2. Customize programs to install
+[INSTALLATION]
+INSTALL_ANYDESK=true      # AnyDesk
+INSTALL_SPOTIFY=true       # Spotify
+INSTALL_VSCODE=true        # VSCode
+INSTALL_CURSOR=false       # Cursor (disabled)
+INSTALL_CHROME=true        # Google Chrome
+INSTALL_BRAVE=false        # Brave (disabled)
+INSTALL_FIREFOX=false      # Firefox (disabled)
+INSTALL_JAVA=true          # Java OpenJDK
+INSTALL_NODEJS=true        # Node.js
+INSTALL_OSU=true           # Osu!
+INSTALL_COMPILERS=true     # GCC, G++, Make, CMake
+INSTALL_DEVELOPMENT_DEPS=true # Development dependencies
+
+# 3. Run customized installation
+./auto-install.sh
+```
+
+### **🖥️ Graphical Interface:**
+```bash
+# Run GUI
+./gui-install.sh
+
+# Main menu options:
+# 1. 🚀 Automatic Installation
+# 2. 📋 List Programs
+# 3. 🗑️ Uninstall Programs
+# 4. 📊 Statistics
+# 5. ❓ Help
+# 6. 🚪 Exit
+```
+
+### **🐳 Docker:**
+```bash
+# Build Docker image
+docker build -f docker/Dockerfile -t linux-install-scripts .
+
+# Run container
+docker run -it linux-install-scripts
+
+# Use Docker Compose
+cd docker
+docker-compose up -d
+```
 
 ## 🔗 Useful Links
 - **Repository:** https://github.com/xJCPMSx/linux-install-scripts

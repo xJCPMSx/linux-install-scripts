@@ -66,16 +66,29 @@ chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
-### **💾 Sistema de Backup:**
+
+### **⚙️ Configuração Personalizada:**
 ```bash
-# Criar backup do sistema
-./backup/backup.sh create
+# Editar arquivo de configuração
+nano ../config/config.conf
 
-# Listar backups disponíveis
-./backup/backup.sh list
+# Personalizar programas a instalar
+[INSTALLATION]
+INSTALL_ANYDESK=true      # AnyDesk
+INSTALL_SPOTIFY=true       # Spotify
+INSTALL_VSCODE=true        # VSCode
+INSTALL_CURSOR=false       # Cursor (desabilitado)
+INSTALL_CHROME=true        # Google Chrome
+INSTALL_BRAVE=false        # Brave (desabilitado)
+INSTALL_FIREFOX=false      # Firefox (desabilitado)
+INSTALL_JAVA=true          # Java OpenJDK
+INSTALL_NODEJS=true        # Node.js
+INSTALL_OSU=true           # Osu!
+INSTALL_COMPILERS=true     # GCC, G++, Make, CMake
+INSTALL_DEVELOPMENT_DEPS=true # Dependências de desenvolvimento
 
-# Restaurar backup
-./backup/backup.sh restore /caminho/do/backup
+# Executar instalação personalizada
+./install-programs-debian.sh
 ```
 
 ### **🖥️ Interface Gráfica:**
@@ -84,11 +97,6 @@ chmod +x install-programs-debian.sh
 ../gui-install.sh
 ```
 
-### **🖥️ Integração Desktop:**
-```bash
-# Integrar com KDE, GNOME, XFCE
-./desktop/desktop-integration.sh
-```
 
 ## 📋 Pré-requisitos
 - **Sistema:** Debian 11+, Ubuntu 20.04+, Linux Mint 20+, Pop!_OS 20.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
