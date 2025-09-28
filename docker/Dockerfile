@@ -74,16 +74,18 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN apt-get update && apt-get install -y firefox \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Flatpak
-RUN apt-get update && apt-get install -y flatpak \
-    && flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo \
+# Instalar Spotify via Snap (mais compatível com Docker)
+# Nota: Flatpak não funciona bem em containers Docker devido às restrições de namespace
+RUN apt-get update && apt-get install -y snapd \
+    && snap install spotify \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Spotify via Flatpak
-RUN flatpak install -y flathub com.spotify.Client
-
-# Instalar Brave Browser via Flatpak
-RUN flatpak install -y flathub com.brave.Browser
+# Instalar Brave Browser via repositório oficial
+RUN curl -fsSL https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/brave-browser-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" > /etc/apt/sources.list.d/brave-browser-release.list \
+    && apt-get update \
+    && apt-get install -y brave-browser \
+    && rm -rf /var/lib/apt/lists/*
 
 # Criar usuário não-root
 RUN useradd -m -s /bin/bash developer \
