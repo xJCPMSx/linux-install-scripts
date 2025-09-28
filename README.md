@@ -21,18 +21,18 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 ## 🐧 Distribuições Suportadas
 
 ### **openSUSE**
-- **openSUSE Leap 15.3+**
-- **openSUSE Tumbleweed**
-- **SUSE Linux Enterprise**
+- ✅ **openSUSE Leap 15.3+**
+- ✅ **openSUSE Tumbleweed**
+- ✅ **SUSE Linux Enterprise**
 
 ### **Debian/Ubuntu**
-- **Debian 11+** (Bullseye, Bookworm)
-- **Ubuntu 20.04+** (LTS e não-LTS)
-- **Linux Mint 20+**
-- **Pop!_OS 20.04+**
-- **Elementary OS 6+**
-- **Zorin OS 16+**
-- **Kali Linux Rolling**
+- ✅ **Debian 11+** (Bullseye, Bookworm)
+- ✅ **Ubuntu 20.04+** (LTS e não-LTS)
+- ✅ **Linux Mint 20+**
+- ✅ **Pop!_OS 20.04+**
+- ✅ **Elementary OS 6+**
+- ✅ **Zorin OS 16+**
+- ✅ **Kali Linux Rolling**
 
 ## 🎯 Programas Instalados
 
@@ -141,34 +141,16 @@ linux-install-scripts/
 - ✅ **Script de desinstalação** - Remoção completa de programas
 - ✅ **Detecção automática** - Identifica distribuição e executa script apropriado
 
-## 🔧 Configurações Automáticas
-- **Java** configurado como alternativa padrão
-- **Git** com configuração de autenticação
-- **Ícones** para aplicativos personalizados
-- **Extensões** do VSCode instaladas automaticamente
-
-## 📊 Compatibilidade
-
-### **openSUSE:**
-- ✅ **openSUSE Leap 15.3+**
-- ✅ **openSUSE Tumbleweed**
-- ✅ **SUSE Linux Enterprise**
-
-### **Debian/Ubuntu:**
-- ✅ **Debian 11+** (Bullseye, Bookworm)
-- ✅ **Ubuntu 20.04+** (LTS e não-LTS)
-- ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
-- ✅ **Elementary OS 6+**
-- ✅ **Zorin OS 16+**
-- ✅ **Kali Linux Rolling**
-
-## 🎯 Características
+## 🎯 Características Principais
 - **Instalação automática** de todos os programas
 - **Configuração inteligente** de dependências
 - **Fallback robusto** para diferentes versões
 - **Limpeza automática** de conflitos
 - **Interface amigável** com progresso visual
+- **Java** configurado como alternativa padrão
+- **Git** com configuração de autenticação
+- **Ícones** para aplicativos personalizados
+- **Extensões** do VSCode instaladas automaticamente
 
 ## 📝 Notas
 - Os scripts detectam automaticamente a distribuição
