@@ -144,7 +144,6 @@ linux-install-scripts/
 │   └── config.conf             # Configurações personalizáveis
 ├── 💾 backup/
 │   └── backup.sh               # Sistema de backup
-├── 📝 logging-functions.sh     # Funções de logging unificadas
 ├── 🐳 docker/
 │   ├── Dockerfile              # Containerização
 │   └── docker-compose.yml      # Orquestração
@@ -295,26 +294,6 @@ linux-install-scripts/
 ./backup/backup.sh stats
 ```
 
-### **📝 Sistema de Logs:**
-```bash
-# Usar logger em scripts
-source logging-functions.sh
-
-# Inicializar sistema de logs
-init_logger
-
-# Log de informações
-log_info "Iniciando instalação..."
-
-# Log de sucesso
-log_success "Programa instalado com sucesso"
-
-# Log de erro
-log_error "Falha na instalação"
-
-# Finalizar logs
-finish_logger $?
-```
 
 ### **🐳 Docker:**
 ```bash

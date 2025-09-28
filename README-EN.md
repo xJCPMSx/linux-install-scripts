@@ -141,7 +141,6 @@ linux-install-scripts/
 ├── 🖥️ gui-install.sh           # Unified graphical interface
 ├── 💾 backup/
 │   └── backup.sh               # Backup system
-├── 📝 logging-functions.sh     # Unified logging functions
 ├── 🐳 docker/
 │   ├── Dockerfile              # Containerization
 │   └── docker-compose.yml      # Orchestration
