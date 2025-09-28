@@ -222,11 +222,62 @@ linux-install-scripts/
 - **GitHub Actions** para CI/CD
 - **Múltiplos ambientes** (dev, test, prod)
 
+## 📦 Sistemas de Pacotes Universais
+
+### **🔧 Gerenciadores Instalados Automaticamente:**
+
+#### **📱 Flatpak:**
+- **Instalação automática** em ambos os scripts
+- **Repositório Flathub** configurado automaticamente
+- **Aplicações sandboxed** com isolamento de segurança
+- **Atualizações automáticas** e gerenciamento simplificado
+
+#### **📦 Snap:**
+- **Instalação automática** em ambos os scripts
+- **Sistema universal** da Canonical
+- **Aplicações containerizadas** com dependências isoladas
+- **Rollback automático** em caso de problemas
+
+#### **🎯 Benefícios:**
+- **Compatibilidade universal** - Funciona em qualquer distribuição
+- **Segurança aprimorada** - Isolamento de aplicações
+- **Atualizações automáticas** - Sem intervenção manual
+- **Gerenciamento centralizado** - Um comando para tudo
+
+## 🔧 Dependências e Requisitos
+
+### **📋 Requisitos do Sistema:**
+- **Distribuições suportadas:** openSUSE, Debian, Ubuntu
+- **Privilégios:** Acesso sudo/root necessário
+- **Espaço em disco:** ~2GB para instalação completa
+- **Conexão com internet** para download de pacotes
+
+### **🛠️ Dependências Instaladas Automaticamente:**
+
+#### **📦 Gerenciadores de Pacotes:**
+- **Flatpak** - Sistema de pacotes universais
+- **Snap** - Sistema de pacotes da Canonical
+- **Repositórios oficiais** - Configurados automaticamente
+
+#### **🔧 Ferramentas de Desenvolvimento:**
+- **Git** - Controle de versão
+- **Curl/Wget** - Download de arquivos
+- **Build-essential** - Compiladores e ferramentas
+- **Node.js** - Runtime JavaScript
+- **Java OpenJDK** - Runtime Java
+
+#### **📱 Aplicações Principais:**
+- **Navegadores:** Chrome, Brave, Firefox
+- **Editores:** VSCode, Cursor
+- **Multimídia:** Spotify
+- **Produtividade:** AnyDesk
+- **Jogos:** Osu!
+
 ## 📝 Informações Importantes
 
 - **Detecção automática** da distribuição Linux
 - **Instalação inteligente** - não reinstala programas existentes
-- **Múltiplas formas de instalação** (repositórios, Flatpak, AppImage)
+- **Múltiplas formas de instalação** (repositórios, Flatpak, Snap, AppImage)
 - **Backup automático** antes de grandes mudanças
 - **Logs detalhados** para troubleshooting
 

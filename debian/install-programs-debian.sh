@@ -145,6 +145,16 @@ else
 fi
 check_success "Flatpak"
 
+# Instalar Snap
+echo "Instalando Snap..."
+if ! command -v snap &> /dev/null; then
+    sudo apt install -y snapd
+    echo "✓ Snap instalado"
+else
+    echo "✓ Snap já está instalado"
+fi
+check_success "Snap"
+
 # Configurar repositórios adicionais
 echo "Configurando repositórios adicionais..."
 
