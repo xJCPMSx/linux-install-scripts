@@ -410,6 +410,51 @@ else
     check_success "dependências adicionais"
 fi
 
+# Instalar Docker e Docker Compose
+echo "Instalando Docker e Docker Compose..."
+if ! command -v docker &> /dev/null; then
+    # Remover repositórios Docker problemáticos primeiro
+    echo "🧹 Limpando repositórios Docker problemáticos..."
+    sudo zypper removerepo docker-ce 2>/dev/null || true
+    sudo zypper removerepo docker-community 2>/dev/null || true
+    sudo zypper removerepo docker 2>/dev/null || true
+    
+    # Atualizar repositórios após limpeza
+    echo "🔄 Atualizando repositórios após limpeza..."
+    sudo zypper refresh
+    
+    # Remover versões antigas
+    sudo zypper remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
+    
+    # Instalar dependências
+    sudo zypper install -y curl ca-certificates
+    
+    # Instalar Docker via pacotes do sistema (mais confiável para Tumbleweed)
+    echo "📦 Instalando Docker via pacotes do sistema..."
+    sudo zypper install -y docker docker-compose
+    
+    # Adicionar usuário ao grupo docker
+    sudo usermod -aG docker $USER
+    
+    # Habilitar e iniciar serviço Docker
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    
+    echo "✓ Docker instalado e configurado via pacotes do sistema"
+    echo "⚠️  IMPORTANTE: Faça logout e login novamente para usar Docker sem sudo"
+else
+    echo "✓ Docker já está instalado"
+fi
+
+# Verificar Docker Compose
+if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
+    echo "⚠️  Docker Compose não encontrado, mas Docker Compose V2 (plugin) deve estar disponível"
+    echo "   Use 'docker compose' em vez de 'docker-compose'"
+else
+    echo "✓ Docker Compose disponível"
+fi
+check_success "Docker e Docker Compose"
+
 # Instalar yt-dlp (sucessor do youtube-dl)
 echo "Instalando yt-dlp..."
 if ! command -v yt-dlp &> /dev/null; then
@@ -462,7 +507,45 @@ else
     fi
 fi
 
-# Instalar driver da Huion Tablet
+# OpenTabletDriver (substituto melhor para tablets gráficos)
+echo ""
+echo "Instalando OpenTabletDriver..."
+if ! command -v opentabletdriver &> /dev/null; then
+    echo "   Baixando OpenTabletDriver..."
+    # Criar diretório para OpenTabletDriver
+    mkdir -p "$HOME/Applications/OpenTabletDriver"
+    
+    # Baixar a versão mais recente do OpenTabletDriver
+    if wget -O "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" https://github.com/OpenTablet/OpenTabletDriver/releases/latest/download/OpenTabletDriver.AppImage; then
+        chmod +x "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+        echo "✓ OpenTabletDriver baixado em $HOME/Applications/OpenTabletDriver/"
+        echo "   Para usar: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+        
+        # Criar arquivo desktop para OpenTabletDriver
+        cat > ~/.local/share/applications/opentabletdriver.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenTabletDriver
+Comment=Open source tablet driver
+Exec=$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
+Icon=opentabletdriver
+Terminal=false
+Categories=System;HardwareSettings;
+StartupNotify=true
+EOF
+        chmod +x ~/.local/share/applications/opentabletdriver.desktop
+        echo "✓ Ícone do OpenTabletDriver criado"
+    else
+        echo "✗ Erro ao baixar OpenTabletDriver"
+        echo "   Você pode baixar manualmente de: https://github.com/OpenTablet/OpenTabletDriver"
+    fi
+else
+    echo "✓ OpenTabletDriver já está instalado"
+fi
+check_success "OpenTabletDriver"
+
+# Driver da Huion Tablet (mantido para compatibilidade)
 echo ""
 echo "Instalando driver da Huion Tablet..."
 
@@ -471,7 +554,7 @@ if ! zypper repos | grep -q "huion"; then
     echo "Adicionando repositório do driver Huion..."
     # Nota: O repositório exato pode variar, este é um exemplo
     # O usuário pode precisar ajustar conforme a disponibilidade
-    echo "Nota: Verifique a disponibilidade do repositório oficial da Huion"
+    echo "Nota: OpenTabletDriver é recomendado para melhor compatibilidade com jogos como osu!"
     echo "Você pode precisar baixar e instalar manualmente o driver"
 fi
 
@@ -483,6 +566,7 @@ else
     echo "⚠️  Driver Huion não encontrado nos repositórios"
     echo "   Você pode precisar baixar manualmente de:"
     echo "   https://www.huion.com/support/download/"
+    echo "   Ou usar o OpenTabletDriver instalado acima"
 fi
 
 # Configurar Java
@@ -556,12 +640,40 @@ echo ""
 echo "Instalando extensões úteis do VSCode..."
 # Verificar se o VSCode está disponível e não executar como root
 if command -v code &> /dev/null && [ "$EUID" -ne 0 ]; then
-    code --install-extension ms-python.python
-    code --install-extension ms-vscode.cpptools
-    code --install-extension redhat.vscode-yaml
-    code --install-extension bradlc.vscode-tailwindcss
-    code --install-extension esbenp.prettier-vscode
-    echo "✓ Extensões do VSCode instaladas"
+    echo "   Instalando extensões do VSCode..."
+    
+    # Instalar extensões com verificação de erro
+    if code --install-extension ms-python.python 2>/dev/null; then
+        echo "   ✓ Python extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar Python extension"
+    fi
+    
+    if code --install-extension ms-vscode.cpptools 2>/dev/null; then
+        echo "   ✓ C++ extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar C++ extension"
+    fi
+    
+    if code --install-extension redhat.vscode-yaml 2>/dev/null; then
+        echo "   ✓ YAML extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar YAML extension"
+    fi
+    
+    if code --install-extension bradlc.vscode-tailwindcss 2>/dev/null; then
+        echo "   ✓ Tailwind CSS extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar Tailwind CSS extension"
+    fi
+    
+    if code --install-extension esbenp.prettier-vscode 2>/dev/null; then
+        echo "   ✓ Prettier extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar Prettier extension"
+    fi
+    
+    echo "✓ Extensões do VSCode processadas"
 else
     echo "⚠️  VSCode não disponível ou executando como root"
     echo "   Para instalar extensões, execute como usuário normal:"
@@ -588,6 +700,8 @@ echo "✓ Firefox"
 echo "✓ Java (OpenJDK 11)"
 echo "✓ Node.js e npm"
 echo "✓ Osu! (Jogo de ritmo)"
+echo "✓ Docker e Docker Compose"
+echo "✓ OpenTabletDriver (driver de tablet recomendado)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
 echo "✓ Driver Huion (se disponível)"
@@ -668,6 +782,10 @@ echo "Recomendações:"
 echo "1. Reinicie o sistema para garantir que todos os drivers funcionem corretamente"
 echo "2. Configure o Git com suas credenciais"
 echo "3. Teste os programas instalados"
-echo "4. Os ícones do Cursor e Osu! aparecerão no menu após reiniciar o ambiente gráfico"
+echo "4. Os ícones do Cursor, Osu! e OpenTabletDriver aparecerão no menu após reiniciar o ambiente gráfico"
+echo "5. Para usar Docker sem sudo, faça logout e login novamente"
+echo "6. Configure o OpenTabletDriver para seu tablet gráfico (recomendado para osu!)"
 echo ""
 echo "Para testar o libfprint, execute: fprintd-enroll"
+echo "Para usar Docker, execute: docker --version"
+echo "Para usar OpenTabletDriver, execute: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"

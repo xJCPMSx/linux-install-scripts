@@ -33,8 +33,10 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
-- **youtube-dl** - Download de vídeos
-- **Driver Huion Tablet** - Suporte a tablets gráficos
+- **Docker e Docker Compose** - Containerização
+- **OpenTabletDriver** - Driver de tablet open source (recomendado para osu!)
+- **yt-dlp** - Download de vídeos (sucessor do youtube-dl)
+- **Driver Huion Tablet** - Suporte a tablets gráficos (compatibilidade)
 
 ## 🚀 Como Usar
 
@@ -123,6 +125,44 @@ INSTALL_DEVELOPMENT_DEPS=true # Dependências de desenvolvimento
 - **Chaves GPG** adicionadas automaticamente
 - **Dependências** do sistema instaladas
 - **Configurações** básicas aplicadas
+
+## 🐳 Docker e Docker Compose
+
+### **🔧 Instalação Automática:**
+- **Docker CE** instalado via repositório oficial
+- **Docker Compose V2** como plugin integrado
+- **Usuário adicionado ao grupo docker** para uso sem sudo
+- **Serviço habilitado** e iniciado automaticamente
+
+### **💡 Como usar:**
+```bash
+# Verificar instalação
+docker --version
+docker compose version
+
+# Executar container de teste
+docker run hello-world
+
+# Usar Docker Compose
+docker compose up -d
+```
+
+## 🎮 OpenTabletDriver
+
+### **🔧 Instalação Automática:**
+- **AppImage baixado** automaticamente
+- **Ícone criado** no menu de aplicações
+- **Melhor compatibilidade** com jogos como osu!
+- **Substituto recomendado** para drivers proprietários
+
+### **💡 Como usar:**
+```bash
+# Executar OpenTabletDriver
+$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
+
+# Ou procurar "OpenTabletDriver" no menu
+# Configurar área de trabalho e botões do tablet
+```
 
 ## 🔗 Links Úteis
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts

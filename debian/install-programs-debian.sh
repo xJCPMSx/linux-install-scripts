@@ -128,6 +128,50 @@ echo "Instalando ferramentas adicionais..."
 sudo apt install -y vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
+# Instalar Docker e Docker Compose
+echo "Instalando Docker e Docker Compose..."
+if ! command -v docker &> /dev/null; then
+    # Remover versões antigas
+    sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
+    
+    # Instalar dependências
+    sudo apt install -y ca-certificates curl gnupg lsb-release
+    
+    # Adicionar chave GPG oficial do Docker
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    
+    # Adicionar repositório do Docker
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    
+    # Atualizar lista de pacotes
+    sudo apt update
+    
+    # Instalar Docker
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    
+    # Adicionar usuário ao grupo docker
+    sudo usermod -aG docker $USER
+    
+    # Habilitar e iniciar serviço Docker
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    
+    echo "✓ Docker instalado e configurado"
+    echo "⚠️  IMPORTANTE: Faça logout e login novamente para usar Docker sem sudo"
+else
+    echo "✓ Docker já está instalado"
+fi
+
+# Verificar Docker Compose
+if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
+    echo "⚠️  Docker Compose não encontrado, mas Docker Compose V2 (plugin) deve estar disponível"
+    echo "   Use 'docker compose' em vez de 'docker-compose'"
+else
+    echo "✓ Docker Compose disponível"
+fi
+check_success "Docker e Docker Compose"
+
 # Instalar yt-dlp (sucessor do youtube-dl)
 echo "Instalando yt-dlp..."
 if ! command -v yt-dlp &> /dev/null; then
@@ -393,14 +437,51 @@ else
     echo "✓ Osu! já está instalado"
 fi
 
-# Driver da Huion Tablet
+# OpenTabletDriver (substituto melhor para tablets gráficos)
+echo "Instalando OpenTabletDriver..."
+if ! command -v opentabletdriver &> /dev/null; then
+    echo "   Baixando OpenTabletDriver..."
+    # Criar diretório para OpenTabletDriver
+    mkdir -p "$HOME/Applications/OpenTabletDriver"
+    
+    # Baixar a versão mais recente do OpenTabletDriver
+    if wget -O "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" https://github.com/OpenTablet/OpenTabletDriver/releases/latest/download/OpenTabletDriver.AppImage; then
+        chmod +x "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+        echo "✓ OpenTabletDriver baixado em $HOME/Applications/OpenTabletDriver/"
+        echo "   Para usar: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+        
+        # Criar arquivo desktop para OpenTabletDriver
+        cat > ~/.local/share/applications/opentabletdriver.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenTabletDriver
+Comment=Open source tablet driver
+Exec=$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
+Icon=opentabletdriver
+Terminal=false
+Categories=System;HardwareSettings;
+StartupNotify=true
+EOF
+        chmod +x ~/.local/share/applications/opentabletdriver.desktop
+        echo "✓ Ícone do OpenTabletDriver criado"
+    else
+        echo "✗ Erro ao baixar OpenTabletDriver"
+        echo "   Você pode baixar manualmente de: https://github.com/OpenTablet/OpenTabletDriver"
+    fi
+else
+    echo "✓ OpenTabletDriver já está instalado"
+fi
+check_success "OpenTabletDriver"
+
+# Driver da Huion Tablet (mantido para compatibilidade)
 echo "Instalando driver da Huion Tablet..."
 echo "Adicionando repositório do driver Huion..."
-echo "Nota: Verifique a disponibilidade do repositório oficial da Huion"
-echo "Você pode precisar baixar e instalar manualmente o driver"
+echo "Nota: OpenTabletDriver é recomendado para melhor compatibilidade com jogos como osu!"
 echo "⚠️  Driver Huion não encontrado nos repositórios"
 echo "   Você pode precisar baixar manualmente de:"
 echo "   https://www.huion.com/support/download/"
+echo "   Ou usar o OpenTabletDriver instalado acima"
 
 # Configurar Java
 echo "Configurando Java..."
@@ -447,10 +528,28 @@ git --version 2>/dev/null || echo "Git não encontrado"
 # Instalar extensões úteis do VSCode
 echo "Instalando extensões úteis do VSCode..."
 if command -v code &> /dev/null && [ "$EUID" -ne 0 ]; then
-    code --install-extension ms-python.python
-    code --install-extension ms-vscode.cpptools
-    code --install-extension redhat.vscode-yaml
-    echo "✓ Extensões do VSCode instaladas"
+    echo "   Instalando extensões do VSCode..."
+    
+    # Instalar extensões com verificação de erro
+    if code --install-extension ms-python.python 2>/dev/null; then
+        echo "   ✓ Python extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar Python extension"
+    fi
+    
+    if code --install-extension ms-vscode.cpptools 2>/dev/null; then
+        echo "   ✓ C++ extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar C++ extension"
+    fi
+    
+    if code --install-extension redhat.vscode-yaml 2>/dev/null; then
+        echo "   ✓ YAML extension instalada"
+    else
+        echo "   ⚠️  Erro ao instalar YAML extension"
+    fi
+    
+    echo "✓ Extensões do VSCode processadas"
 else
     echo "⚠️  VSCode não encontrado ou executando como root"
 fi
@@ -539,6 +638,8 @@ echo "✓ Firefox"
 echo "✓ Java (OpenJDK 11)"
 echo "✓ Node.js e npm"
 echo "✓ Osu! (Jogo de ritmo)"
+echo "✓ Docker e Docker Compose"
+echo "✓ OpenTabletDriver (driver de tablet recomendado)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
 echo "✓ Driver Huion (se disponível)"
@@ -548,6 +649,10 @@ echo "Recomendações:"
 echo "1. Reinicie o sistema para garantir que todos os drivers funcionem corretamente"
 echo "2. Configure o Git com suas credenciais"
 echo "3. Teste os programas instalados"
-echo "4. Os ícones do Cursor e Osu! aparecerão no menu após reiniciar o ambiente gráfico"
+echo "4. Os ícones do Cursor, Osu! e OpenTabletDriver aparecerão no menu após reiniciar o ambiente gráfico"
+echo "5. Para usar Docker sem sudo, faça logout e login novamente"
+echo "6. Configure o OpenTabletDriver para seu tablet gráfico (recomendado para osu!)"
 echo ""
 echo "Para testar o libfprint, execute: fprintd-enroll"
+echo "Para usar Docker, execute: docker --version"
+echo "Para usar OpenTabletDriver, execute: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"

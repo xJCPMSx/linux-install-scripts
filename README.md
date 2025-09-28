@@ -53,7 +53,9 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
-- **Driver Huion Tablet** - Suporte a tablets gráficos
+- **Docker e Docker Compose** - Containerização
+- **OpenTabletDriver** - Driver de tablet open source (recomendado para osu!)
+- **Driver Huion Tablet** - Suporte a tablets gráficos (compatibilidade)
 
 ## 🚀 Como Usar
 
@@ -245,6 +247,46 @@ linux-install-scripts/
 - **Atualizações automáticas** - Sem intervenção manual
 - **Gerenciamento centralizado** - Um comando para tudo
 
+## 🐳 Docker e Docker Compose - Containerização
+
+### **🔧 O que é o Docker:**
+- **Plataforma de containerização** para desenvolvimento e deploy
+- **Isolamento de aplicações** com dependências incluídas
+- **Docker Compose** para orquestração de múltiplos containers
+- **Instalação automática** em ambos os scripts
+- **Usuário adicionado ao grupo docker** para uso sem sudo
+
+### **💡 Como usar o Docker:**
+```bash
+# Verificar instalação
+docker --version
+docker compose version
+
+# Executar container simples
+docker run hello-world
+
+# Usar Docker Compose
+docker compose up -d
+```
+
+## 🎮 OpenTabletDriver - Driver de Tablet
+
+### **🔧 O que é o OpenTabletDriver:**
+- **Driver open source** para tablets gráficos
+- **Melhor compatibilidade** com jogos como osu!
+- **Substituto recomendado** para drivers proprietários
+- **Instalação automática** em ambos os scripts
+- **Interface gráfica** para configuração
+
+### **💡 Como usar o OpenTabletDriver:**
+```bash
+# Executar OpenTabletDriver
+$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
+
+# Ou procurar no menu de aplicações
+# Configurar área de trabalho e botões do tablet
+```
+
 ## 📺 yt-dlp - Download de Vídeos
 
 ### **🔧 O que é o yt-dlp:**
@@ -318,6 +360,8 @@ yt-dlp --write-sub --sub-lang pt "URL_DO_VIDEO"
 - **Multimídia:** Spotify
 - **Produtividade:** AnyDesk
 - **Jogos:** Osu!
+- **Containerização:** Docker, Docker Compose
+- **Tablets:** OpenTabletDriver
 - **Utilitários:** yt-dlp
 
 ## 📝 Informações Importantes
