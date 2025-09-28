@@ -335,7 +335,8 @@ fi
 
 # Osu! (Jogo de ritmo)
 echo "Instalando Osu!..."
-if ! flatpak list | grep -q "com.github.ppy.osu"; then
+USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+if ! flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Applications/osu.AppImage" ]; then
     echo "⚠️  Osu! não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
     

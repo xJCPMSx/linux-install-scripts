@@ -195,13 +195,21 @@ fi
 
 # Spotify (via Flatpak)
 echo "Instalando Spotify via Flatpak..."
-flatpak install -y flathub com.spotify.Client
-check_success "Spotify"
+if flatpak list | grep -q "com.spotify.Client"; then
+    echo "✓ Spotify já está instalado"
+else
+    flatpak install -y flathub com.spotify.Client
+    check_success "Spotify"
+fi
 
 # VSCode
 echo "Instalando VSCode..."
-sudo zypper install -y code
-check_success "VSCode"
+if command -v code &> /dev/null; then
+    echo "✓ VSCode já está instalado"
+else
+    sudo zypper install -y code
+    check_success "VSCode"
+fi
 
 # Cursor (Editor com IA)
 echo "Instalando Cursor..."
@@ -271,17 +279,21 @@ fi
 
 # Google Chrome
 echo "Instalando Google Chrome..."
-# Tentar instalar com verificação de assinatura
-if sudo zypper install -y google-chrome-stable; then
-    check_success "Google Chrome"
+if command -v google-chrome &> /dev/null; then
+    echo "✓ Google Chrome já está instalado"
 else
-    echo "⚠️  Erro de assinatura GPG do Google Chrome"
-    echo "   Tentando instalar ignorando verificação de assinatura..."
-    if sudo zypper install --allow-unsigned-rpm -y google-chrome-stable; then
-        echo "✓ Google Chrome instalado (ignorando verificação de assinatura)"
+    # Tentar instalar com verificação de assinatura
+    if sudo zypper install -y google-chrome-stable; then
+        check_success "Google Chrome"
     else
-        echo "✗ Erro ao instalar Google Chrome"
-        echo "   Você pode instalar manualmente de: https://www.google.com/chrome/"
+        echo "⚠️  Erro de assinatura GPG do Google Chrome"
+        echo "   Tentando instalar ignorando verificação de assinatura..."
+        if sudo zypper install --allow-unsigned-rpm -y google-chrome-stable; then
+            echo "✓ Google Chrome instalado (ignorando verificação de assinatura)"
+        else
+            echo "✗ Erro ao instalar Google Chrome"
+            echo "   Você pode instalar manualmente de: https://www.google.com/chrome/"
+        fi
     fi
 fi
 
@@ -368,7 +380,8 @@ check_success "dependências adicionais"
 echo ""
 echo "Instalando Osu!..."
 # Verificar se já está instalado
-if command -v osu &> /dev/null || command -v osu! &> /dev/null; then
+USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+if command -v osu &> /dev/null || command -v osu! &> /dev/null || [ -f "$USER_HOME/Applications/osu.AppImage" ]; then
     echo "✓ Osu! já está instalado"
 else
     echo "⚠️  Osu! não encontrado nos repositórios"
