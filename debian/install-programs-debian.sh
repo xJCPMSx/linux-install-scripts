@@ -128,6 +128,12 @@ echo "Instalando ferramentas adicionais..."
 sudo apt install -y vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
+# Instalar Flatpak primeiro
+echo "Instalando Flatpak..."
+sudo apt install -y flatpak
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+check_success "Flatpak"
+
 # Configurar repositórios adicionais
 echo "Configurando repositórios adicionais..."
 
@@ -178,11 +184,6 @@ sudo apt update || {
     sudo apt update
 }
 
-# Instalar Flatpak
-echo "Instalando Flatpak..."
-sudo apt install -y flatpak
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-check_success "Flatpak"
 
 # Instalar programas principais
 echo "Instalando programas principais..."
