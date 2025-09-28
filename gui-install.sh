@@ -146,31 +146,54 @@ install_programs() {
 # Função para listar programas
 list_programs() {
     local gui_tool="$1"
-    local programs="<b>📋 Programas Disponíveis:</b>\n\n"
-    programs+="<b>🔧 Desenvolvimento:</b>\n"
-    programs+="• VSCode - Editor de código\n"
-    programs+="• Cursor - Editor com IA\n"
-    programs+="• Java (OpenJDK) - Linguagem de programação\n"
-    programs+="• Node.js - Runtime JavaScript\n"
-    programs+="• Compiladores (GCC, G++, Make, CMake)\n\n"
-    programs+="<b>🌐 Navegadores:</b>\n"
-    programs+="• Google Chrome\n"
-    programs+="• Brave Browser\n"
-    programs+="• Firefox\n\n"
-    programs+="<b>🎵 Multimídia:</b>\n"
-    programs+="• Spotify - Streaming de música\n"
-    programs+="• Osu! - Jogo de ritmo\n\n"
-    programs+="<b>🛠️ Ferramentas:</b>\n"
-    programs+="• AnyDesk - Acesso remoto\n"
-    programs+="• Dependências de desenvolvimento\n"
     
     if [ "$gui_tool" = "kdialog" ]; then
+        local programs="📋 PROGRAMAS DISPONÍVEIS\n\n"
+        programs+="🔧 DESENVOLVIMENTO:\n"
+        programs+="• VSCode - Editor de código\n"
+        programs+="• Cursor - Editor com IA\n"
+        programs+="• Java (OpenJDK) - Linguagem de programação\n"
+        programs+="• Node.js - Runtime JavaScript\n"
+        programs+="• Compiladores (GCC, G++, Make, CMake)\n\n"
+        programs+="🌐 NAVEGADORES:\n"
+        programs+="• Google Chrome\n"
+        programs+="• Brave Browser\n"
+        programs+="• Firefox\n\n"
+        programs+="🎵 MULTIMÍDIA:\n"
+        programs+="• Spotify - Streaming de música\n"
+        programs+="• Osu! - Jogo de ritmo\n\n"
+        programs+="🛠️ FERRAMENTAS:\n"
+        programs+="• AnyDesk - Acesso remoto\n"
+        programs+="• Dependências de desenvolvimento"
+        
         run_kdialog --title "Programas Disponíveis" \
-            --msgbox "$programs"
+            --msgbox "$programs" \
+            --geometry 600x500
     else
+        # Para zenity, usar formato HTML para melhor formatação
+        local programs="<b>📋 Programas Disponíveis</b>\n\n"
+        programs+="<b>🔧 Desenvolvimento:</b>\n"
+        programs+="• VSCode - Editor de código\n"
+        programs+="• Cursor - Editor com IA\n"
+        programs+="• Java (OpenJDK) - Linguagem de programação\n"
+        programs+="• Node.js - Runtime JavaScript\n"
+        programs+="• Compiladores (GCC, G++, Make, CMake)\n\n"
+        programs+="<b>🌐 Navegadores:</b>\n"
+        programs+="• Google Chrome\n"
+        programs+="• Brave Browser\n"
+        programs+="• Firefox\n\n"
+        programs+="<b>🎵 Multimídia:</b>\n"
+        programs+="• Spotify - Streaming de música\n"
+        programs+="• Osu! - Jogo de ritmo\n\n"
+        programs+="<b>🛠️ Ferramentas:</b>\n"
+        programs+="• AnyDesk - Acesso remoto\n"
+        programs+="• Dependências de desenvolvimento"
+        
         run_zenity --info \
             --title="Programas Disponíveis" \
-            --text="$programs"
+            --text="$programs" \
+            --width=700 \
+            --height=600
     fi
 }
 
@@ -261,63 +284,108 @@ backup_menu() {
 # Função para mostrar estatísticas
 show_statistics() {
     local gui_tool="$1"
-    local stats="<b>📊 Estatísticas do Sistema</b>\n\n"
-    stats+="<b>🖥️ Sistema:</b>\n"
-    if command -v lsb_release &> /dev/null; then
-        stats+="• Distribuição: $(lsb_release -d | cut -f2)\n"
-    else
-        stats+="• Sistema: $(uname -s) $(uname -r)\n"
-    fi
-    stats+="• Kernel: $(uname -r)\n"
-    stats+="• Usuário: $USER\n\n"
-    stats+="<b>💾 Espaço em Disco:</b>\n"
-    stats+="• $(df -h / | tail -1 | awk '{print $4}') disponível\n\n"
-    stats+="<b>🧠 Memória:</b>\n"
-    stats+="• $(free -h | grep Mem | awk '{print $7}') disponível\n\n"
-    stats+="<b>📦 Programas Instalados:</b>\n"
-    if command -v zypper &> /dev/null; then
-        stats+="• $(zypper packages --installed-only | wc -l) pacotes (Zypper)\n"
-    fi
-    if command -v flatpak &> /dev/null; then
-        stats+="• $(flatpak list | wc -l) aplicativos (Flatpak)\n"
-    fi
     
     if [ "$gui_tool" = "kdialog" ]; then
+        local stats="📊 ESTATÍSTICAS DO SISTEMA\n\n"
+        stats+="🖥️ SISTEMA:\n"
+        if command -v lsb_release &> /dev/null; then
+            stats+="• Distribuição: $(lsb_release -d | cut -f2)\n"
+        else
+            stats+="• Sistema: $(uname -s) $(uname -r)\n"
+        fi
+        stats+="• Kernel: $(uname -r)\n"
+        stats+="• Usuário: $USER\n\n"
+        stats+="💾 ESPAÇO EM DISCO:\n"
+        stats+="• $(df -h / | tail -1 | awk '{print $4}') disponível\n\n"
+        stats+="🧠 MEMÓRIA:\n"
+        stats+="• $(free -h | grep Mem | awk '{print $7}') disponível\n\n"
+        stats+="📦 PROGRAMAS INSTALADOS:\n"
+        if command -v zypper &> /dev/null; then
+            stats+="• $(zypper packages --installed-only | wc -l) pacotes (Zypper)\n"
+        fi
+        if command -v flatpak &> /dev/null; then
+            stats+="• $(flatpak list | wc -l) aplicativos (Flatpak)\n"
+        fi
+        
         run_kdialog --title "Estatísticas do Sistema" \
-            --msgbox "$stats"
+            --msgbox "$stats" \
+            --geometry 600x500
     else
+        local stats="<b>📊 Estatísticas do Sistema</b>\n\n"
+        stats+="<b>🖥️ Sistema:</b>\n"
+        if command -v lsb_release &> /dev/null; then
+            stats+="• Distribuição: $(lsb_release -d | cut -f2)\n"
+        else
+            stats+="• Sistema: $(uname -s) $(uname -r)\n"
+        fi
+        stats+="• Kernel: $(uname -r)\n"
+        stats+="• Usuário: $USER\n\n"
+        stats+="<b>💾 Espaço em Disco:</b>\n"
+        stats+="• $(df -h / | tail -1 | awk '{print $4}') disponível\n\n"
+        stats+="<b>🧠 Memória:</b>\n"
+        stats+="• $(free -h | grep Mem | awk '{print $7}') disponível\n\n"
+        stats+="<b>📦 Programas Instalados:</b>\n"
+        if command -v zypper &> /dev/null; then
+            stats+="• $(zypper packages --installed-only | wc -l) pacotes (Zypper)\n"
+        fi
+        if command -v flatpak &> /dev/null; then
+            stats+="• $(flatpak list | wc -l) aplicativos (Flatpak)\n"
+        fi
+        
         run_zenity --info \
             --title="Estatísticas do Sistema" \
-            --text="$stats"
+            --text="$stats" \
+            --width=700 \
+            --height=600
     fi
 }
 
 # Função para mostrar ajuda
 show_help() {
     local gui_tool="$1"
-    local help_text="<b>❓ Ajuda - Linux Install Scripts</b>\n\n"
-    help_text+="<b>🚀 Instalação Automática:</b>\n"
-    help_text+="Selecione a opção 1 para instalar todos os programas.\n\n"
-    help_text+="<b>📋 Listar Programas:</b>\n"
-    help_text+="Veja todos os programas disponíveis para instalação.\n\n"
-    help_text+="<b>🗑️ Desinstalar:</b>\n"
-    help_text+="Remove todos os programas instalados pelo script.\n\n"
-    help_text+="<b>💾 Backup:</b>\n"
-    help_text+="Crie backups antes de grandes mudanças.\n\n"
-    help_text+="<b>📊 Estatísticas:</b>\n"
-    help_text+="Veja informações do sistema e programas instalados.\n\n"
-    help_text+="<b>🔗 Suporte:</b>\n"
-    help_text+="• Repositório: https://github.com/xJCPMSx/linux-install-scripts\n"
-    help_text+="• Issues: https://github.com/xJCPMSx/linux-install-scripts/issues\n"
-    help_text+="• Documentação: README.md"
     
     if [ "$gui_tool" = "kdialog" ]; then
+        local help_text="❓ AJUDA - LINUX INSTALL SCRIPTS\n\n"
+        help_text+="🚀 INSTALAÇÃO AUTOMÁTICA:\n"
+        help_text+="Selecione a opção 1 para instalar todos os programas.\n\n"
+        help_text+="📋 LISTAR PROGRAMAS:\n"
+        help_text+="Veja todos os programas disponíveis para instalação.\n\n"
+        help_text+="🗑️ DESINSTALAR:\n"
+        help_text+="Remove todos os programas instalados pelo script.\n\n"
+        help_text+="💾 BACKUP:\n"
+        help_text+="Crie backups antes de grandes mudanças.\n\n"
+        help_text+="📊 ESTATÍSTICAS:\n"
+        help_text+="Veja informações do sistema e programas instalados.\n\n"
+        help_text+="🔗 SUPORTE:\n"
+        help_text+="• Repositório: https://github.com/xJCPMSx/linux-install-scripts\n"
+        help_text+="• Issues: https://github.com/xJCPMSx/linux-install-scripts/issues\n"
+        help_text+="• Documentação: README.md"
+        
         run_kdialog --title "Ajuda" \
-            --msgbox "$help_text"
+            --msgbox "$help_text" \
+            --geometry 700x600
     else
+        local help_text="<b>❓ Ajuda - Linux Install Scripts</b>\n\n"
+        help_text+="<b>🚀 Instalação Automática:</b>\n"
+        help_text+="Selecione a opção 1 para instalar todos os programas.\n\n"
+        help_text+="<b>📋 Listar Programas:</b>\n"
+        help_text+="Veja todos os programas disponíveis para instalação.\n\n"
+        help_text+="<b>🗑️ Desinstalar:</b>\n"
+        help_text+="Remove todos os programas instalados pelo script.\n\n"
+        help_text+="<b>💾 Backup:</b>\n"
+        help_text+="Crie backups antes de grandes mudanças.\n\n"
+        help_text+="<b>📊 Estatísticas:</b>\n"
+        help_text+="Veja informações do sistema e programas instalados.\n\n"
+        help_text+="<b>🔗 Suporte:</b>\n"
+        help_text+="• Repositório: https://github.com/xJCPMSx/linux-install-scripts\n"
+        help_text+="• Issues: https://github.com/xJCPMSx/linux-install-scripts/issues\n"
+        help_text+="• Documentação: README.md"
+        
         run_zenity --info \
             --title="Ajuda" \
-            --text="$help_text"
+            --text="$help_text" \
+            --width=800 \
+            --height=700
     fi
 }
 
