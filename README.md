@@ -54,7 +54,17 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 
 ## 🚀 Como Usar
 
-### **openSUSE:**
+### **🎯 Instalação Automática (Recomendado):**
+```bash
+# Detecção automática da distribuição
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
+chmod +x auto-install.sh
+./auto-install.sh
+```
+
+### **📋 Instalação Manual por Distribuição:**
+
+#### **openSUSE:**
 ```bash
 # Baixar e executar
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
@@ -62,7 +72,7 @@ chmod +x install-programs.sh
 ./install-programs.sh
 ```
 
-### **Debian/Ubuntu:**
+#### **Debian/Ubuntu:**
 ```bash
 # Baixar e executar
 wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
@@ -73,16 +83,28 @@ chmod +x install-programs-debian.sh
 ## 📁 Estrutura do Projeto
 ```
 linux-install-scripts/
+├── auto-install.sh          # 🎯 Detecção automática
+├── LICENSE                   # 📄 Licença MIT
+├── CHANGELOG.md             # 📋 Histórico de versões
+├── README.md                # 📖 Documentação (português)
+├── README-EN.md             # 📖 Documentation (english)
 ├── opensuse/
 │   ├── install-programs.sh
-│   └── README.md
-├── debian/
-│   ├── install-programs-debian.sh
-│   └── README.md
-└── README.md
+│   ├── README.md
+│   └── README-EN.md
+└── debian/
+    ├── install-programs-debian.sh
+    ├── README.md
+    └── README-EN.md
 ```
 
 ## 🔧 Funcionalidades
+
+### **🎯 Detecção Automática:**
+- ✅ **Detecção de distribuição** - Identifica automaticamente o sistema
+- ✅ **Execução inteligente** - Executa o script apropriado
+- ✅ **Suporte a múltiplas distribuições** - openSUSE, Debian, Ubuntu e derivados
+- ✅ **Interface amigável** - Feedback visual durante a detecção
 
 ### **Instalação Automática:**
 - ✅ Repositórios necessários
@@ -96,6 +118,12 @@ linux-install-scripts/
 - ✅ Git com autenticação
 - ✅ Ícones para aplicativos
 - ✅ Extensões do VSCode
+
+### **📋 Documentação Completa:**
+- ✅ **READMEs bilíngues** - Português e inglês
+- ✅ **CHANGELOG** - Histórico detalhado de versões
+- ✅ **LICENSE** - Licença MIT
+- ✅ **Badges informativos** - Status e compatibilidade
 
 ## 🔧 Configurações Automáticas
 - **Java** configurado como alternativa padrão
