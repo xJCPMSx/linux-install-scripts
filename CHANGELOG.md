@@ -5,7 +5,10 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2.6] - 2025-09-27
+## [1.0-beta] - 2025-09-28
+
+### ⚠️ **VERSÃO BETA - TESTES**
+Esta é uma versão beta para testes. Funcionalidades podem mudar antes da versão final.
 
 ### ✨ Adicionado
 - **Suporte multilíngue completo** - READMEs em inglês e português
