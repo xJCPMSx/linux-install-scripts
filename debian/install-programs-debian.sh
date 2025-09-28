@@ -14,7 +14,6 @@ echo ""
 set -e
 
 # Cores para output
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -251,8 +250,7 @@ if [ "$cursor_found" = false ]; then
     echo "⚠️  Cursor não encontrado"
     echo "   Baixando AppImage do Cursor..."
     mkdir -p "$HOME/Applications"
-    wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64
-    if [ $? -eq 0 ]; then
+    if wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64; then
         chmod +x "$HOME/Applications/cursor.AppImage"
         echo "✓ Cursor AppImage baixado em $HOME/Applications/"
         echo "   Para usar: $HOME/Applications/cursor.AppImage"
@@ -335,7 +333,7 @@ fi
 
 # Osu! (Jogo de ritmo)
 echo "Instalando Osu!..."
-USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
 if ! flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Applications/osu.AppImage" ]; then
     echo "⚠️  Osu! não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
@@ -344,10 +342,9 @@ if ! flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Applicati
         echo "✓ Osu! instalado via Flatpak"
     else
         echo "   Flatpak falhou, tentando download direto..."
-        wget -O osu.AppImage https://github.com/ppy/osu/releases/latest/download/osu.AppImage
-        if [ $? -eq 0 ]; then
+        if wget -O osu.AppImage https://github.com/ppy/osu/releases/latest/download/osu.AppImage; then
             chmod +x osu.AppImage
-            USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+            USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
             mkdir -p "$USER_HOME/Applications"
             mv osu.AppImage "$USER_HOME/Applications/"
             echo "✓ Osu! AppImage baixado em $USER_HOME/Applications/"
@@ -428,8 +425,8 @@ echo "Criando ícones para aplicativos..."
 mkdir -p ~/.local/share/applications ~/.local/share/icons
 
 # Criar arquivo desktop para Cursor
-if [ -f "$HOME/Applications/Cursor"*.AppImage ]; then
-    CURSOR_APPIMAGE=$(ls "$HOME/Applications/Cursor"*.AppImage | head -1)
+CURSOR_APPIMAGE=$(find "$HOME/Applications" -name "Cursor*.AppImage" -type f | head -1)
+if [ -n "$CURSOR_APPIMAGE" ]; then
     cat > ~/.local/share/applications/cursor.desktop << EOF
 [Desktop Entry]
 Version=1.0
