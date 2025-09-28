@@ -1,5 +1,12 @@
 # Script de Instalação Automática - Debian/Ubuntu
 
+[![Debian](https://img.shields.io/badge/Debian-Supported-red.svg)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-Supported-orange.svg)](https://ubuntu.com/)
+[![Linux Mint](https://img.shields.io/badge/Linux%20Mint-Supported-green.svg)](https://linuxmint.com/)
+[![Kali](https://img.shields.io/badge/Kali-Supported-purple.svg)](https://www.kali.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-2.6-brightgreen.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+
 ## 📋 Descrição
 Script automatizado para instalação de programas essenciais em sistemas baseados em Debian/Ubuntu, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
 

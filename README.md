@@ -1,5 +1,17 @@
 # Scripts de Instalação Linux
 
+[![Linux](https://img.shields.io/badge/Linux-Supported-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+[![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
+[![Debian](https://img.shields.io/badge/Debian-Supported-red.svg)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-Supported-orange.svg)](https://ubuntu.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-2.6-brightgreen.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+
+## 🌍 Languages / Idiomas
+
+- [🇺🇸 English](README-EN.md)
+- [🇧🇷 Português](README.md) *(Atual)*
+
 ## 📋 Descrição
 Coleção de scripts automatizados para instalação de programas essenciais em diferentes distribuições Linux, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
 
