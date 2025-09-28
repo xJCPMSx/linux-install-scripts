@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Serviço para openSUSE
+  opensuse-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.opensuse
+    container_name: linux-install-opensuse
+    volumes:
+      - ./logs:/home/developer/.linux-install-scripts/logs
+      - ./backup:/home/developer/.linux-install-scripts/backup
+    environment:
+      - LOG_LEVEL=DEBUG
+      - INSTALL_MODE=test
+    command: ["/bin/bash", "-c", "cd /home/developer/linux-install-scripts && ./opensuse/install-programs.sh"]
+    networks:
+      - linux-install-network
+
+  # Serviço para Debian/Ubuntu
+  debian-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.debian
+    container_name: linux-install-debian
+    volumes:
+      - ./logs:/home/developer/.linux-install-scripts/logs
+      - ./backup:/home/developer/.linux-install-scripts/backup
+    environment:
+      - LOG_LEVEL=DEBUG
+      - INSTALL_MODE=test
+    command: ["/bin/bash", "-c", "cd /home/developer/linux-install-scripts && ./debian/install-programs-debian.sh"]
+    networks:
+      - linux-install-network
+
+  # Serviço para testes
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linux-install-test
+    volumes:
+      - ./logs:/home/developer/.linux-install-scripts/logs
+      - ./backup:/home/developer/.linux-install-scripts/backup
+      - ./tests:/home/developer/tests
+    environment:
+      - LOG_LEVEL=DEBUG
+      - TEST_MODE=true
+    command: ["/bin/bash", "-c", "cd /home/developer && ./tests/run-tests.sh"]
+    networks:
+      - linux-install-network
+    depends_on:
+      - opensuse-test
+      - debian-test
+
+  # Serviço para desenvolvimento
+  dev-environment:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linux-install-dev
+    volumes:
+      - .:/home/developer/linux-install-scripts
+      - ./logs:/home/developer/.linux-install-scripts/logs
+      - ./backup:/home/developer/.linux-install-scripts/backup
+    environment:
+      - LOG_LEVEL=DEBUG
+      - DEV_MODE=true
+    ports:
+      - "8080:8080"
+    networks:
+      - linux-install-network
+    command: ["/bin/bash"]
+
+networks:
+  linux-install-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
+  backup:
+    driver: local
