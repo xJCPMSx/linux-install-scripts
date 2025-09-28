@@ -76,6 +76,13 @@ jobs:
         echo "Testando imagem Docker..."
         docker run --rm linux-install-scripts:latest /bin/bash -c "echo 'Docker image funcionando'"
     
+    - name: Instalar Docker Compose
+      run: |
+        echo "Instalando Docker Compose..."
+        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+    
     - name: Build com Docker Compose
       run: |
         echo "Testando Docker Compose..."
