@@ -410,15 +410,25 @@ else
     check_success "dependências adicionais"
 fi
 
-# Instalar youtube-dl
-echo "Instalando youtube-dl..."
-if ! command -v youtube-dl &> /dev/null; then
-    sudo zypper install -y youtube-dl
-    echo "✓ youtube-dl instalado"
+# Instalar yt-dlp (sucessor do youtube-dl)
+echo "Instalando yt-dlp..."
+if ! command -v yt-dlp &> /dev/null; then
+    # Tentar instalar via pip primeiro (mais atualizado)
+    if command -v pip3 &> /dev/null; then
+        pip3 install --user yt-dlp
+        echo "✓ yt-dlp instalado via pip3"
+    elif command -v pip &> /dev/null; then
+        pip install --user yt-dlp
+        echo "✓ yt-dlp instalado via pip"
+    else
+        # Fallback para zypper
+        sudo zypper install -y yt-dlp
+        echo "✓ yt-dlp instalado via zypper"
+    fi
 else
-    echo "✓ youtube-dl já está instalado"
+    echo "✓ yt-dlp já está instalado"
 fi
-check_success "youtube-dl"
+check_success "yt-dlp"
 
 # Osu! (Jogo de ritmo)
 echo ""

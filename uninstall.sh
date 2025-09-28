@@ -61,7 +61,7 @@ confirm_uninstall() {
     echo -e "${RED}   - Java (OpenJDK)${NC}"
     echo -e "${RED}   - Node.js${NC}"
     echo -e "${RED}   - Osu!${NC}"
-    echo -e "${RED}   - youtube-dl${NC}"
+    echo -e "${RED}   - yt-dlp${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
     echo -e "${RED}   - Ícones personalizados${NC}"
@@ -108,9 +108,10 @@ uninstall_opensuse() {
     echo -e "${YELLOW}Removendo Node.js...${NC}"
     sudo zypper remove -y nodejs npm 2>/dev/null || echo "Node.js não encontrado"
     
-    # Desinstalar youtube-dl
-    echo -e "${YELLOW}Removendo youtube-dl...${NC}"
-    sudo zypper remove -y youtube-dl yt-dlp 2>/dev/null || echo "youtube-dl não encontrado"
+    # Desinstalar yt-dlp
+    echo -e "${YELLOW}Removendo yt-dlp...${NC}"
+    sudo zypper remove -y yt-dlp 2>/dev/null || echo "yt-dlp não encontrado"
+    pip3 uninstall -y yt-dlp 2>/dev/null || echo "yt-dlp pip não encontrado"
     
     # Desinstalar Snap
     echo -e "${YELLOW}Removendo Snap...${NC}"
@@ -169,9 +170,10 @@ uninstall_debian() {
     echo -e "${YELLOW}Removendo Node.js...${NC}"
     sudo apt remove -y nodejs npm 2>/dev/null || echo "Node.js não encontrado"
     
-    # Desinstalar youtube-dl
-    echo -e "${YELLOW}Removendo youtube-dl...${NC}"
-    sudo apt remove -y youtube-dl 2>/dev/null || echo "youtube-dl não encontrado"
+    # Desinstalar yt-dlp
+    echo -e "${YELLOW}Removendo yt-dlp...${NC}"
+    sudo apt remove -y yt-dlp 2>/dev/null || echo "yt-dlp não encontrado"
+    pip3 uninstall -y yt-dlp 2>/dev/null || echo "yt-dlp pip não encontrado"
     
     # Desinstalar Snap
     echo -e "${YELLOW}Removendo Snap...${NC}"

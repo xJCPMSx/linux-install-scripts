@@ -245,41 +245,42 @@ linux-install-scripts/
 - **Atualizações automáticas** - Sem intervenção manual
 - **Gerenciamento centralizado** - Um comando para tudo
 
-## 📺 youtube-dl - Download de Vídeos
+## 📺 yt-dlp - Download de Vídeos
 
-### **🔧 O que é o youtube-dl:**
-- **Ferramenta de linha de comando** para download de vídeos
+### **🔧 O que é o yt-dlp:**
+- **Ferramenta de linha de comando** para download de vídeos (sucessor do youtube-dl)
 - **Suporte a múltiplas plataformas** (YouTube, Vimeo, Twitch, etc.)
 - **Instalação automática** em ambos os scripts
 - **Download de áudio e vídeo** em diferentes qualidades
+- **Mais atualizado e mantido** que o youtube-dl original
 
-### **💡 Como usar o youtube-dl:**
+### **💡 Como usar o yt-dlp:**
 
 #### **📥 Comandos Básicos:**
 ```bash
 # Download de vídeo simples
-youtube-dl "https://www.youtube.com/watch?v=VIDEO_ID"
+yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
 
 # Download apenas do áudio (MP3)
-youtube-dl -x --audio-format mp3 "URL_DO_VIDEO"
+yt-dlp -x --audio-format mp3 "URL_DO_VIDEO"
 
 # Download em qualidade específica
-youtube-dl -f best "URL_DO_VIDEO"
+yt-dlp -f best "URL_DO_VIDEO"
 
 # Download de playlist completa
-youtube-dl "URL_DA_PLAYLIST"
+yt-dlp "URL_DA_PLAYLIST"
 ```
 
 #### **🎯 Exemplos Práticos:**
 ```bash
 # Download de música do YouTube
-youtube-dl -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+yt-dlp -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
 # Download de vídeo em HD
-youtube-dl -f "best[height<=720]" "URL_DO_VIDEO"
+yt-dlp -f "best[height<=720]" "URL_DO_VIDEO"
 
 # Download de vídeo com legenda
-youtube-dl --write-sub --sub-lang pt "URL_DO_VIDEO"
+yt-dlp --write-sub --sub-lang pt "URL_DO_VIDEO"
 ```
 
 #### **⚙️ Opções Avançadas:**
@@ -317,7 +318,7 @@ youtube-dl --write-sub --sub-lang pt "URL_DO_VIDEO"
 - **Multimídia:** Spotify
 - **Produtividade:** AnyDesk
 - **Jogos:** Osu!
-- **Utilitários:** youtube-dl
+- **Utilitários:** yt-dlp
 
 ## 📝 Informações Importantes
 
