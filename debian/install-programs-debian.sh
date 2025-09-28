@@ -128,6 +128,16 @@ echo "Instalando ferramentas adicionais..."
 sudo apt install -y vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
+# Instalar youtube-dl
+echo "Instalando youtube-dl..."
+if ! command -v youtube-dl &> /dev/null; then
+    sudo apt install -y youtube-dl
+    echo "✓ youtube-dl instalado"
+else
+    echo "✓ youtube-dl já está instalado"
+fi
+check_success "youtube-dl"
+
 # Instalar Flatpak primeiro
 echo "Instalando Flatpak..."
 if ! command -v flatpak &> /dev/null; then

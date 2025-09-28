@@ -245,6 +245,50 @@ linux-install-scripts/
 - **Atualizações automáticas** - Sem intervenção manual
 - **Gerenciamento centralizado** - Um comando para tudo
 
+## 📺 youtube-dl - Download de Vídeos
+
+### **🔧 O que é o youtube-dl:**
+- **Ferramenta de linha de comando** para download de vídeos
+- **Suporte a múltiplas plataformas** (YouTube, Vimeo, Twitch, etc.)
+- **Instalação automática** em ambos os scripts
+- **Download de áudio e vídeo** em diferentes qualidades
+
+### **💡 Como usar o youtube-dl:**
+
+#### **📥 Comandos Básicos:**
+```bash
+# Download de vídeo simples
+youtube-dl "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Download apenas do áudio (MP3)
+youtube-dl -x --audio-format mp3 "URL_DO_VIDEO"
+
+# Download em qualidade específica
+youtube-dl -f best "URL_DO_VIDEO"
+
+# Download de playlist completa
+youtube-dl "URL_DA_PLAYLIST"
+```
+
+#### **🎯 Exemplos Práticos:**
+```bash
+# Download de música do YouTube
+youtube-dl -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+# Download de vídeo em HD
+youtube-dl -f "best[height<=720]" "URL_DO_VIDEO"
+
+# Download de vídeo com legenda
+youtube-dl --write-sub --sub-lang pt "URL_DO_VIDEO"
+```
+
+#### **⚙️ Opções Avançadas:**
+- **`-x`** - Extrair apenas áudio
+- **`--audio-format mp3`** - Formato de áudio
+- **`-f best`** - Melhor qualidade disponível
+- **`--write-sub`** - Baixar legendas
+- **`--sub-lang pt`** - Idioma das legendas
+
 ## 🔧 Dependências e Requisitos
 
 ### **📋 Requisitos do Sistema:**
@@ -273,6 +317,7 @@ linux-install-scripts/
 - **Multimídia:** Spotify
 - **Produtividade:** AnyDesk
 - **Jogos:** Osu!
+- **Utilitários:** youtube-dl
 
 ## 📝 Informações Importantes
 

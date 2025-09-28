@@ -410,6 +410,16 @@ else
     check_success "dependências adicionais"
 fi
 
+# Instalar youtube-dl
+echo "Instalando youtube-dl..."
+if ! command -v youtube-dl &> /dev/null; then
+    sudo zypper install -y youtube-dl
+    echo "✓ youtube-dl instalado"
+else
+    echo "✓ youtube-dl já está instalado"
+fi
+check_success "youtube-dl"
+
 # Osu! (Jogo de ritmo)
 echo ""
 echo "Instalando Osu!..."
