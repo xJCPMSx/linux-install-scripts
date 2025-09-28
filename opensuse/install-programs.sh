@@ -185,8 +185,7 @@ else
         echo "⚠️  AnyDesk não encontrado nos repositórios"
         echo "   Instalando via download direto..."
         # Download e instalação manual do AnyDesk
-        wget -O anydesk.rpm https://download.anydesk.com/opensuse/anydesk-6.3.2-1.x86_64.rpm
-        if [ $? -eq 0 ]; then
+        if wget -O anydesk.rpm https://download.anydesk.com/opensuse/anydesk-6.3.2-1.x86_64.rpm; then
             sudo zypper install -y anydesk.rpm
             rm anydesk.rpm
             check_success "AnyDesk (via download)"
@@ -270,8 +269,7 @@ if [ "$cursor_found" = false ]; then
     echo "⚠️  Cursor não encontrado"
     echo "   Baixando AppImage do Cursor..."
     mkdir -p "$HOME/Applications"
-    wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64
-    if [ $? -eq 0 ]; then
+    if wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64; then
         chmod +x "$HOME/Applications/cursor.AppImage"
         echo "✓ Cursor AppImage baixado em $HOME/Applications/"
         echo "   Para usar: $HOME/Applications/cursor.AppImage"
@@ -316,8 +314,7 @@ else
     else
         echo "   Flatpak falhou, tentando download direto..."
         # Download e instalação manual do Brave (URL corrigida)
-        wget -O brave-browser.rpm https://brave-browser-rpm-release.s3.brave.com/brave-browser-stable.rpm
-        if [ $? -eq 0 ]; then
+        if wget -O brave-browser.rpm https://brave-browser-rpm-release.s3.brave.com/brave-browser-stable.rpm; then
             sudo zypper install -y brave-browser.rpm
             rm brave-browser.rpm
             check_success "Brave Browser (via download)"
@@ -397,7 +394,7 @@ fi
 echo ""
 echo "Instalando Osu!..."
 # Verificar se já está instalado
-USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
 if command -v osu &> /dev/null || command -v osu! &> /dev/null || [ -f "$USER_HOME/Applications/osu.AppImage" ]; then
     echo "✓ Osu! já está instalado"
 else
@@ -410,11 +407,10 @@ else
     else
         echo "   Flatpak falhou, tentando download direto..."
         # Download e instalação manual do Osu!
-        wget -O osu.AppImage https://github.com/ppy/osu/releases/latest/download/osu.AppImage
-        if [ $? -eq 0 ]; then
+        if wget -O osu.AppImage https://github.com/ppy/osu/releases/latest/download/osu.AppImage; then
             chmod +x osu.AppImage
             # Usar diretório do usuário atual, não root
-            USER_HOME=$(eval echo ~$SUDO_USER 2>/dev/null || echo "$HOME")
+            USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
             mkdir -p "$USER_HOME/Applications"
             mv osu.AppImage "$USER_HOME/Applications/"
             echo "✓ Osu! AppImage baixado em $USER_HOME/Applications/"
@@ -562,8 +558,8 @@ echo "Criando ícones para aplicativos..."
 mkdir -p ~/.local/share/applications ~/.local/share/icons
 
 # Criar arquivo desktop para Cursor
-if [ -f "$HOME/Applications/Cursor"*.AppImage ]; then
-    CURSOR_APPIMAGE=$(ls "$HOME/Applications/Cursor"*.AppImage | head -1)
+CURSOR_APPIMAGE=$(find "$HOME/Applications" -name "Cursor*.AppImage" -type f | head -1)
+if [ -n "$CURSOR_APPIMAGE" ]; then
     cat > ~/.local/share/applications/cursor.desktop << EOF
 [Desktop Entry]
 Version=1.0
