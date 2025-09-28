@@ -28,6 +28,7 @@ Automated script for installing essential programs on openSUSE, including compil
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
+- **youtube-dl** - Video download
 - **Huion Tablet Driver** - Graphics tablet support
 
 ## 🚀 How to Use

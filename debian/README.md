@@ -34,6 +34,7 @@ Script automatizado para instalação de programas essenciais em sistemas basead
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
+- **youtube-dl** - Download de vídeos
 - **Driver Huion Tablet** - Suporte a tablets gráficos
 
 ## 🚀 Como Usar

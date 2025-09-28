@@ -247,6 +247,50 @@ cd docker
 docker-compose up -d
 ```
 
+## 📺 youtube-dl - Video Download
+
+### **🔧 What is youtube-dl:**
+- **Command-line tool** for downloading videos
+- **Multi-platform support** (YouTube, Vimeo, Twitch, etc.)
+- **Automatic installation** in both scripts
+- **Audio and video download** in different qualities
+
+### **💡 How to use youtube-dl:**
+
+#### **📥 Basic Commands:**
+```bash
+# Simple video download
+youtube-dl "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Audio only download (MP3)
+youtube-dl -x --audio-format mp3 "VIDEO_URL"
+
+# Download in specific quality
+youtube-dl -f best "VIDEO_URL"
+
+# Download complete playlist
+youtube-dl "PLAYLIST_URL"
+```
+
+#### **🎯 Practical Examples:**
+```bash
+# Download music from YouTube
+youtube-dl -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+# Download video in HD
+youtube-dl -f "best[height<=720]" "VIDEO_URL"
+
+# Download video with subtitles
+youtube-dl --write-sub --sub-lang en "VIDEO_URL"
+```
+
+#### **⚙️ Advanced Options:**
+- **`-x`** - Extract audio only
+- **`--audio-format mp3`** - Audio format
+- **`-f best`** - Best available quality
+- **`--write-sub`** - Download subtitles
+- **`--sub-lang en`** - Subtitle language
+
 ## 🔗 Useful Links
 - **Repository:** https://github.com/xJCPMSx/linux-install-scripts
 - **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues

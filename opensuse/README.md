@@ -33,6 +33,7 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
+- **youtube-dl** - Download de vídeos
 - **Driver Huion Tablet** - Suporte a tablets gráficos
 
 ## 🚀 Como Usar

@@ -29,6 +29,7 @@ Automated script for installing essential programs on Debian/Ubuntu-based system
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
+- **youtube-dl** - Video download
 - **Huion Tablet Driver** - Graphics tablet support
 
 ## 🚀 How to Use
