@@ -37,11 +37,9 @@ jobs:
         echo "Testando sintaxe dos scripts..."
         shellcheck auto-install.sh
         shellcheck uninstall.sh
+        shellcheck gui-install.sh
         shellcheck opensuse/install-programs.sh
         shellcheck debian/install-programs-debian.sh
-        shellcheck gui/gui-install.sh
-        shellcheck backup/backup.sh
-        shellcheck logs/logger.sh
     
     - name: Testar detecção de distribuição
       run: |

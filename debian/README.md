@@ -49,9 +49,9 @@ chmod +x auto-install.sh
 ### **🖥️ Interface Gráfica:**
 ```bash
 # Interface gráfica interativa
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui/gui-install.sh
-chmod +x gui/gui-install.sh
-./gui/gui-install.sh
+wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
+chmod +x gui-install.sh
+./gui-install.sh
 ```
 
 ### **📋 Instalação Manual:**
