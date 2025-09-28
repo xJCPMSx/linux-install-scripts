@@ -43,7 +43,7 @@ detect_distribution() {
     fi
     
     echo -e "${GREEN}✓ Distribuição detectada: $DISTRO${NC}"
-    if [ ! -z "$VERSION" ]; then
+    if [ -n "$VERSION" ]; then
         echo -e "${GREEN}✓ Versão: $VERSION${NC}"
     fi
     echo ""
