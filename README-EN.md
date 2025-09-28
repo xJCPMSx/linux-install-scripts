@@ -219,40 +219,13 @@ linux-install-scripts/
 - ✅ **Backup options** - Backup configuration
 - ✅ **Interface** - GUI settings
 
-## 🔧 Automatic Configurations
-- **Java** configured as default alternative
-- **Git** with authentication configuration
-- **Icons** for custom applications
-- **VSCode extensions** installed automatically
-
-## 📊 Compatibility
-
-### **openSUSE:**
-- ✅ **openSUSE Leap 15.3+**
-- ✅ **openSUSE Tumbleweed**
-- ✅ **SUSE Linux Enterprise**
-
-### **Debian/Ubuntu:**
-- ✅ **Debian 11+** (Bullseye, Bookworm)
-- ✅ **Ubuntu 20.04+** (LTS and non-LTS)
-- ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
-- ✅ **Elementary OS 6+**
-- ✅ **Zorin OS 16+**
-- ✅ **Kali Linux Rolling**
-
-## 🎯 Characteristics
-- **Automatic installation** of all programs
-- **Intelligent configuration** of dependencies
-- **Robust fallback** for different versions
-- **Automatic cleanup** of conflicts
-- **User-friendly interface** with visual progress
-
-## 📝 Notes
-- Scripts automatically detect the distribution
-- Install only programs that are not present
-- Automatically configure Java alternatives
-- Create custom icons for applications
+## 🎯 Key Features
+- **Automatic distribution detection** and script execution
+- **Smart installation** - doesn't reinstall existing programs
+- **Multiple installation methods** (repositories, Flatpak, AppImage)
+- **Automatic backup** before major changes
+- **Detailed logging** for troubleshooting
+- **Native desktop integration** (KDE, GNOME, XFCE)
 
 ## 🔗 Useful Links
 - **Repository:** https://github.com/xJCPMSx/linux-install-scripts

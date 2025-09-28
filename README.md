@@ -224,62 +224,46 @@ linux-install-scripts/
 
 ## 🎯 Características Principais
 
-### **🚀 Instalação:**
-- **Instalação automática** de todos os programas
-- **Configuração inteligente** de dependências
+### **🚀 Instalação Inteligente:**
+- **Detecção automática** da distribuição
+- **Instalação seletiva** - apenas programas não presentes
 - **Fallback robusto** para diferentes versões
 - **Limpeza automática** de conflitos
 - **Interface amigável** com progresso visual
 
-### **🔧 Configuração:**
+### **🔧 Configuração Automática:**
 - **Java** configurado como alternativa padrão
-- **Git** com configuração de autenticação
-- **Ícones** para aplicativos personalizados
-- **Extensões** do VSCode instaladas automaticamente
-- **Configuração personalizável** via arquivo config.conf
+- **Git** com autenticação SSH
+- **Ícones personalizados** para aplicativos
+- **Extensões VSCode** instaladas automaticamente
+- **Configuração personalizável** via config.conf
 
 ### **💾 Backup e Segurança:**
 - **Backup automático** antes da instalação
-- **Restauração** de configurações
 - **Logs detalhados** para troubleshooting
 - **Verificação de integridade** dos programas
+- **Restauração** de configurações
 
-### **🖥️ Interface:**
+### **🖥️ Interface e Integração:**
 - **GUI interativa** com Zenity
 - **Integração desktop** (KDE, GNOME, XFCE)
 - **Menu de aplicações** nativo
 - **Atalhos** na área de trabalho
 
-### **🐳 Containerização:**
+### **🐳 Containerização e CI/CD:**
 - **Docker** para isolamento
 - **Docker Compose** para orquestração
+- **GitHub Actions** para CI/CD
 - **Múltiplos ambientes** (dev, test, prod)
-- **CI/CD** com GitHub Actions
 
-## 📝 Notas
+## 📝 Informações Importantes
 
-### **🔍 Detecção Inteligente:**
-- Os scripts detectam automaticamente a distribuição
-- Instalam apenas programas que não estão presentes
-- Verificam múltiplas formas de instalação (repositórios, Flatpak, AppImage)
-
-### **⚙️ Configuração Automática:**
-- Configuram automaticamente as alternativas do Java
-- Criam ícones personalizados para aplicativos
-- Configuram Git com autenticação SSH
-- Instalam extensões úteis do VSCode
-
-### **🛡️ Segurança e Backup:**
-- Criam backup automático antes da instalação
-- Registram logs detalhados de todas as operações
-- Verificam integridade dos programas instalados
-- Limpam automaticamente conflitos de repositórios
-
-### **🖥️ Integração:**
-- Integram com desktops (KDE, GNOME, XFCE)
-- Criam entradas no menu de aplicações
-- Adicionam atalhos na área de trabalho
-- Suportam interface gráfica interativa
+- **Detecção automática** da distribuição Linux
+- **Instalação inteligente** - não reinstala programas existentes
+- **Múltiplas formas de instalação** (repositórios, Flatpak, AppImage)
+- **Backup automático** antes de grandes mudanças
+- **Logs detalhados** para troubleshooting
+- **Integração nativa** com desktops (KDE, GNOME, XFCE)
 
 ## 💡 Exemplos de Uso
 

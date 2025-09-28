@@ -89,45 +89,32 @@ chmod +x install-programs-debian.sh
 - **Permissões:** Acesso sudo
 - **Conexão:** Internet estável
 
-## 🔧 Funcionalidades
-
-### **Instalação Automática:**
-- ✅ Limpeza de repositórios conflitantes
-- ✅ Repositórios necessários
-- ✅ Chaves GPG
-- ✅ Dependências do sistema
-- ✅ Programas principais
-- ✅ Configurações básicas
-
-### **Configurações Incluídas:**
-- ✅ Java com fallback múltiplo (11→17→21→default)
-- ✅ Git com autenticação
-- ✅ Ícones para Cursor e Osu!
-- ✅ Extensões do VSCode
-
 ## 🎯 Características Principais
-- **VSCode via Flatpak** - Evita conflitos de repositórios
-- **Java com fallback múltiplo** - 11→17→21→default
-- **Spotify com fallback triplo** - Flatpak→snap→repositório
+
+### **🚀 Instalação Inteligente:**
+- **Detecção automática** da distribuição
+- **Instalação seletiva** - apenas programas não presentes
 - **Limpeza automática** de conflitos de repositórios
-- **Instalação robusta** com fallbacks inteligentes
-- **Java** com fallback múltiplo para diferentes versões
-- **Git** com configuração de autenticação
-- **Ícones** para aplicativos personalizados
-- **Extensões** do VSCode instaladas automaticamente
+- **Fallback robusto** para diferentes versões
+- **Interface amigável** com progresso visual
 
-## 🔧 Resolução de Problemas
-- **Conflitos de repositórios:** Limpeza automática integrada
-- **Java não encontrado:** Fallback para múltiplas versões
-- **Spotify falha:** Múltiplos métodos de instalação
-- **VSCode conflitos:** Instalação via Flatpak
+### **🔧 Configuração Automática:**
+- **Java com fallback múltiplo** (11→17→21→default)
+- **Git** com autenticação SSH
+- **Ícones personalizados** para Cursor e Osu!
+- **Extensões VSCode** instaladas automaticamente
 
-## 📝 Notas
-- O script detecta automaticamente a distribuição
-- Instala apenas programas que não estão presentes
-- Configura automaticamente as alternativas do Java
-- Cria ícones personalizados para aplicativos
-- Resolve automaticamente conflitos de repositórios
+### **🛠️ Resolução de Problemas:**
+- **VSCode via Flatpak** - Evita conflitos de repositórios
+- **Spotify com fallback triplo** - Flatpak→snap→repositório
+- **Java não encontrado** - Fallback para múltiplas versões
+- **Conflitos de repositórios** - Limpeza automática integrada
+
+### **📋 Informações Importantes:**
+- **Repositórios** necessários configurados automaticamente
+- **Chaves GPG** adicionadas automaticamente
+- **Dependências** do sistema instaladas
+- **Configurações** básicas aplicadas
 
 ## 🔗 Links Úteis
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts

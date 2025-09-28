@@ -88,37 +88,26 @@ chmod +x install-programs.sh
 - **Permissões:** Acesso sudo
 - **Conexão:** Internet estável
 
-## 🔧 Funcionalidades
-
-### **Instalação Automática:**
-- ✅ Repositórios necessários
-- ✅ Chaves GPG
-- ✅ Dependências do sistema
-- ✅ Programas principais
-- ✅ Configurações básicas
-
-### **Configurações Incluídas:**
-- ✅ Java como alternativa padrão
-- ✅ Git com autenticação
-- ✅ Ícones para Cursor e Osu!
-- ✅ Extensões do VSCode
-
 ## 🎯 Características Principais
-- **Instalação automática** de todos os programas
-- **Configuração inteligente** de dependências
+
+### **🚀 Instalação Inteligente:**
+- **Detecção automática** da versão do openSUSE
+- **Instalação seletiva** - apenas programas não presentes
 - **Fallback robusto** para diferentes versões
 - **Limpeza automática** de conflitos
 - **Interface amigável** com progresso visual
-- **Java** configurado como alternativa padrão
-- **Git** com configuração de autenticação
-- **Ícones** para aplicativos personalizados
-- **Extensões** do VSCode instaladas automaticamente
 
-## 📝 Notas
-- O script detecta automaticamente a versão do openSUSE
-- Instala apenas programas que não estão presentes
-- Configura automaticamente as alternativas do Java
-- Cria ícones personalizados para aplicativos
+### **🔧 Configuração Automática:**
+- **Java** configurado como alternativa padrão
+- **Git** com autenticação SSH
+- **Ícones personalizados** para Cursor e Osu!
+- **Extensões VSCode** instaladas automaticamente
+
+### **📋 Informações Importantes:**
+- **Repositórios** necessários configurados automaticamente
+- **Chaves GPG** adicionadas automaticamente
+- **Dependências** do sistema instaladas
+- **Configurações** básicas aplicadas
 
 ## 🔗 Links Úteis
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
