@@ -417,7 +417,7 @@ echo "Instalando extensões úteis do VSCode..."
 if command -v code &> /dev/null && [ "$EUID" -ne 0 ]; then
     code --install-extension ms-python.python
     code --install-extension ms-vscode.cpptools
-    code --install-extension ms-vscode.vscode-json
+    code --install-extension redhat.vscode-yaml
     echo "✓ Extensões do VSCode instaladas"
 else
     echo "⚠️  VSCode não encontrado ou executando como root"

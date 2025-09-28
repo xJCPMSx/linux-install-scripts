@@ -91,16 +91,20 @@ echo "Limpando repositórios problemáticos..."
 sudo zypper removerepo spotify 2>/dev/null || true
 sudo zypper removerepo spotify-2 2>/dev/null || true
 
-# Atualizar repositórios
-echo "Atualizando repositórios..."
-sudo zypper refresh
+# Atualizar repositórios (já feito anteriormente)
+echo "Repositórios já atualizados"
 check_success "repositórios"
 
 # Instalar compiladores e ferramentas (do setup-libfprint.sh)
 echo ""
 echo "Instalando compiladores e ferramentas essenciais..."
-sudo zypper install -y gcc gcc-c++ cmake ninja git meson
-check_success "compiladores e ferramentas"
+# Verificar se já estão instalados
+if command -v gcc &> /dev/null && command -v git &> /dev/null; then
+    echo "✓ Compiladores já estão instalados"
+else
+    sudo zypper install -y gcc gcc-c++ cmake ninja git meson
+    check_success "compiladores e ferramentas"
+fi
 
 # Instalar dependências de desenvolvimento (do setup-libfprint.sh)
 echo ""
@@ -346,35 +350,48 @@ fi
 
 # Java (OpenJDK)
 echo "Instalando Java (OpenJDK)..."
-sudo zypper install -y java-11-openjdk java-11-openjdk-devel
-check_success "Java"
+if command -v java &> /dev/null; then
+    echo "✓ Java já está instalado"
+else
+    sudo zypper install -y java-11-openjdk java-11-openjdk-devel
+    check_success "Java"
+fi
 
 # Node.js
 echo "Instalando Node.js..."
-sudo zypper install -y nodejs npm
-check_success "Node.js"
+if command -v node &> /dev/null; then
+    echo "✓ Node.js já está instalado"
+else
+    sudo zypper install -y nodejs npm
+    check_success "Node.js"
+fi
 
 # Instalar dependências adicionais úteis
 echo ""
 echo "Instalando dependências adicionais úteis..."
-sudo zypper install -y \
-  curl \
-  wget \
-  unzip \
-  tar \
-  vim \
-  nano \
-  htop \
-  neofetch \
-  tree \
-  file \
-  which \
-  make \
-  autoconf \
-  automake \
-  libtool \
-  pkg-config
-check_success "dependências adicionais"
+# Verificar se já estão instaladas
+if command -v wget &> /dev/null && command -v make &> /dev/null && command -v curl &> /dev/null; then
+    echo "✓ Dependências adicionais já estão instaladas"
+else
+    sudo zypper install -y \
+      curl \
+      wget \
+      unzip \
+      tar \
+      vim \
+      nano \
+      htop \
+      neofetch \
+      tree \
+      file \
+      which \
+      make \
+      autoconf \
+      automake \
+      libtool \
+      pkg-config
+    check_success "dependências adicionais"
+fi
 
 # Osu! (Jogo de ritmo)
 echo ""
@@ -505,7 +522,7 @@ echo "Instalando extensões úteis do VSCode..."
 if command -v code &> /dev/null && [ "$EUID" -ne 0 ]; then
     code --install-extension ms-python.python
     code --install-extension ms-vscode.cpptools
-    code --install-extension ms-vscode.vscode-json
+    code --install-extension redhat.vscode-yaml
     code --install-extension bradlc.vscode-tailwindcss
     code --install-extension esbenp.prettier-vscode
     echo "✓ Extensões do VSCode instaladas"
@@ -514,7 +531,7 @@ else
     echo "   Para instalar extensões, execute como usuário normal:"
     echo "   code --install-extension ms-python.python"
     echo "   code --install-extension ms-vscode.cpptools"
-    echo "   code --install-extension ms-vscode.vscode-json"
+    echo "   code --install-extension redhat.vscode-yaml"
     echo "   code --install-extension bradlc.vscode-tailwindcss"
     echo "   code --install-extension esbenp.prettier-vscode"
 fi
