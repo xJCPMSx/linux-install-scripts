@@ -237,13 +237,15 @@ backup_menu() {
     local gui_tool="$1"
     
     if [ "$gui_tool" = "kdialog" ]; then
-        local backup_choice=$(run_kdialog --title "Backup/Restore" \
+        local backup_choice
+        backup_choice=$(run_kdialog --title "Backup/Restore" \
             --menu "Selecione uma opção de backup:" \
             "1" "💾 Criar Backup" \
             "2" "📋 Listar Backups" \
             "3" "📊 Estatísticas")
     else
-        local backup_choice=$(run_zenity --list \
+        local backup_choice
+        backup_choice=$(run_zenity --list \
             --title="Backup/Restore" \
             --text="Selecione uma opção de backup:" \
             --column="Opção" \
