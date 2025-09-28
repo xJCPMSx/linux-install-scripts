@@ -15,7 +15,6 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 - **Google Chrome** - Navegador principal
 - **Brave Browser** - Navegador privado
 - **Firefox** - Navegador alternativo
-- **Comet Browser** - Navegador adicional
 
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música
@@ -87,7 +86,6 @@ cd opensuse-install-script/opensuse
 - **Google Chrome** - Navegador principal
 - **Brave Browser** - Foco em privacidade
 - **Firefox** - Navegador alternativo
-- **Comet Browser** - Navegador adicional
 
 ## 📱 Aplicativos
 - **Spotify** - Streaming de música

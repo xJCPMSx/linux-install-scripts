@@ -2,13 +2,13 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
-# Versão: 2.3 - Limpeza agressiva de repositórios integrada
+# Versão: 2.6 - Correções definitivas
 
-echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.3"
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v2.6"
 echo "======================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
-echo "🔧 Versão: 2.3 (Limpeza agressiva de repositórios integrada)"
+echo "🔧 Versão: 2.6 (Correções definitivas)"
 echo ""
 
 set -e
@@ -58,26 +58,6 @@ limpar_repositorios() {
     sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
     sudo rm -f /usr/share/keyrings/spotify.gpg
     sudo rm -f /usr/share/keyrings/*.gpg
-    
-    # Limpar configurações específicas do Microsoft (mais agressivo)
-    echo "Removendo configurações específicas do Microsoft..."
-    sudo rm -f /etc/apt/sources.list.d/microsoft.list
-    sudo rm -f /etc/apt/sources.list.d/vscode.list
-    sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
-    sudo rm -f /usr/share/keyrings/microsoft.gpg
-    
-    # Limpar configurações do Microsoft em outros locais
-    echo "Removendo configurações do Microsoft em outros locais..."
-    sudo rm -f /etc/apt/sources.list.d/*microsoft*
-    sudo rm -f /etc/apt/sources.list.d/*vscode*
-    sudo rm -f /etc/apt/trusted.gpg.d/*microsoft*
-    sudo rm -f /usr/share/keyrings/*microsoft*
-    
-    # Limpar configurações do Google Chrome também
-    echo "Removendo configurações do Google Chrome..."
-    sudo rm -f /etc/apt/sources.list.d/google-chrome.list
-    sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
-    sudo rm -f /usr/share/keyrings/google.gpg
     
     # Limpar cache do apt
     echo "Limpando cache do apt..."
@@ -188,7 +168,16 @@ fi
 
 # Atualizar lista de pacotes
 echo "Atualizando lista de pacotes..."
-sudo apt update
+sudo apt update || {
+    echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
+    # Limpar repositórios problemáticos
+    sudo rm -f /etc/apt/sources.list.d/*.list
+    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
+    sudo rm -f /usr/share/keyrings/*.gpg
+    echo "✓ Repositórios problemáticos removidos"
+    echo "Tentando atualizar novamente..."
+    sudo apt update
+}
 
 # Instalar Flatpak
 echo "Instalando Flatpak..."
@@ -213,39 +202,8 @@ fi
 # Spotify via Flatpak
 echo "Instalando Spotify via Flatpak..."
 if ! flatpak list | grep -q "com.spotify.Client"; then
-    # Limpar cache do Flatpak antes de instalar
-    echo "Limpando cache do Flatpak..."
-    flatpak uninstall --unused -y 2>/dev/null || true
-    flatpak repair 2>/dev/null || true
-    
-    # Tentar instalar Spotify
-    if flatpak install -y flathub com.spotify.Client; then
-        echo "✓ Spotify instalado via Flatpak"
-    else
-        echo "⚠️  Falha na instalação via Flatpak, tentando método alternativo..."
-        # Método alternativo: instalar via snap
-        if command -v snap &> /dev/null; then
-            if sudo snap install spotify; then
-                echo "✓ Spotify instalado via snap"
-            else
-                echo "⚠️  Falha na instalação via snap, tentando método alternativo..."
-                # Método alternativo: instalar via repositório oficial
-                curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-                echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-                sudo apt update
-                sudo apt install -y spotify-client
-                check_success "Spotify (via repositório oficial)"
-            fi
-        else
-            echo "⚠️  Snap não disponível, tentando repositório oficial..."
-            # Método alternativo: instalar via repositório oficial
-            curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-            echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-            sudo apt update
-            sudo apt install -y spotify-client
-            check_success "Spotify (via repositório oficial)"
-        fi
-    fi
+    flatpak install -y flathub com.spotify.Client
+    check_success "Spotify"
 else
     echo "✓ Spotify já está instalado"
 fi

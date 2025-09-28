@@ -15,7 +15,6 @@ Script automatizado para instalação de programas essenciais em sistemas basead
 - **Google Chrome** - Navegador principal
 - **Brave Browser** - Navegador privado (via Flatpak)
 - **Firefox** - Navegador alternativo
-- **Comet Browser** - Navegador adicional
 
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música (via Flatpak/snap/repositório)
@@ -88,7 +87,6 @@ cd opensuse-install-script/debian
 - **Google Chrome** - Navegador principal
 - **Brave Browser** - Foco em privacidade (via Flatpak)
 - **Firefox** - Navegador alternativo
-- **Comet Browser** - Navegador adicional
 
 ## 📱 Aplicativos
 - **Spotify** - Streaming de música (múltiplos métodos)
