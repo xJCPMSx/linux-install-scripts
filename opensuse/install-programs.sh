@@ -510,19 +510,27 @@ fi
 # OpenTabletDriver (substituto melhor para tablets gráficos)
 echo ""
 echo "Instalando OpenTabletDriver..."
-if ! command -v opentabletdriver &> /dev/null; then
-    echo "   Baixando OpenTabletDriver..."
-    # Criar diretório para OpenTabletDriver
-    mkdir -p "$HOME/Applications/OpenTabletDriver"
+if ! command -v opentabletdriver &> /dev/null && ! flatpak list | grep -q "net.opentabletdriver.OpenTabletDriver"; then
+    echo "   Instalando OpenTabletDriver via Flatpak..."
     
-    # Baixar a versão mais recente do OpenTabletDriver
-    if wget -O "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" https://github.com/OpenTablet/OpenTabletDriver/releases/latest/download/OpenTabletDriver.AppImage; then
-        chmod +x "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
-        echo "✓ OpenTabletDriver baixado em $HOME/Applications/OpenTabletDriver/"
-        echo "   Para usar: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+    # Tentar instalar via Flatpak primeiro (mais confiável)
+    if flatpak install -y flathub net.opentabletdriver.OpenTabletDriver; then
+        echo "✓ OpenTabletDriver instalado via Flatpak"
+        echo "   Para usar: flatpak run net.opentabletdriver.OpenTabletDriver"
+        echo "   Ou procure 'OpenTabletDriver' no menu de aplicações"
+    else
+        echo "   Flatpak falhou, tentando download direto..."
+        # Fallback para download direto
+        mkdir -p "$HOME/Applications/OpenTabletDriver"
         
-        # Criar arquivo desktop para OpenTabletDriver
-        cat > ~/.local/share/applications/opentabletdriver.desktop << EOF
+        # Tentar baixar AppImage (pode falhar se o link estiver incorreto)
+        if wget -O "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" https://github.com/OpenTablet/OpenTabletDriver/releases/latest/download/OpenTabletDriver.AppImage 2>/dev/null && [ -s "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" ]; then
+            chmod +x "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+            echo "✓ OpenTabletDriver baixado em $HOME/Applications/OpenTabletDriver/"
+            echo "   Para usar: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+            
+            # Criar arquivo desktop para OpenTabletDriver
+            cat > ~/.local/share/applications/opentabletdriver.desktop << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -534,11 +542,13 @@ Terminal=false
 Categories=System;HardwareSettings;
 StartupNotify=true
 EOF
-        chmod +x ~/.local/share/applications/opentabletdriver.desktop
-        echo "✓ Ícone do OpenTabletDriver criado"
-    else
-        echo "✗ Erro ao baixar OpenTabletDriver"
-        echo "   Você pode baixar manualmente de: https://github.com/OpenTablet/OpenTabletDriver"
+            chmod +x ~/.local/share/applications/opentabletdriver.desktop
+            echo "✓ Ícone do OpenTabletDriver criado"
+        else
+            echo "✗ Erro ao baixar OpenTabletDriver"
+            echo "   Você pode instalar manualmente via Flatpak:"
+            echo "   flatpak install flathub net.opentabletdriver.OpenTabletDriver"
+        fi
     fi
 else
     echo "✓ OpenTabletDriver já está instalado"
