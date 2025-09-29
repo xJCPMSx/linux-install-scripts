@@ -507,77 +507,45 @@ else
     fi
 fi
 
-# OpenTabletDriver (substituto melhor para tablets gráficos)
+# Driver Oficial da Huion Tablet
 echo ""
-echo "Instalando OpenTabletDriver..."
-if ! command -v opentabletdriver &> /dev/null && ! flatpak list | grep -q "net.opentabletdriver.OpenTabletDriver"; then
-    echo "   Instalando OpenTabletDriver via Flatpak..."
+echo "Instalando Driver Oficial da Huion..."
+if ! command -v huiontablet &> /dev/null && ! [ -f "/usr/lib/huiontablet/huiontablet" ]; then
+    echo "   Instalando Driver Oficial da Huion..."
     
-    # Tentar instalar via Flatpak primeiro (mais confiável)
-    if flatpak install -y flathub net.opentabletdriver.OpenTabletDriver; then
-        echo "✓ OpenTabletDriver instalado via Flatpak"
-        echo "   Para usar: flatpak run net.opentabletdriver.OpenTabletDriver"
-        echo "   Ou procure 'OpenTabletDriver' no menu de aplicações"
-    else
-        echo "   Flatpak falhou, tentando download direto..."
-        # Fallback para download direto
-        mkdir -p "$HOME/Applications/OpenTabletDriver"
+    # Verificar se o driver está disponível
+    if [ -d "/home/juca/Downloads/HuionTablet_v15.0.0.89.202205241352.x86_64" ]; then
+        echo "   Driver da Huion encontrado, instalando..."
         
-        # Tentar baixar AppImage (pode falhar se o link estiver incorreto)
-        if wget -O "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" https://github.com/OpenTablet/OpenTabletDriver/releases/latest/download/OpenTabletDriver.AppImage 2>/dev/null && [ -s "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage" ]; then
-            chmod +x "$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
-            echo "✓ OpenTabletDriver baixado em $HOME/Applications/OpenTabletDriver/"
-            echo "   Para usar: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
-            
-            # Criar arquivo desktop para OpenTabletDriver
-            cat > ~/.local/share/applications/opentabletdriver.desktop << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=OpenTabletDriver
-Comment=Open source tablet driver
-Exec=$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
-Icon=opentabletdriver
-Terminal=false
-Categories=System;HardwareSettings;
-StartupNotify=true
-EOF
-            chmod +x ~/.local/share/applications/opentabletdriver.desktop
-            echo "✓ Ícone do OpenTabletDriver criado"
+        # Navegar para o diretório do driver
+        cd /home/juca/Downloads/HuionTablet_v15.0.0.89.202205241352.x86_64
+        
+        # Executar instalação
+        if sudo ./install.sh; then
+            echo "✓ Driver Oficial da Huion instalado com sucesso"
+            echo "   Para usar: procure 'Huion Tablet' no menu de aplicações"
+            echo "   ⚠️  IMPORTANTE: Reinicie o sistema para o driver funcionar corretamente"
         else
-            echo "✗ Erro ao baixar OpenTabletDriver"
-            echo "   Você pode instalar manualmente via Flatpak:"
-            echo "   flatpak install flathub net.opentabletdriver.OpenTabletDriver"
+            echo "✗ Erro ao instalar Driver Oficial da Huion"
+            echo "   Verifique se você tem permissões de administrador"
         fi
+        
+        # Voltar ao diretório original
+        cd /home/juca/Documentos/Scipt\ pós\ instalação
+    else
+        echo "   Driver da Huion não encontrado em /home/juca/Downloads/"
+        echo "   Baixe o driver oficial de: https://www.huion.com/download/"
+        echo "   Extraia e execute: sudo ./install.sh"
     fi
 else
-    echo "✓ OpenTabletDriver já está instalado"
+    echo "✓ Driver Oficial da Huion já está instalado"
 fi
-check_success "OpenTabletDriver"
+check_success "Driver Oficial da Huion"
 
-# Driver da Huion Tablet (mantido para compatibilidade)
+# Nota sobre compatibilidade com jogos
 echo ""
-echo "Instalando driver da Huion Tablet..."
-
-# Verificar se o repositório do driver Huion está disponível
-if ! zypper repos | grep -q "huion"; then
-    echo "Adicionando repositório do driver Huion..."
-    # Nota: O repositório exato pode variar, este é um exemplo
-    # O usuário pode precisar ajustar conforme a disponibilidade
-    echo "Nota: OpenTabletDriver é recomendado para melhor compatibilidade com jogos como osu!"
-    echo "Você pode precisar baixar e instalar manualmente o driver"
-fi
-
-# Tentar instalar o driver Huion (se disponível)
-if zypper search huion 2>/dev/null | grep -q "huion"; then
-    sudo zypper install -y huion-driver
-    check_success "driver Huion"
-else
-    echo "⚠️  Driver Huion não encontrado nos repositórios"
-    echo "   Você pode precisar baixar manualmente de:"
-    echo "   https://www.huion.com/support/download/"
-    echo "   Ou usar o OpenTabletDriver instalado acima"
-fi
+echo "Nota: Driver Oficial da Huion instalado para melhor compatibilidade com tablets Huion"
+echo "   Para jogos como osu!, configure Raw Input: OFF nas configurações do jogo"
 
 # Configurar Java
 echo ""
@@ -711,7 +679,7 @@ echo "✓ Java (OpenJDK 11)"
 echo "✓ Node.js e npm"
 echo "✓ Osu! (Jogo de ritmo)"
 echo "✓ Docker e Docker Compose"
-echo "✓ OpenTabletDriver (driver de tablet recomendado)"
+echo "✓ Driver Oficial da Huion (driver de tablet para tablets Huion)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
 echo "✓ Driver Huion (se disponível)"
@@ -792,10 +760,10 @@ echo "Recomendações:"
 echo "1. Reinicie o sistema para garantir que todos os drivers funcionem corretamente"
 echo "2. Configure o Git com suas credenciais"
 echo "3. Teste os programas instalados"
-echo "4. Os ícones do Cursor, Osu! e OpenTabletDriver aparecerão no menu após reiniciar o ambiente gráfico"
+echo "4. Os ícones do Cursor, Osu! e Huion Tablet aparecerão no menu após reiniciar o ambiente gráfico"
 echo "5. Para usar Docker sem sudo, faça logout e login novamente"
-echo "6. Configure o OpenTabletDriver para seu tablet gráfico (recomendado para osu!)"
+echo "6. Configure o Driver Oficial da Huion para seu tablet gráfico (recomendado para osu!)"
 echo ""
 echo "Para testar o libfprint, execute: fprintd-enroll"
 echo "Para usar Docker, execute: docker --version"
-echo "Para usar OpenTabletDriver, execute: $HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage"
+echo "Para usar Driver Oficial da Huion, procure 'Huion Tablet' no menu de aplicações"

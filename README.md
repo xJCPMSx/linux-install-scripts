@@ -54,8 +54,7 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização
-- **OpenTabletDriver** - Driver de tablet open source (recomendado para osu!)
-- **Driver Huion Tablet** - Suporte a tablets gráficos (compatibilidade)
+- **Driver Oficial da Huion** - Driver oficial para tablets Huion (recomendado para osu!)
 
 ## 🚀 Como Usar
 
@@ -269,22 +268,20 @@ docker run hello-world
 docker compose up -d
 ```
 
-## 🎮 OpenTabletDriver - Driver de Tablet
+## 🎮 Driver Oficial da Huion - Driver de Tablet
 
-### **🔧 O que é o OpenTabletDriver:**
-- **Driver open source** para tablets gráficos
-- **Melhor compatibilidade** com jogos como osu!
-- **Substituto recomendado** para drivers proprietários
+### **🔧 O que é o Driver Oficial da Huion:**
+- **Driver oficial** para tablets Huion
+- **Melhor compatibilidade** com tablets Huion específicos
+- **Suporte nativo** para modelos como INSPIROY H430P
 - **Instalação automática** em ambos os scripts
 - **Interface gráfica** para configuração
 
-### **💡 Como usar o OpenTabletDriver:**
+### **💡 Como usar o Driver Oficial da Huion:**
 ```bash
-# Executar OpenTabletDriver
-$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
-
-# Ou procurar no menu de aplicações
+# Procurar "Huion Tablet" no menu de aplicações
 # Configurar área de trabalho e botões do tablet
+# Para osu!: configure Raw Input: OFF nas configurações do jogo
 ```
 
 ## 📺 yt-dlp - Download de Vídeos
@@ -361,7 +358,7 @@ yt-dlp --write-sub --sub-lang pt "URL_DO_VIDEO"
 - **Produtividade:** AnyDesk
 - **Jogos:** Osu!
 - **Containerização:** Docker, Docker Compose
-- **Tablets:** OpenTabletDriver
+- **Tablets:** Driver Oficial da Huion
 - **Utilitários:** yt-dlp
 
 ## 📝 Informações Importantes

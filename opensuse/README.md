@@ -34,9 +34,8 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização
-- **OpenTabletDriver** - Driver de tablet open source (recomendado para osu!)
+- **Driver Oficial da Huion** - Driver oficial para tablets Huion (recomendado para osu!)
 - **yt-dlp** - Download de vídeos (sucessor do youtube-dl)
-- **Driver Huion Tablet** - Suporte a tablets gráficos (compatibilidade)
 
 ## 🚀 Como Usar
 
@@ -147,21 +146,19 @@ docker run hello-world
 docker compose up -d
 ```
 
-## 🎮 OpenTabletDriver
+## 🎮 Driver Oficial da Huion
 
 ### **🔧 Instalação Automática:**
-- **AppImage baixado** automaticamente
+- **Driver oficial** instalado automaticamente
 - **Ícone criado** no menu de aplicações
-- **Melhor compatibilidade** com jogos como osu!
-- **Substituto recomendado** para drivers proprietários
+- **Melhor compatibilidade** com tablets Huion específicos
+- **Suporte nativo** para modelos como INSPIROY H430P
 
 ### **💡 Como usar:**
 ```bash
-# Executar OpenTabletDriver
-$HOME/Applications/OpenTabletDriver/OpenTabletDriver.AppImage
-
-# Ou procurar "OpenTabletDriver" no menu
+# Procurar "Huion Tablet" no menu de aplicações
 # Configurar área de trabalho e botões do tablet
+# Para osu!: configure Raw Input: OFF nas configurações do jogo
 ```
 
 ## 🔗 Links Úteis
