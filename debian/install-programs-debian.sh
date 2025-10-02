@@ -438,42 +438,167 @@ else
 fi
 
 # Driver Oficial da Huion Tablet
+echo ""
 echo "Instalando Driver Oficial da Huion..."
 if ! command -v huiontablet &> /dev/null && ! [ -f "/usr/lib/huiontablet/huiontablet" ]; then
     echo "   Instalando Driver Oficial da Huion..."
     
-    # Verificar se o driver está disponível
-    if [ -d "/home/juca/Downloads/HuionTablet_v15.0.0.89.202205241352.x86_64" ]; then
-        echo "   Driver da Huion encontrado, instalando..."
+    # Obter o diretório do script
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    HUION_DIR="$SCRIPT_DIR/huion"
+    
+    # Verificar se os arquivos do driver existem
+    if [ ! -d "$HUION_DIR" ]; then
+        echo "✗ Arquivos do driver Huion não encontrados em $HUION_DIR"
+        echo "   Os arquivos do driver devem estar em: debian/huion/"
+        check_success "Driver Oficial da Huion"
+    else
+        # Fechar driver se estiver rodando
+        AppName=huiontablet
+        AppDir=huiontablet
+        AppCoreName=huionCore
+        AppUIName=huiontablet
         
-        # Navegar para o diretório do driver
-        cd /home/juca/Downloads/HuionTablet_v15.0.0.89.202205241352.x86_64
+        echo "   Parando driver existente (se estiver rodando)..."
+        sudo killall huionCore 2>/dev/null || true
+        sudo killall huiontablet 2>/dev/null || true
         
-        # Executar instalação
-        if sudo ./install.sh; then
-            echo "✓ Driver Oficial da Huion instalado com sucesso"
-            echo "   Para usar: procure 'Huion Tablet' no menu de aplicações"
-            echo "   ⚠️  IMPORTANTE: Reinicie o sistema para o driver funcionar corretamente"
+        # Copiar regras udev
+        sysRuleDir="/usr/lib/udev/rules.d"
+        appRuleDir="$HUION_DIR/huiontablet/res/rule"
+        ruleName="20-huion.rules"
+        
+        echo "   Copiando regras udev..."
+        if [ -f "$appRuleDir/$ruleName" ]; then
+            sudo cp "$appRuleDir/$ruleName" "$sysRuleDir/$ruleName"
         else
-            echo "✗ Erro ao instalar Driver Oficial da Huion"
-            echo "   Verifique se você tem permissões de administrador"
+            echo "✗ Não foi possível encontrar as regras do driver"
+            check_success "Driver Oficial da Huion"
         fi
         
-        # Voltar ao diretório original
-        cd /home/juca/Documentos/Scipt\ pós\ instalação
-    else
-        echo "   Driver da Huion não encontrado em /home/juca/Downloads/"
-        echo "   Baixe o driver oficial de: https://www.huion.com/download/"
-        echo "   Extraia e execute: sudo ./install.sh"
+        # Instalar aplicativo
+        sysAppDir="/usr/lib"
+        appAppDir="$HUION_DIR/$AppName"
+        exeShell="huionCore.sh"
+        
+        echo "   Copiando arquivos do driver..."
+        if [ -d "$appAppDir" ]; then
+            sudo cp -rf "$appAppDir" "$sysAppDir"
+        else
+            echo "✗ Não foi possível encontrar os arquivos do driver"
+            check_success "Driver Oficial da Huion"
+        fi
+        
+        # Configurar permissões
+        echo "   Configurando permissões..."
+        sudo chmod +0755 "$sysAppDir/$AppName/$exeShell" 2>/dev/null || true
+        sudo chmod +0755 "$sysAppDir/$AppDir/$AppCoreName" 2>/dev/null || true
+        sudo chmod +0755 "$sysAppDir/$AppDir/$AppUIName" 2>/dev/null || true
+        sudo chmod 0766 "$sysAppDir/$AppDir/HuionCore.pid" 2>/dev/null || true
+        sudo chmod 766 "$sysAppDir/$AppDir/log.conf" 2>/dev/null || true
+        sudo chmod 766 "$sysAppDir/$AppDir/huion.log" 2>/dev/null || true
+        
+        # Instalar atalhos
+        sysDesktopDir=/usr/share/applications
+        sysAppIconDir=/usr/share/icons
+        sysAutoStartDir=/etc/xdg/autostart
+        
+        appDesktopDir="$HUION_DIR/xdg/autostart/"
+        appAppIconDir="$HUION_DIR/icon/"
+        appAutoStartDir="$HUION_DIR/xdg/autostart/"
+        
+        appDesktopName=$AppName.desktop
+        appIconName=$AppName.png
+        
+        echo "   Instalando atalhos..."
+        if [ -f "$appDesktopDir/$appDesktopName" ]; then
+            sudo cp "$appDesktopDir/$appDesktopName" "$sysDesktopDir/$appDesktopName"
+        fi
+        
+        if [ -f "$appAppIconDir/$appIconName" ]; then
+            sudo cp "$appAppIconDir/$appIconName" "$sysAppIconDir/$appIconName"
+            sudo chmod 0766 "$sysAppIconDir/$appIconName"
+        fi
+        
+        if [ -f "$appAutoStartDir/$appDesktopName" ]; then
+            sudo cp "$appAutoStartDir/$appDesktopName" "$sysAutoStartDir/$appDesktopName"
+        fi
+        
+        # Configurar arquivos de recursos
+        echo "   Configurando recursos..."
+        sudo chmod -R 766 "$sysAppDir/$AppDir/res/"* 2>/dev/null || true
+        sudo chmod 766 "$sysAppDir/$AppDir/res/DevImg/"* 2>/dev/null || true
+        sudo chmod -R 777 /usr/lib/huiontablet/res 2>/dev/null || true
+        
+        echo "✓ Driver Oficial da Huion instalado com sucesso"
+        echo "   Para usar: procure 'Huion Tablet' no menu de aplicações"
+        echo "   ⚠️  IMPORTANTE: Reinicie o sistema para o driver funcionar corretamente"
     fi
 else
     echo "✓ Driver Oficial da Huion já está instalado"
 fi
 check_success "Driver Oficial da Huion"
 
+# Função de desinstalação do Driver da Huion (se necessário)
+uninstall_huion_driver() {
+    echo "Desinstalando Driver Oficial da Huion..."
+    
+    # Fechar processos em execução
+    echo "   Fechando processos do driver em execução..."
+    sudo killall huionCore 2>/dev/null || true
+    sudo killall huiontablet 2>/dev/null || true
+    
+    # Remover aplicação
+    echo "   Removendo arquivos do driver..."
+    if [ -d "/usr/lib/huiontablet" ]; then
+        sudo rm -rf "/usr/lib/huiontablet"
+    fi
+    
+    # Remover atalhos e ícones
+    echo "   Removendo atalhos e ícones..."
+    if [ -f "/usr/share/applications/huiontablet.desktop" ]; then
+        sudo rm "/usr/share/applications/huiontablet.desktop"
+    fi
+    
+    if [ -f "/usr/share/icons/huiontablet.png" ]; then
+        sudo rm "/usr/share/icons/huiontablet.png"
+    fi
+    
+    if [ -f "/etc/xdg/autostart/huiontablet.desktop" ]; then
+        sudo rm "/etc/xdg/autostart/huiontablet.desktop"
+    fi
+    
+    # Remover regras udev
+    echo "   Removendo regras udev..."
+    if [ -f "/usr/lib/udev/rules.d/20-huion.rules" ]; then
+        sudo rm "/usr/lib/udev/rules.d/20-huion.rules"
+    fi
+    
+    echo "✓ Driver Oficial da Huion desinstalado com sucesso"
+}
+
 # Nota sobre compatibilidade com jogos
+echo ""
 echo "Nota: Driver Oficial da Huion instalado para melhor compatibilidade com tablets Huion"
 echo "   Para jogos como osu!, configure Raw Input: OFF nas configurações do jogo"
+
+# WireGuard VPN
+echo ""
+echo "Instalando WireGuard..."
+if command -v wg &> /dev/null || command -v wg-quick &> /dev/null; then
+    echo "✓ WireGuard já está instalado"
+else
+    echo "   Instalando WireGuard..."
+    if sudo apt install -y wireguard wireguard-tools; then
+        echo "✓ WireGuard instalado com sucesso"
+        echo "   WireGuard é uma VPN moderna, rápida e segura"
+        echo "   Configuração: /etc/wireguard/"
+        echo "   Para criar uma configuração: sudo wg genkey | tee privatekey | wg pubkey > publickey"
+    else
+        echo "✗ Erro ao instalar WireGuard"
+    fi
+fi
+check_success "WireGuard"
 
 # Configurar Java
 echo "Configurando Java..."
@@ -632,6 +757,7 @@ echo "✓ Node.js e npm"
 echo "✓ Osu! (Jogo de ritmo)"
 echo "✓ Docker e Docker Compose"
 echo "✓ Driver Oficial da Huion (driver de tablet para tablets Huion)"
+echo "✓ WireGuard (VPN moderna e segura)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
 echo "✓ Driver Huion (se disponível)"

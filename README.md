@@ -16,7 +16,7 @@
 Esta é uma versão beta para testes. Funcionalidades podem mudar antes da versão final.
 
 ## 📋 Descrição
-Coleção de scripts automatizados para instalação de programas essenciais em diferentes distribuições Linux, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e jogos.
+Coleção de scripts automatizados para instalação de programas essenciais em diferentes distribuições Linux, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e aplicativos.
 
 ## 🐧 Distribuições Suportadas
 
@@ -54,22 +54,26 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização
-- **Driver Oficial da Huion** - Driver oficial para tablets Huion (recomendado para osu!)
+- **Driver Oficial da Huion** - Driver para tablets Huion
+- **WireGuard** - VPN moderna e segura
+- **yt-dlp** - Download de vídeos
 
 ## 🚀 Como Usar
 
 ### **🎯 Instalação Automática (Recomendado):**
 ```bash
+# Clone o repositório
+git clone https://github.com/xJCPMSx/linux-install-scripts.git
+cd linux-install-scripts
+
 # Detecção automática da distribuição
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
 chmod +x auto-install.sh
 ./auto-install.sh
 ```
 
 ### **🖥️ Interface Gráfica (GUI):**
 ```bash
-# Interface gráfica interativa (detecta automaticamente zenity/kdialog)
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
+# Interface gráfica interativa
 chmod +x gui-install.sh
 ./gui-install.sh
 ```
@@ -78,361 +82,273 @@ chmod +x gui-install.sh
 
 #### **openSUSE:**
 ```bash
-# Baixar e executar
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
+cd opensuse
 chmod +x install-programs.sh
 ./install-programs.sh
 ```
 
 #### **Debian/Ubuntu:**
 ```bash
-# Baixar e executar
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
+cd debian
 chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
 ```
 
 ### **🗑️ Desinstalação:**
 ```bash
-# Remover todos os programas instalados
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/uninstall.sh
 chmod +x uninstall.sh
 ./uninstall.sh
-```
-
-
-### **🐳 Docker:**
-```bash
-# Construir imagem Docker
-docker build -f docker/Dockerfile -t linux-install-scripts .
-
-# Executar com Docker Compose
-cd docker
-docker-compose up -d
 ```
 
 ## 📁 Estrutura do Projeto
 ```
 linux-install-scripts/
 ├── 🎯 auto-install.sh          # Detecção automática
-├── 🗑️ uninstall.sh             # Script de desinstalação
-├── 🖥️ gui-install.sh           # Interface gráfica unificada
+├── 🖥️ gui-install.sh           # Interface gráfica
+├── 🗑️ uninstall.sh             # Desinstalação
 ├── 📄 LICENSE                   # Licença MIT
 ├── 📋 CHANGELOG.md             # Histórico de versões
-├── 📖 README.md                # Documentação (português)
-├── 📖 README-EN.md             # Documentação (english)
+├── 📖 README.md                # Documentação principal
 ├── 🔧 config/
-│   └── config.conf             # Configurações personalizáveis
+│   └── config.conf             # Configurações
 ├── 🐳 docker/
-│   ├── Dockerfile              # Containerização
-│   └── docker-compose.yml      # Orquestração
-├── 🔄 .github/workflows/
-│   └── ci.yml                  # CI/CD
+│   ├── Dockerfile
+│   └── docker-compose.yml
 ├── opensuse/
 │   ├── install-programs.sh
-│   ├── README.md
-│   └── README-EN.md
+│   ├── huion/                  # Driver Huion
+│   └── README.md
 └── debian/
     ├── install-programs-debian.sh
-    ├── README.md
-    └── README-EN.md
+    ├── huion/                  # Driver Huion
+    └── README.md
 ```
 
-## 🔧 Funcionalidades
+## 🔧 Funcionalidades Principais
 
-### **🎯 Funcionalidades Básicas:**
-- ✅ **Detecção automática** - Identifica distribuição e executa script apropriado
-- ✅ **Instalação inteligente** - Não reinstala programas existentes
-- ✅ **Suporte múltiplas distribuições** - openSUSE, Debian, Ubuntu e derivados
-- ✅ **Verificações robustas** - Detecta instalações de diferentes formas
-- ✅ **Fallback inteligente** - Múltiplas opções de instalação
+### **✨ Instalação Inteligente:**
+- ✅ **Detecção automática** da distribuição Linux
+- ✅ **Instalação seletiva** - não reinstala programas existentes
+- ✅ **Múltiplas fontes** - repositórios oficiais, Flatpak, Snap, AppImage
+- ✅ **Fallback inteligente** - tenta múltiplas opções de instalação
+- ✅ **Verificações robustas** - detecta instalações de diferentes formas
 
-### **🖥️ Interface Gráfica:**
-- ✅ **GUI interativa** - Interface amigável com Zenity
-- ✅ **Seleção de programas** - Escolha quais programas instalar
-- ✅ **Configurações avançadas** - Opções personalizáveis
-- ✅ **Menu principal** - Navegação fácil entre funcionalidades
-- ✅ **Progresso visual** - Barra de progresso durante instalação
+### **⚙️ Configuração Automática:**
+- ✅ **Java** configurado como alternativa padrão
+- ✅ **Git** preparado para uso
+- ✅ **Docker** com usuário adicionado ao grupo
+- ✅ **Ícones** criados automaticamente para AppImages
+- ✅ **Extensões VSCode** instaladas automaticamente
 
-- ✅ **Troubleshooting** - Facilita resolução de problemas
+### **🎨 Interface Gráfica:**
+- ✅ **GUI amigável** com Zenity/Kdialog
+- ✅ **Seleção personalizada** de programas
+- ✅ **Progresso visual** durante instalação
+- ✅ **Menu intuitivo** com todas as opções
 
 ### **🐳 Containerização:**
 - ✅ **Docker** - Containerização completa
 - ✅ **Docker Compose** - Orquestração de serviços
-- ✅ **Múltiplos ambientes** - Desenvolvimento, teste, produção
-- ✅ **Portas expostas** - Para desenvolvimento web
-- ✅ **Isolamento** - Ambiente controlado
+- ✅ **Ambientes isolados** para desenvolvimento
 
-### **🔄 CI/CD:**
-- ✅ **GitHub Actions** - Testes automáticos
-- ✅ **Build automático** - Construção de imagens
-- ✅ **Deploy automático** - Deploy em produção
-- ✅ **Qualidade de código** - Análise e validação
-- ✅ **Segurança** - Verificação de vulnerabilidades
+## 📦 Sistemas de Pacotes
 
-### **🖥️ Integração Desktop:**
-- ✅ **KDE** - Integração completa com KDE
-- ✅ **GNOME** - Suporte ao GNOME Shell
-- ✅ **XFCE** - Compatibilidade com XFCE
-- ✅ **Menu de aplicações** - Entradas no menu
-
-### **⚙️ Configuração:**
-- ✅ **Arquivo de configuração** - Personalização completa
-- ✅ **Seleção de programas** - Escolha quais programas instalar
-- ✅ **Configurações por usuário** - Adaptável às necessidades
-- ✅ **Níveis de log** - Controle de verbosidade
-- ✅ **Interface** - Configurações da GUI
-
-## 🎯 Características Principais
-
-### **🚀 Instalação Inteligente:**
-- **Detecção automática** da distribuição
-- **Instalação seletiva** - apenas programas não presentes
-- **Fallback robusto** para diferentes versões
-- **Limpeza automática** de conflitos
-- **Interface amigável** com progresso visual
-
-### **🔧 Configuração Automática:**
-- **Java** configurado como alternativa padrão
-- **Git** com autenticação SSH
-- **Ícones personalizados** para aplicativos
-- **Extensões VSCode** instaladas automaticamente
-- **Configuração personalizável** via config.conf
-
-### **⚙️ Controle de Instalação:**
-- **Arquivo `config/config.conf`** - Controle total sobre a instalação
-- **Seleção de programas** - Escolha exatamente o que instalar
-- **Configurações de repositórios** - Controle sobre fontes de software
-- **Configurações de backup** - Personalize o sistema de backup
-- **Configurações de log** - Controle a verbosidade e rotação
-
-### **💾 Backup e Segurança:**
-- **Backup automático** antes da instalação
-- **Logs detalhados** para troubleshooting
-- **Verificação de integridade** dos programas
-- **Restauração** de configurações
-
-### **🖥️ Interface e Integração:**
-- **GUI interativa** com Zenity
-- **Menu de aplicações** nativo
-- **Atalhos** na área de trabalho
-
-### **🐳 Containerização e CI/CD:**
-- **Docker** para isolamento
-- **Docker Compose** para orquestração
-- **GitHub Actions** para CI/CD
-- **Múltiplos ambientes** (dev, test, prod)
-
-## 📦 Sistemas de Pacotes Universais
-
-### **🔧 Gerenciadores Instalados Automaticamente:**
+### **Gerenciadores Instalados:**
 
 #### **📱 Flatpak:**
-- **Instalação automática** em ambos os scripts
-- **Repositório Flathub** configurado automaticamente
+- **Instalação automática** em todas as distribuições
+- **Repositório Flathub** configurado
 - **Aplicações sandboxed** com isolamento de segurança
-- **Atualizações automáticas** e gerenciamento simplificado
 
 #### **📦 Snap:**
-- **Instalação automática** em ambos os scripts
-- **Sistema universal** da Canonical
-- **Aplicações containerizadas** com dependências isoladas
-- **Rollback automático** em caso de problemas
-- **Repositório Snappy** configurado automaticamente no openSUSE
+- **Instalação automática** quando necessário
+- **Aplicações containerizadas**
+- **Atualizações automáticas**
 
-#### **🎯 Benefícios:**
-- **Compatibilidade universal** - Funciona em qualquer distribuição
-- **Segurança aprimorada** - Isolamento de aplicações
-- **Atualizações automáticas** - Sem intervenção manual
-- **Gerenciamento centralizado** - Um comando para tudo
+### **🎯 Benefícios:**
+- ✅ Compatibilidade universal entre distribuições
+- ✅ Segurança aprimorada com isolamento
+- ✅ Atualizações automáticas
+- ✅ Gerenciamento simplificado
 
-## 🐳 Docker e Docker Compose - Containerização
+## 🎮 Driver Oficial da Huion
 
-### **🔧 O que é o Docker:**
-- **Plataforma de containerização** para desenvolvimento e deploy
-- **Isolamento de aplicações** com dependências incluídas
-- **Docker Compose** para orquestração de múltiplos containers
-- **Instalação automática** em ambos os scripts
-- **Usuário adicionado ao grupo docker** para uso sem sudo
+### **🔧 Instalação Automática:**
+- **Driver oficial** incluído no repositório
+- **Instalação integrada** nos scripts
+- **Ícone criado** no menu de aplicações
+- **Melhor compatibilidade** com tablets Huion
 
-### **💡 Como usar o Docker:**
+### **💡 Modelos Suportados:**
+- INSPIROY H430P, H640P, H950P
+- KAMVAS GT-191, GT-221
+- E muitos outros modelos Huion
+
+### **📝 Uso:**
+```bash
+# Após instalação, procure "Huion Tablet" no menu
+# Configure área de trabalho e botões
+# Para osu!: configure Raw Input: OFF no jogo
+```
+
+## 🐳 Docker e Docker Compose
+
+### **🔧 Instalação:**
+- **Docker CE** via repositório oficial
+- **Docker Compose V2** como plugin
+- **Usuário adicionado** ao grupo docker (uso sem sudo)
+
+### **💡 Uso Básico:**
 ```bash
 # Verificar instalação
 docker --version
 docker compose version
 
-# Executar container simples
+# Executar container
 docker run hello-world
 
-# Usar Docker Compose
+# Docker Compose
 docker compose up -d
-```
-
-## 🎮 Driver Oficial da Huion - Driver de Tablet
-
-### **🔧 O que é o Driver Oficial da Huion:**
-- **Driver oficial** para tablets Huion
-- **Melhor compatibilidade** com tablets Huion específicos
-- **Suporte nativo** para modelos como INSPIROY H430P
-- **Instalação automática** em ambos os scripts
-- **Interface gráfica** para configuração
-
-### **💡 Como usar o Driver Oficial da Huion:**
-```bash
-# Procurar "Huion Tablet" no menu de aplicações
-# Configurar área de trabalho e botões do tablet
-# Para osu!: configure Raw Input: OFF nas configurações do jogo
 ```
 
 ## 📺 yt-dlp - Download de Vídeos
 
-### **🔧 O que é o yt-dlp:**
-- **Ferramenta de linha de comando** para download de vídeos (sucessor do youtube-dl)
+### **🔧 Instalação:**
+- **Sucessor do youtube-dl** mais atualizado
 - **Suporte a múltiplas plataformas** (YouTube, Vimeo, Twitch, etc.)
-- **Instalação automática** em ambos os scripts
-- **Download de áudio e vídeo** em diferentes qualidades
-- **Mais atualizado e mantido** que o youtube-dl original
 
-### **💡 Como usar o yt-dlp:**
-
-#### **📥 Comandos Básicos:**
+### **💡 Uso Básico:**
 ```bash
-# Download de vídeo simples
-yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
+# Download de vídeo
+yt-dlp "URL_DO_VIDEO"
 
 # Download apenas do áudio (MP3)
 yt-dlp -x --audio-format mp3 "URL_DO_VIDEO"
 
-# Download em qualidade específica
-yt-dlp -f best "URL_DO_VIDEO"
-
-# Download de playlist completa
+# Download de playlist
 yt-dlp "URL_DA_PLAYLIST"
 ```
 
-#### **🎯 Exemplos Práticos:**
+## 🔒 WireGuard - VPN Moderna
+
+### **🔧 Instalação Automática:**
+- **VPN moderna, rápida e segura**
+- **Configuração simplificada** comparado a OpenVPN
+- **Instalação automática** em ambos os scripts
+- **Arquivos de configuração** em `/etc/wireguard/`
+
+### **💡 Uso Básico:**
 ```bash
-# Download de música do YouTube
-yt-dlp -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+# Gerar chaves (executar como root)
+sudo -i
+cd /etc/wireguard/
+wg genkey | tee privatekey | wg pubkey > publickey
 
-# Download de vídeo em HD
-yt-dlp -f "best[height<=720]" "URL_DO_VIDEO"
+# Criar arquivo de configuração
+sudo nano /etc/wireguard/wg0.conf
 
-# Download de vídeo com legenda
-yt-dlp --write-sub --sub-lang pt "URL_DO_VIDEO"
+# Exemplo de configuração:
+[Interface]
+PrivateKey = <sua_chave_privada>
+Address = 10.0.0.2/24
+DNS = 1.1.1.1
+
+[Peer]
+PublicKey = <chave_publica_do_servidor>
+Endpoint = vpn.exemplo.com:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+
+# Iniciar VPN
+sudo wg-quick up wg0
+
+# Parar VPN
+sudo wg-quick down wg0
+
+# Habilitar no boot
+sudo systemctl enable wg-quick@wg0
+
+# Ver status
+sudo wg show
 ```
 
-#### **⚙️ Opções Avançadas:**
-- **`-x`** - Extrair apenas áudio
-- **`--audio-format mp3`** - Formato de áudio
-- **`-f best`** - Melhor qualidade disponível
-- **`--write-sub`** - Baixar legendas
-- **`--sub-lang pt`** - Idioma das legendas
+## ⚙️ Configuração Personalizada
 
-## 🔧 Dependências e Requisitos
+Edite o arquivo `config/config.conf` para personalizar a instalação:
 
-### **📋 Requisitos do Sistema:**
-- **Distribuições suportadas:** openSUSE, Debian, Ubuntu
-- **Privilégios:** Acesso sudo/root necessário
-- **Espaço em disco:** ~2GB para instalação completa
-- **Conexão com internet** para download de pacotes
-
-### **🛠️ Dependências Instaladas Automaticamente:**
-
-#### **📦 Gerenciadores de Pacotes:**
-- **Flatpak** - Sistema de pacotes universais
-- **Snap** - Sistema de pacotes da Canonical
-- **Repositórios oficiais** - Configurados automaticamente
-
-#### **🔧 Ferramentas de Desenvolvimento:**
-- **Git** - Controle de versão
-- **Curl/Wget** - Download de arquivos
-- **Build-essential** - Compiladores e ferramentas
-- **Node.js** - Runtime JavaScript
-- **Java OpenJDK** - Runtime Java
-
-#### **📱 Aplicações Principais:**
-- **Navegadores:** Chrome, Brave, Firefox
-- **Editores:** VSCode, Cursor
-- **Multimídia:** Spotify
-- **Produtividade:** AnyDesk
-- **Jogos:** Osu!
-- **Containerização:** Docker, Docker Compose
-- **Tablets:** Driver Oficial da Huion
-- **Utilitários:** yt-dlp
-
-## 📝 Informações Importantes
-
-- **Detecção automática** da distribuição Linux
-- **Instalação inteligente** - não reinstala programas existentes
-- **Múltiplas formas de instalação** (repositórios, Flatpak, Snap, AppImage)
-- **Backup automático** antes de grandes mudanças
-- **Logs detalhados** para troubleshooting
-
-## 💡 Exemplos de Uso
-
-### **⚙️ Configuração Personalizada:**
-```bash
-# 1. Editar arquivo de configuração
-nano config/config.conf
-
-# 2. Personalizar programas a instalar
+```ini
 [INSTALLATION]
-INSTALL_ANYDESK=true      # AnyDesk
-INSTALL_SPOTIFY=true       # Spotify
-INSTALL_VSCODE=true        # VSCode
-INSTALL_CURSOR=false       # Cursor (desabilitado)
-INSTALL_CHROME=true        # Google Chrome
-INSTALL_BRAVE=false        # Brave (desabilitado)
-INSTALL_FIREFOX=false      # Firefox (desabilitado)
-INSTALL_JAVA=true          # Java OpenJDK
-INSTALL_NODEJS=true        # Node.js
-INSTALL_OSU=true           # Osu!
-INSTALL_COMPILERS=true     # GCC, G++, Make, CMake
-INSTALL_DEVELOPMENT_DEPS=true # Dependências de desenvolvimento
+INSTALL_ANYDESK=true
+INSTALL_SPOTIFY=true
+INSTALL_VSCODE=true
+INSTALL_CURSOR=false
+INSTALL_CHROME=true
+INSTALL_BRAVE=false
+INSTALL_FIREFOX=false
+INSTALL_JAVA=true
+INSTALL_NODEJS=true
+INSTALL_OSU=true
+INSTALL_DOCKER=true
+INSTALL_HUION_DRIVER=true
+INSTALL_YTDLP=true
+```
 
-# 3. Executar instalação personalizada
+Depois execute:
+```bash
 ./auto-install.sh
 ```
 
-### **🖥️ Interface Gráfica:**
+## 📋 Requisitos
+
+- **Sistema:** Distribuição Linux suportada
+- **Permissões:** Acesso sudo/root
+- **Espaço:** ~2GB para instalação completa
+- **Internet:** Conexão estável para downloads
+
+## 💡 Exemplos de Uso
+
+### **Instalação Completa:**
 ```bash
-# Executar GUI
+git clone https://github.com/xJCPMSx/linux-install-scripts.git
+cd linux-install-scripts
+./auto-install.sh
+```
+
+### **Instalação com GUI:**
+```bash
 ./gui-install.sh
-
-# Menu principal com opções:
-# 1. 🚀 Instalação Automática
-# 2. ⚙️ Configurações
-# 3. 📋 Listar Programas
-# 4. 🗑️ Desinstalar Programas
-# 5. 💾 Backup/Restore
-# 6. 📊 Estatísticas
-# 7. ❓ Ajuda
+# Selecione os programas desejados no menu gráfico
 ```
 
-
-
-### **🐳 Docker:**
+### **Instalação Personalizada:**
 ```bash
-# Construir imagem
-docker build -f docker/Dockerfile -t linux-install-scripts .
+# 1. Editar configurações
+nano config/config.conf
 
-# Executar container
-docker run -it linux-install-scripts
-
-# Usar Docker Compose
-cd docker
-docker-compose up -d
+# 2. Executar instalação
+./auto-install.sh
 ```
 
+## 📝 Notas Importantes
+
+- ⚠️ **Versão Beta:** Funcionalidades podem mudar
+- ✅ **Detecção automática:** Identifica sua distribuição
+- ✅ **Instalação inteligente:** Não reinstala programas existentes
+- ✅ **Backup:** Logs detalhados para troubleshooting
+- ⚠️ **Reboot recomendado:** Após instalação do Docker e Driver Huion
 
 ## 🔗 Links Úteis
+
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
 - **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
-- **Documentação:** READMEs específicos em cada pasta
+- **Documentação por Distribuição:**
+  - [openSUSE](opensuse/README.md)
+  - [Debian/Ubuntu](debian/README.md)
 
 ## 📄 Licença
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
+
 **🎉 Desenvolvido para facilitar a configuração de ambientes de desenvolvimento em diferentes distribuições Linux!**

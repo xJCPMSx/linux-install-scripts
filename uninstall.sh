@@ -62,6 +62,7 @@ confirm_uninstall() {
     echo -e "${RED}   - Node.js${NC}"
     echo -e "${RED}   - Osu!${NC}"
     echo -e "${RED}   - yt-dlp${NC}"
+    echo -e "${RED}   - Docker e Docker Compose${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
     echo -e "${RED}   - Ícones personalizados${NC}"
@@ -112,6 +113,12 @@ uninstall_opensuse() {
     echo -e "${YELLOW}Removendo yt-dlp...${NC}"
     sudo zypper remove -y yt-dlp 2>/dev/null || echo "yt-dlp não encontrado"
     pip3 uninstall -y yt-dlp 2>/dev/null || echo "yt-dlp pip não encontrado"
+    
+    # Desinstalar Docker
+    echo -e "${YELLOW}Removendo Docker e Docker Compose...${NC}"
+    sudo zypper remove -y docker docker-compose 2>/dev/null || echo "Docker não encontrado"
+    sudo systemctl stop docker 2>/dev/null || echo "Serviço Docker não encontrado"
+    sudo systemctl disable docker 2>/dev/null || echo "Serviço Docker não encontrado"
     
     # Desinstalar Snap
     echo -e "${YELLOW}Removendo Snap...${NC}"
@@ -175,6 +182,12 @@ uninstall_debian() {
     sudo apt remove -y yt-dlp 2>/dev/null || echo "yt-dlp não encontrado"
     pip3 uninstall -y yt-dlp 2>/dev/null || echo "yt-dlp pip não encontrado"
     
+    # Desinstalar Docker
+    echo -e "${YELLOW}Removendo Docker e Docker Compose...${NC}"
+    sudo apt remove -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose 2>/dev/null || echo "Docker não encontrado"
+    sudo systemctl stop docker 2>/dev/null || echo "Serviço Docker não encontrado"
+    sudo systemctl disable docker 2>/dev/null || echo "Serviço Docker não encontrado"
+    
     # Desinstalar Snap
     echo -e "${YELLOW}Removendo Snap...${NC}"
     sudo apt remove -y snapd 2>/dev/null || echo "Snap não encontrado"
@@ -218,6 +231,7 @@ remove_custom_files() {
     rm -f ~/Applications/osu.AppImage 2>/dev/null || echo "Osu! não encontrado"
     rm -f ~/.local/share/applications/osu.desktop 2>/dev/null || echo "Desktop file do Osu! não encontrado"
     rm -f ~/.local/share/icons/osu.svg 2>/dev/null || echo "Ícone do Osu! não encontrado"
+    
     
     # Remover configurações do Git
     echo -e "${YELLOW}Removendo configurações do Git...${NC}"
