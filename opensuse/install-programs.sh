@@ -434,7 +434,7 @@ if ! command -v docker &> /dev/null; then
     sudo zypper install -y docker docker-compose
     
     # Adicionar usuário ao grupo docker
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker "$USER"
     
     # Habilitar e iniciar serviço Docker
     sudo systemctl enable docker
