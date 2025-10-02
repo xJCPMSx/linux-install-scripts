@@ -38,7 +38,7 @@ jobs:
         shellcheck auto-install.sh
         shellcheck uninstall.sh
         shellcheck gui-install.sh
-        shellcheck opensuse/install-programs.sh
+        shellcheck opensuse/install-programs-opensuse.sh
         shellcheck debian/install-programs-debian.sh
     
     - name: Testar detecção de distribuição
