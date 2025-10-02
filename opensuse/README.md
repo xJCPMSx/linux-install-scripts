@@ -61,8 +61,8 @@ cd linux-install-scripts
 ```bash
 # Executar script específico do openSUSE
 cd opensuse
-chmod +x install-programs.sh
-./install-programs.sh
+chmod +x install-programs-opensuse.sh
+./install-programs-opensuse.sh
 ```
 
 ## 📋 Pré-requisitos

@@ -54,9 +54,9 @@ run_appropriate_script() {
     case $DISTRO in
         "opensuse"|"opensuse-leap"|"opensuse-tumbleweed")
             echo -e "${BLUE}🎯 Executando script para openSUSE...${NC}"
-            if [ -f "opensuse/install-programs.sh" ]; then
-                chmod +x opensuse/install-programs.sh
-                ./opensuse/install-programs.sh
+            if [ -f "opensuse/install-programs-opensuse.sh" ]; then
+                chmod +x opensuse/install-programs-opensuse.sh
+                ./opensuse/install-programs-opensuse.sh
             else
                 echo -e "${RED}❌ Script do openSUSE não encontrado!${NC}"
                 echo -e "${YELLOW}💡 Baixe o repositório completo:${NC}"

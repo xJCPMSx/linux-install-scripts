@@ -83,8 +83,8 @@ chmod +x gui-install.sh
 #### **openSUSE:**
 ```bash
 cd opensuse
-chmod +x install-programs.sh
-./install-programs.sh
+chmod +x install-programs-opensuse.sh
+./install-programs-opensuse.sh
 ```
 
 #### **Debian/Ubuntu:**
@@ -115,7 +115,7 @@ linux-install-scripts/
 │   ├── Dockerfile
 │   └── docker-compose.yml
 ├── opensuse/
-│   ├── install-programs.sh
+│   ├── install-programs-opensuse.sh
 │   ├── huion/                  # Driver Huion
 │   └── README.md
 └── debian/

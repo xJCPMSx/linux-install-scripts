@@ -12,8 +12,11 @@
 - [🇺🇸 English](README-EN.md) *(Current)*
 - [🇧🇷 Português](README.md)
 
+## ⚠️ **BETA VERSION - TESTING**
+This is a beta version for testing. Features may change before the final release.
+
 ## 📋 Description
-Collection of automated scripts for installing essential programs on different Linux distributions, including compilers, development tools, browsers, code editors, and games.
+Collection of automated scripts for installing essential programs on different Linux distributions, including compilers, development tools, browsers, code editors, and applications.
 
 ## 🐧 Supported Distributions
 
@@ -35,9 +38,9 @@ Collection of automated scripts for installing essential programs on different L
 
 ### 🔧 **Development Tools**
 - **Compilers:** GCC, G++, Make, CMake, Ninja
-- **Languages:** Java (OpenJDK), Node.js
-- **Version Control:** Git
-- **Editors:** VSCode, Cursor (AI)
+- **Languages:** Java (OpenJDK), Node.js, npm
+- **Version Control:** Git with SSH
+- **Editors:** VSCode, Cursor (AI-powered editor)
 
 ### 🌐 **Browsers**
 - **Google Chrome** - Main browser
@@ -45,12 +48,16 @@ Collection of automated scripts for installing essential programs on different L
 - **Firefox** - Alternative browser
 
 ### 🎵 **Multimedia**
-- **Spotify** - Music streaming
+- **Spotify** - Music streaming (via Flatpak)
 - **Osu!** - Rhythm game
+- **yt-dlp** - Video downloader (youtube-dl successor)
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
-- **Huion Tablet Driver** - Graphics tablet support
+- **Docker e Docker Compose** - Containerization
+- **Official Huion Driver** - Graphics tablet driver
+- **WireGuard** - Modern and secure VPN
+- **yt-dlp** - Video download
 
 ## 🚀 How to Use
 
@@ -62,77 +69,44 @@ chmod +x auto-install.sh
 ./auto-install.sh
 ```
 
-### **🖥️ Graphical Interface (GUI):**
-```bash
-# Interactive graphical interface (auto-detects zenity/kdialog)
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/gui-install.sh
-chmod +x gui-install.sh
-./gui-install.sh
-```
-
 ### **📋 Manual Installation by Distribution:**
 
 #### **openSUSE:**
 ```bash
-# Download and run
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/opensuse/install-programs.sh
-chmod +x install-programs.sh
-./install-programs.sh
+cd opensuse
+chmod +x install-programs-opensuse.sh
+./install-programs-opensuse.sh
 ```
 
 #### **Debian/Ubuntu:**
 ```bash
-# Download and run
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
+cd debian
 chmod +x install-programs-debian.sh
 ./install-programs-debian.sh
-```
-
-### **🗑️ Uninstallation:**
-```bash
-# Remove all installed programs
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/uninstall.sh
-chmod +x uninstall.sh
-./uninstall.sh
-```
-
-
-
-### **🐳 Docker:**
-```bash
-# Build Docker image
-docker build -f docker/Dockerfile -t linux-install-scripts .
-
-# Run with Docker Compose
-cd docker
-docker-compose up -d
 ```
 
 ## 📁 Project Structure
 ```
 linux-install-scripts/
-├── 🎯 auto-install.sh          # Automatic detection
-├── 🗑️ uninstall.sh             # Uninstallation script
-├── 📄 LICENSE                   # MIT License
-├── 📋 CHANGELOG.md             # Version history
-├── 📖 README.md                # Documentation (Portuguese)
-├── 📖 README-EN.md             # Documentation (English)
+├── 🎯 auto-install.sh                  # Automatic detection
+├── 🗑️ uninstall.sh                     # Uninstallation script
+├── 📄 LICENSE                           # MIT License
+├── 📋 CHANGELOG.md                     # Version history
+├── 📖 README.md                        # Documentation (Portuguese)
+├── 📖 README-EN.md                     # Documentation (English)
 ├── 🔧 config/
-│   └── config.conf             # Customizable configurations
-├── 🖥️ gui-install.sh           # Unified graphical interface
+│   └── config.conf                     # Configuration
 ├── 🐳 docker/
-│   ├── Dockerfile              # Containerization
-│   └── docker-compose.yml      # Orchestration
-├── 🔄 .github/workflows/
-│   └── ci.yml                  # CI/CD
+│   ├── Dockerfile
+│   └── docker-compose.yml
 ├── opensuse/
-│   ├── install-programs.sh
-│   ├── README.md
-│   └── README-EN.md
+│   ├── install-programs-opensuse.sh
+│   ├── huion/                          # Huion Driver
+│   └── README.md
 └── debian/
     ├── install-programs-debian.sh
-    ├── README.md
-    └── README-EN.md
+    ├── huion/                          # Huion Driver
+    └── README.md
 ```
 
 ## 🔧 Features
@@ -144,160 +118,174 @@ linux-install-scripts/
 - ✅ **Robust checks** - Detects installations in different ways
 - ✅ **Intelligent fallback** - Multiple installation options
 
-### **⚙️ Custom Configuration:**
-- ✅ **Configuration file** - `config/config.conf` for complete control
-- ✅ **Program selection** - Choose exactly what to install
-- ✅ **Repository settings** - Control software sources
-- ✅ **Backup settings** - Customize backup system
-- ✅ **Log settings** - Control verbosity and rotation
+### **🔒 Security:**
+- ✅ **Automatic GPG verification** - For repositories
+- ✅ **Security audit** - Using Snyk and CodeQL
+- ✅ **CI/CD** - Automated tests on every commit
 
-### **🖥️ Graphical Interface:**
-- ✅ **Interactive GUI** - User-friendly interface with Zenity
-- ✅ **Program selection** - Choose which programs to install
-- ✅ **Advanced settings** - Customizable options
-- ✅ **Main menu** - Easy navigation between features
-- ✅ **Visual progress** - Progress bar during installation
+## 🎮 Osu! - Rhythm Game
 
-- ✅ **Troubleshooting** - Facilitates problem resolution
+### **🔧 Automatic Installation:**
+- **Downloaded** to `~/Applications/osu.AppImage`
+- **Desktop icon** automatically created
+- **Game launcher** in applications menu
+- **Executable permission** configured
 
-### **🐳 Containerization:**
-- ✅ **Docker** - Complete containerization
-- ✅ **Docker Compose** - Service orchestration
-- ✅ **Multiple environments** - Development, test, production
-- ✅ **Exposed ports** - For web development
-- ✅ **Isolation** - Controlled environment
-
-### **🔄 CI/CD:**
-- ✅ **GitHub Actions** - Automatic testing
-- ✅ **Automatic build** - Image construction
-- ✅ **Automatic deploy** - Production deployment
-- ✅ **Code quality** - Analysis and validation
-- ✅ **Security** - Vulnerability checks
-
-### **🖥️ Desktop Integration:**
-- ✅ **KDE** - Complete KDE integration
-- ✅ **GNOME** - GNOME Shell support
-- ✅ **XFCE** - XFCE compatibility
-- ✅ **Application menu** - Menu entries
-- ✅ **Desktop shortcuts** - Desktop icons
-
-### **⚙️ Configuration:**
-- ✅ **Configuration file** - Complete customization
-- ✅ **User settings** - Adaptable to needs
-- ✅ **Log levels** - Verbosity control
-- ✅ **Backup options** - Backup configuration
-- ✅ **Interface** - GUI settings
-
-## 🎯 Key Features
-- **Automatic distribution detection** and script execution
-- **Smart installation** - doesn't reinstall existing programs
-- **Multiple installation methods** (repositories, Flatpak, AppImage)
-- **Detailed logging** for troubleshooting
-
-## 💡 Usage Examples
-
-### **⚙️ Custom Configuration:**
+### **💡 Basic Usage:**
 ```bash
-# 1. Edit configuration file
-nano config/config.conf
+# Run Osu!
+~/Applications/osu.AppImage
 
-# 2. Customize programs to install
-[INSTALLATION]
-INSTALL_ANYDESK=true      # AnyDesk
-INSTALL_SPOTIFY=true       # Spotify
-INSTALL_VSCODE=true        # VSCode
-INSTALL_CURSOR=false       # Cursor (disabled)
-INSTALL_CHROME=true        # Google Chrome
-INSTALL_BRAVE=false        # Brave (disabled)
-INSTALL_FIREFOX=false      # Firefox (disabled)
-INSTALL_JAVA=true          # Java OpenJDK
-INSTALL_NODEJS=true        # Node.js
-INSTALL_OSU=true           # Osu!
-INSTALL_COMPILERS=true     # GCC, G++, Make, CMake
-INSTALL_DEVELOPMENT_DEPS=true # Development dependencies
-
-# 3. Run customized installation
-./auto-install.sh
+# Or search for "osu!" in applications menu
 ```
 
-### **🖥️ Graphical Interface:**
-```bash
-# Run GUI
-./gui-install.sh
+### **🎨 Huion Tablet Configuration:**
+- Configure tablet in Huion driver
+- In Osu!, set **Raw Input: OFF**
+- Works perfectly with official Huion driver
 
-# Main menu options:
-# 1. 🚀 Automatic Installation
-# 2. 📋 List Programs
-# 3. 🗑️ Uninstall Programs
-# 4. 📊 Statistics
-# 5. ❓ Help
-# 6. 🚪 Exit
+## 🐳 Docker and Docker Compose
+
+### **🔧 Automatic Installation:**
+- **Docker Engine** - Latest stable version
+- **Docker Compose** - Integrated with Docker
+- **Automatic initialization** - Docker service starts at boot
+- **User configuration** - No need for sudo
+
+### **💡 Basic Usage:**
+```bash
+# Check version
+docker --version
+docker compose version
+
+# Run a container
+docker run hello-world
+
+# Using Docker Compose
+docker compose up -d
 ```
 
-### **🐳 Docker:**
+### **⚠️ Important:**
+After installation, **log out and log in** for Docker to work without sudo.
+
+## 🎨 Official Huion Driver
+
+### **🔧 Automatic Installation:**
+- **Official driver** from Huion
+- **udev rules** configured for USB access
+- **Desktop icon** created automatically
+- **User added** to `dialout` group
+
+### **💡 How to Use:**
 ```bash
-# Build Docker image
-docker build -f docker/Dockerfile -t linux-install-scripts .
-
-# Run container
-docker run -it linux-install-scripts
-
-# Use Docker Compose
-cd docker
-docker-compose up -d
+# Search "Huion Tablet" in applications menu
+# Or run:
+huiontablet
 ```
 
-## 📺 youtube-dl - Video Download
+### **🎮 Configuration for Osu!:**
+For best performance in games like Osu!:
+- Open Huion driver
+- Configure pressure and keys
+- In Osu!: **Raw Input: OFF**
 
-### **🔧 What is youtube-dl:**
-- **Command-line tool** for downloading videos
-- **Multi-platform support** (YouTube, Vimeo, Twitch, etc.)
-- **Automatic installation** in both scripts
-- **Audio and video download** in different qualities
+## 📺 yt-dlp - Video Download
 
-### **💡 How to use youtube-dl:**
+### **🔧 Installation:**
+- **youtube-dl successor** more updated and maintained
+- **Multi-platform support** (YouTube, Vimeo, Twitch, SoundCloud, etc.)
+- **Installation via pip** (always latest version)
 
-#### **📥 Basic Commands:**
+### **💡 Basic Usage:**
 ```bash
-# Simple video download
-youtube-dl "https://www.youtube.com/watch?v=VIDEO_ID"
+# Download video
+yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
 
-# Audio only download (MP3)
-youtube-dl -x --audio-format mp3 "VIDEO_URL"
+# Download audio only (MP3)
+yt-dlp -x --audio-format mp3 "VIDEO_URL"
 
-# Download in specific quality
-youtube-dl -f best "VIDEO_URL"
+# Download at specific quality
+yt-dlp -f "best[height<=720]" "VIDEO_URL"
 
 # Download complete playlist
-youtube-dl "PLAYLIST_URL"
+yt-dlp "PLAYLIST_URL"
 ```
 
-#### **🎯 Practical Examples:**
+## 🔒 WireGuard - Modern VPN
+
+### **🔧 Automatic Installation:**
+- **wireguard-tools** - Complete package
+- **Modern and fast** - Uses latest cryptographic algorithms
+- **Easy configuration** - Simple setup files
+- **Automatic startup** - Can be configured to start at boot
+
+### **💡 Basic Usage:**
 ```bash
-# Download music from YouTube
-youtube-dl -x --audio-format mp3 "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+# Generate keys
+sudo wg genkey | tee privatekey | wg pubkey > publickey
 
-# Download video in HD
-youtube-dl -f "best[height<=720]" "VIDEO_URL"
+# Configuration file: /etc/wireguard/wg0.conf
+# Edit with your configuration:
+sudo nano /etc/wireguard/wg0.conf
 
-# Download video with subtitles
-youtube-dl --write-sub --sub-lang en "VIDEO_URL"
+# Start VPN
+sudo wg-quick up wg0
+
+# Stop VPN
+sudo wg-quick down wg0
+
+# Enable at boot
+sudo systemctl enable wg-quick@wg0
 ```
 
-#### **⚙️ Advanced Options:**
-- **`-x`** - Extract audio only
-- **`--audio-format mp3`** - Audio format
-- **`-f best`** - Best available quality
-- **`--write-sub`** - Download subtitles
-- **`--sub-lang en`** - Subtitle language
+### **📋 Configuration Example:**
+```ini
+[Interface]
+PrivateKey = YOUR_PRIVATE_KEY
+Address = 10.0.0.2/24
+DNS = 1.1.1.1
 
-## 🔗 Useful Links
-- **Repository:** https://github.com/xJCPMSx/linux-install-scripts
-- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
-- **Documentation:** Specific READMEs in each folder
+[Peer]
+PublicKey = SERVER_PUBLIC_KEY
+Endpoint = vpn.example.com:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+```
 
-## 📄 License
-This project is under the MIT license. See the LICENSE file for more details.
+## ⚙️ Custom Configuration
+
+Edit the `config/config.conf` file to customize the installation:
+- Select which programs to install
+- Configure repositories
+- Set preferred versions
+- Define custom paths
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Open issues
+- Submit pull requests
+- Suggest new features
+- Report bugs
+- Improve documentation
+
+## 📞 Support and Information
+
+- 🔗 **Repository**: https://github.com/xJCPMSx/linux-install-scripts
+- 📋 **Issues**: https://github.com/xJCPMSx/linux-install-scripts/issues
+- 📖 **Full Documentation**: README.md
+- 💬 **Discussions**: GitHub Discussions
+
+## 📝 License
+
+MIT License - See [LICENSE](LICENSE) file for details
+
+## 🙏 Acknowledgments
+
+Thanks to all contributors and the open source community!
 
 ---
-**🎉 Developed to facilitate the configuration of development environments on different Linux distributions!**
+
+**⚠️ Note:** This is beta software. Test in a non-production environment first.
+
+**Made with ❤️ for the Linux community**

@@ -7,16 +7,22 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0--beta-orange.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
+## 🌍 Languages / Idiomas
+
+- [🇺🇸 English](README-EN.md) *(Current)*
+- [🇧🇷 Português](README.md)
+
 ## 📋 Description
-Automated script for installing essential programs on Debian/Ubuntu-based systems, including compilers, development tools, browsers, code editors, and games.
+
+Automated script for installing essential programs on Debian/Ubuntu-based systems, including compilers, development tools, browsers, code editors, and applications.
 
 ## 🎯 Installed Programs
 
 ### 🔧 **Development Tools**
 - **Compilers:** GCC, G++, Make, CMake, Ninja
-- **Languages:** Java (OpenJDK), Node.js
-- **Version Control:** Git
-- **Editors:** VSCode (via Flatpak), Cursor (AI)
+- **Languages:** Java (OpenJDK), Node.js, npm
+- **Version Control:** Git with SSH
+- **Editors:** VSCode (with extensions), Cursor (AI-powered editor)
 
 ### 🌐 **Browsers**
 - **Google Chrome** - Main browser
@@ -24,53 +30,33 @@ Automated script for installing essential programs on Debian/Ubuntu-based system
 - **Firefox** - Alternative browser
 
 ### 🎵 **Multimedia**
-- **Spotify** - Music streaming (via Flatpak/snap/repository)
-- **Osu!** - Rhythm game (AppImage)
+- **Spotify** - Music streaming (via multiple sources)
+- **Osu!** - Rhythm game (configured for Huion tablets)
 
 ### 🛠️ **Tools**
-- **AnyDesk** - Remote access
-- **youtube-dl** - Video download
-- **Huion Tablet Driver** - Graphics tablet support
+- **AnyDesk** - Remote access (.deb official)
+- **Docker e Docker Compose** - Containerization
+- **Official Huion Driver** - Graphics tablet driver
+- **WireGuard** - Modern and secure VPN
+- **yt-dlp** - Video download
 
 ## 🚀 How to Use
 
 ### **Quick Installation:**
 ```bash
-# Download the script
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/debian/install-programs-debian.sh
-
-# Make executable
+cd debian
 chmod +x install-programs-debian.sh
-
-# Execute
-./install-programs-debian.sh
-```
-
-### **Manual Installation:**
-```bash
-# Clone the repository
-git clone https://github.com/xJCPMSx/linux-install-scripts.git
-cd linux-install-scripts/debian
-
-# Execute
 ./install-programs-debian.sh
 ```
 
 ## 📋 Prerequisites
-- **System:** Debian 11+, Ubuntu 20.04+, Linux Mint 20+, Pop!_OS 20.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
+- **System:** Debian 11+, Ubuntu 20.04+, or derivatives
 - **Permissions:** Sudo access
 - **Connection:** Stable internet
-
-### **🖥️ Graphical Interface:**
-```bash
-# Interactive graphical interface (in project root)
-../gui-install.sh
-```
 
 ## 🔧 Features
 
 ### **Automatic Installation:**
-- ✅ Conflict repository cleanup
 - ✅ Required repositories
 - ✅ GPG keys
 - ✅ System dependencies
@@ -78,42 +64,227 @@ cd linux-install-scripts/debian
 - ✅ Basic configurations
 
 ### **Included Configurations:**
-- ✅ Java with multiple fallback (11→17→21→default)
+- ✅ Java as default alternative
 - ✅ Git with authentication
-- ✅ Icons for Cursor and Osu!
+- ✅ SSH keys for GitHub/GitLab
+- ✅ Docker without sudo
 - ✅ VSCode extensions
+- ✅ Desktop icons
 
-## 🎯 Main Characteristics
-- **VSCode via Flatpak** - Avoids repository conflicts
-- **Java with multiple fallback** - 11→17→21→default
-- **Spotify with triple fallback** - Flatpak→snap→repository
-- **Automatic cleanup** of repository conflicts
-- **Robust installation** with intelligent fallbacks
-- **Java** with multiple fallback for different versions
-- **Git** with authentication configuration
-- **Icons** for custom applications
-- **VSCode extensions** installed automatically
+## 🎮 Osu! - Rhythm Game
 
-## 🔧 Troubleshooting
-- **Repository conflicts:** Integrated automatic cleanup
-- **Java not found:** Fallback for multiple versions
-- **Spotify fails:** Multiple installation methods
-- **VSCode conflicts:** Installation via Flatpak
+### **🔧 Automatic Installation:**
+- **Downloaded** to `~/Applications/osu.AppImage`
+- **Desktop icon** automatically created
+- **Executable permission** configured
+- **Game launcher** in applications menu
 
-## 📝 Notes
-- The script automatically detects the distribution
-- Installs only programs that are not present
-- Automatically configures Java alternatives
-- Creates custom icons for applications
-- Automatically resolves repository conflicts
+### **💡 How to Use:**
+```bash
+# Run Osu!
+~/Applications/osu.AppImage
 
-## 🔗 Useful Links
-- **Repository:** https://github.com/xJCPMSx/linux-install-scripts
-- **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
-- **Documentation:** This README
+# Or search "osu!" in applications menu
+```
 
-## 📄 License
-This project is under the MIT license. See the LICENSE file for more details.
+### **🎨 Configuration with Huion Tablet:**
+For best performance with Huion tablets:
+1. Open Official Huion Driver
+2. Configure tablet in driver
+3. In Osu!: **Options → Input → Raw Input: OFF**
+4. Works perfectly!
+
+### **⚠️ Important:**
+- Official Huion driver is recommended for osu!
+- Configure **Raw Input: OFF** in osu! settings
+- Driver is automatically installed by this script
+
+## 🐳 Docker and Docker Compose
+
+### **🔧 Automatic Installation:**
+- **Official Docker repository** configured
+- **Docker Engine** - Latest stable version
+- **Docker Compose** - Integrated with Docker (v2)
+- **Automatic initialization** - Docker service starts at boot
+- **User configuration** - Added to docker group (no sudo needed)
+
+### **💡 How to Use:**
+```bash
+# Check version
+docker --version
+docker compose version
+
+# Run a container
+docker run hello-world
+
+# Using Docker Compose
+docker compose up -d
+```
+
+### **⚠️ Important:**
+After installation, **log out and log in** for Docker to work without sudo.
+
+## 🎨 Official Huion Driver
+
+### **🔧 Automatic Installation:**
+- **Driver files** included in repository (`debian/huion/`)
+- **Installation script** embedded in main script
+- **No external downloads needed**
+- **udev rules** configured automatically
+- **Desktop icon** created in applications menu
+- **User added** to `dialout` group
+
+### **💡 How to Use:**
+```bash
+# Search "Huion Tablet" in applications menu
+# Configure your tablet settings
+# Compatible with all recent Huion models
+```
+
+### **🎮 Configuration for Osu!:**
+For best performance in games like Osu!:
+- Open Huion driver from applications menu
+- Configure pressure and shortcut keys
+- In Osu!: **Raw Input: OFF**
+- Perfect tablet performance!
+
+### **⚠️ Note about compatibility:**
+Official Huion driver installed for better compatibility with Huion tablets.
+For games like osu!, set **Raw Input: OFF** in game settings.
+
+## 📺 yt-dlp - Video Download
+
+### **🔧 Installation:**
+- **youtube-dl successor** more updated and maintained
+- **Multi-platform support** (YouTube, Vimeo, Twitch, SoundCloud, etc.)
+- **Installation via pip** (always latest version)
+
+### **💡 Basic Usage:**
+```bash
+# Download video
+yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Download audio only (MP3)
+yt-dlp -x --audio-format mp3 "VIDEO_URL"
+
+# Download at specific quality
+yt-dlp -f "best[height<=720]" "VIDEO_URL"
+
+# Download complete playlist
+yt-dlp "PLAYLIST_URL"
+```
+
+## 🔒 WireGuard - Modern VPN
+
+### **🔧 Automatic Installation:**
+- **wireguard** and **wireguard-tools** - Complete packages
+- **Modern and fast** - Uses latest cryptographic algorithms
+- **Easy configuration** - Simple setup files
+- **Automatic startup** - Can be configured to start at boot
+
+### **💡 Basic Usage:**
+```bash
+# Generate keys
+sudo wg genkey | tee privatekey | wg pubkey > publickey
+
+# Configuration file: /etc/wireguard/wg0.conf
+# Edit with your configuration:
+sudo nano /etc/wireguard/wg0.conf
+
+# Start VPN
+sudo wg-quick up wg0
+
+# Stop VPN
+sudo wg-quick down wg0
+
+# Check status
+sudo wg show
+
+# Enable at boot
+sudo systemctl enable wg-quick@wg0
+```
+
+### **📋 Configuration Example:**
+```ini
+[Interface]
+PrivateKey = YOUR_PRIVATE_KEY
+Address = 10.0.0.2/24
+DNS = 1.1.1.1
+
+[Peer]
+PublicKey = SERVER_PUBLIC_KEY
+Endpoint = vpn.example.com:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+```
+
+### **🔗 More Information:**
+- [Official WireGuard documentation](https://www.wireguard.com/)
+- Configuration: `/etc/wireguard/`
+- Modern replacement for OpenVPN
+
+## ⚙️ Custom Configuration
+
+The script detects existing installations and doesn't reinstall:
+- Programs already installed
+- Repositories already added
+- Configurations already made
+
+## 🔍 Verification
+
+After installation, verify:
+```bash
+# Java
+java -version
+
+# Node.js
+node -v
+npm -v
+
+# Git
+git --version
+
+# Docker
+docker --version
+
+# WireGuard
+wg --version
+```
+
+## 🛠️ Manual Configurations
+
+### **Git:**
+```bash
+# If not configured automatically
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+### **SSH Keys:**
+```bash
+# If not created automatically
+ssh-keygen -t ed25519 -C "your.email@example.com"
+```
+
+## 🎯 What to Do After Installation
+
+1. **Restart the system** to ensure all drivers work correctly
+2. **Configure Git** with your credentials (if needed)
+3. **Test installed programs**
+4. **Icons** for Cursor, Osu!, and Huion Tablet will appear in menu after restarting graphical environment
+5. **To use Docker without sudo**, log out and log in again
+6. **Configure Official Huion Driver** for your graphics tablet (recommended for osu!)
+
+## 📞 Support and Information
+
+- 🔗 **Repository**: https://github.com/xJCPMSx/linux-install-scripts
+- 📋 **Issues**: https://github.com/xJCPMSx/linux-install-scripts/issues
+- 📖 **Full Documentation**: ../README.md
+
+## 📝 License
+
+MIT License - See [LICENSE](../LICENSE) file for details
 
 ---
-**🎉 Developed to facilitate the configuration of development environments on Debian/Ubuntu-based systems!**
+
+**Made with ❤️ for the Debian/Ubuntu community**
