@@ -29,16 +29,21 @@ Automated script for installing essential programs on Debian/Ubuntu-based system
 - **Brave Browser** - Privacy-focused browser (via Flatpak)
 - **Firefox** - Alternative browser
 
+### 🎮 **Gaming Platforms**
+- **Steam** - Largest PC gaming platform
+- **Lutris** - Game manager (Steam, GOG, Epic, Emulators, etc.)
+- **Heroic Games Launcher** - Client for Epic Games Store and GOG
+- **Osu!** - Rhythm game (configured for Huion tablets)
+
 ### 🎵 **Multimedia**
 - **Spotify** - Music streaming (via multiple sources)
-- **Osu!** - Rhythm game (configured for Huion tablets)
+- **yt-dlp** - Video download
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access (.deb official)
-- **Docker e Docker Compose** - Containerization
+- **Docker & Docker Compose** - Containerization
 - **Official Huion Driver** - Graphics tablet driver
 - **WireGuard** - Modern and secure VPN
-- **yt-dlp** - Video download
 
 ## 🚀 How to Use
 

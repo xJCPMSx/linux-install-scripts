@@ -47,16 +47,21 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 - **Brave Browser** - Navegador privado
 - **Firefox** - Navegador alternativo
 
+### 🎮 **Plataformas de Jogos**
+- **Steam** - Maior plataforma de distribuição de jogos para PC
+- **Lutris** - Gerenciador de jogos (Steam, GOG, Epic, Emuladores, etc.)
+- **Heroic Games Launcher** - Cliente para Epic Games Store e GOG
+- **Osu!** - Jogo de ritmo
+
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música
-- **Osu!** - Jogo de ritmo
+- **yt-dlp** - Download de vídeos
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização
 - **Driver Oficial da Huion** - Driver para tablets Huion
 - **WireGuard** - VPN moderna e segura
-- **yt-dlp** - Download de vídeos
 
 ## 🚀 Como Usar
 

@@ -437,6 +437,65 @@ else
     echo "✓ Osu! já está instalado"
 fi
 
+# Steam (Plataforma de Jogos)
+echo ""
+echo "Instalando Steam..."
+if command -v steam &> /dev/null; then
+    echo "✓ Steam já está instalado"
+else
+    echo "   Instalando Steam..."
+    if sudo apt install -y steam steam-installer; then
+        echo "✓ Steam instalado com sucesso"
+        echo "   Steam é a maior plataforma de distribuição de jogos para PC"
+        echo "   Para melhor compatibilidade, instale os drivers gráficos apropriados"
+    else
+        echo "✗ Erro ao instalar Steam via apt, tentando Flatpak..."
+        if sudo flatpak install -y flathub com.valvesoftware.Steam; then
+            echo "✓ Steam instalado via Flatpak"
+        else
+            echo "✗ Erro ao instalar Steam"
+        fi
+    fi
+fi
+check_success "Steam"
+
+# Lutris (Gerenciador de Jogos)
+echo ""
+echo "Instalando Lutris..."
+if command -v lutris &> /dev/null; then
+    echo "✓ Lutris já está instalado"
+else
+    echo "   Instalando Lutris..."
+    if sudo apt install -y lutris; then
+        echo "✓ Lutris instalado com sucesso"
+        echo "   Lutris permite gerenciar jogos de várias plataformas (Steam, GOG, Epic, etc.)"
+    else
+        echo "✗ Erro ao instalar Lutris via apt, tentando Flatpak..."
+        if sudo flatpak install -y flathub net.lutris.Lutris; then
+            echo "✓ Lutris instalado via Flatpak"
+        else
+            echo "✗ Erro ao instalar Lutris"
+        fi
+    fi
+fi
+check_success "Lutris"
+
+# Heroic Games Launcher (Epic Games & GOG)
+echo ""
+echo "Instalando Heroic Games Launcher..."
+if command -v heroic &> /dev/null || sudo flatpak list | grep -q "com.heroicgameslauncher.hgl"; then
+    echo "✓ Heroic Games Launcher já está instalado"
+else
+    echo "   Instalando Heroic Games Launcher via Flatpak..."
+    if sudo flatpak install -y flathub com.heroicgameslauncher.hgl; then
+        echo "✓ Heroic Games Launcher instalado com sucesso"
+        echo "   Heroic permite jogar jogos da Epic Games Store e GOG no Linux"
+    else
+        echo "✗ Erro ao instalar Heroic Games Launcher"
+    fi
+fi
+check_success "Heroic Games Launcher"
+
 # Driver Oficial da Huion Tablet
 echo ""
 echo "Instalando Driver Oficial da Huion..."
@@ -754,13 +813,19 @@ echo "✓ Brave Browser"
 echo "✓ Firefox"
 echo "✓ Java (OpenJDK 11)"
 echo "✓ Node.js e npm"
-echo "✓ Osu! (Jogo de ritmo)"
 echo "✓ Docker e Docker Compose"
+echo ""
+echo "🎮 Plataformas de Jogos:"
+echo "✓ Osu! (Jogo de ritmo)"
+echo "✓ Steam (Plataforma de jogos)"
+echo "✓ Lutris (Gerenciador de jogos)"
+echo "✓ Heroic Games Launcher (Epic Games & GOG)"
+echo ""
+echo "🔧 Ferramentas e Drivers:"
 echo "✓ Driver Oficial da Huion (driver de tablet para tablets Huion)"
 echo "✓ WireGuard (VPN moderna e segura)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
-echo "✓ Driver Huion (se disponível)"
 echo ""
 
 echo "Recomendações:"

@@ -47,17 +47,21 @@ Collection of automated scripts for installing essential programs on different L
 - **Brave Browser** - Privacy-focused browser
 - **Firefox** - Alternative browser
 
+### 🎮 **Gaming Platforms**
+- **Steam** - Largest PC gaming platform
+- **Lutris** - Game manager (Steam, GOG, Epic, Emulators, etc.)
+- **Heroic Games Launcher** - Client for Epic Games Store and GOG
+- **Osu!** - Rhythm game
+
 ### 🎵 **Multimedia**
 - **Spotify** - Music streaming (via Flatpak)
-- **Osu!** - Rhythm game
 - **yt-dlp** - Video downloader (youtube-dl successor)
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
-- **Docker e Docker Compose** - Containerization
+- **Docker & Docker Compose** - Containerization
 - **Official Huion Driver** - Graphics tablet driver
 - **WireGuard** - Modern and secure VPN
-- **yt-dlp** - Video download
 
 ## 🚀 How to Use
 

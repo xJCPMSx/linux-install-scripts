@@ -28,16 +28,21 @@ Script automatizado para instalação de programas essenciais no openSUSE, inclu
 - **Brave Browser** - Navegador privado (via Flatpak)
 - **Firefox** - Navegador alternativo
 
+### 🎮 **Plataformas de Jogos**
+- **Steam** - Maior plataforma de distribuição de jogos para PC
+- **Lutris** - Gerenciador de jogos (Steam, GOG, Epic, Emuladores, etc.)
+- **Heroic Games Launcher** - Cliente para Epic Games Store e GOG
+- **Osu!** - Jogo de ritmo (AppImage)
+
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música (via Flatpak)
-- **Osu!** - Jogo de ritmo (AppImage)
+- **yt-dlp** - Download de vídeos
 
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização
 - **Driver Oficial da Huion** - Driver para tablets Huion
 - **WireGuard** - VPN moderna e segura
-- **yt-dlp** - Download de vídeos
 
 ## 🚀 Como Usar
 
