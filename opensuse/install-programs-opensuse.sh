@@ -634,10 +634,52 @@ else
         WINBOAT_URL="https://github.com/TibixDev/winboat/releases/download/v0.8.5/winboat-0.8.5-x86_64.AppImage"
         if wget --timeout=30 -O "$HOME/Applications/WinBoat.AppImage" "$WINBOAT_URL" 2>/dev/null && [ -s "$HOME/Applications/WinBoat.AppImage" ]; then
             chmod +x "$HOME/Applications/WinBoat.AppImage"
+            
+            # Criar desktop file para WinBoat
+            echo "   Criando atalho do WinBoat..."
+            mkdir -p ~/.local/share/applications ~/.local/share/icons
+            
+            cat > ~/.local/share/applications/winboat.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=WinBoat
+Comment=Run Windows applications on Linux
+Exec=$HOME/Applications/WinBoat.AppImage
+Icon=winboat
+Terminal=false
+Categories=Utility;Emulator;
+StartupNotify=true
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-ms-shortcut;
+EOF
+            chmod +x ~/.local/share/applications/winboat.desktop
+            
+            # Criar ícone para WinBoat
+            echo "   Criando ícone do WinBoat..."
+            cat > ~/.local/share/icons/winboat.svg << 'EOF'
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+  <polyline points="9,22 9,12 15,12 15,22"/>
+  <path d="M8 12h8"/>
+  <path d="M8 16h8"/>
+  <path d="M8 20h8"/>
+</svg>
+EOF
+            
+            # Atualizar base de dados
+            update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+            gtk-update-icon-cache -f -t ~/.local/share/icons/ 2>/dev/null || true
+            
+            # Forçar atualização do menu KDE
+            echo "   Atualizando menu do KDE..."
+            kbuildsycoca5 --noincremental 2>/dev/null || true
+            
             echo "✓ WinBoat instalado com sucesso"
             echo "   Para usar: $HOME/Applications/WinBoat.AppImage"
             echo "   WinBoat executa aplicativos Windows nativamente no Linux"
             echo "   Suporta: Office, Adobe Suite, jogos, e muito mais"
+            echo "   Atalho criado no menu de aplicações"
+            echo "   💡 Se não aparecer no menu, faça logout/login ou reinicie o sistema"
             check_success "WinBoat"
         else
             # Remover arquivo incompleto se existir
@@ -1101,7 +1143,7 @@ fi
 
 # PhoneInfoga (Phone Number OSINT)
 echo "Instalando PhoneInfoga..."
-if command -v phoneinfoga &> /dev/null; then
+if command -v phoneinfoga &> /dev/null || [ -f "$HOME/osint-tools/phoneinfoga/phoneinfoga" ]; then
     echo "✓ PhoneInfoga já está instalado"
 else
     echo "   Baixando PhoneInfoga..."
