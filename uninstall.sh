@@ -61,8 +61,17 @@ confirm_uninstall() {
     echo -e "${RED}   - Java (OpenJDK)${NC}"
     echo -e "${RED}   - Node.js${NC}"
     echo -e "${RED}   - Osu!${NC}"
+    echo -e "${RED}   - Steam${NC}"
+    echo -e "${RED}   - Lutris${NC}"
+    echo -e "${RED}   - Heroic Games Launcher${NC}"
+    echo -e "${RED}   - WinBoat${NC}"
     echo -e "${RED}   - yt-dlp${NC}"
     echo -e "${RED}   - Docker e Docker Compose${NC}"
+    echo -e "${RED}   - WireGuard${NC}"
+    echo -e "${RED}   - Driver Oficial da Huion${NC}"
+    echo -e "${RED}   - Ferramentas de Segurança (Kali Linux)${NC}"
+    echo -e "${RED}   - Ferramentas de OSINT${NC}"
+    echo -e "${RED}   - Ferramentas Divertidas${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
     echo -e "${RED}   - Ícones personalizados${NC}"
@@ -123,6 +132,14 @@ uninstall_opensuse() {
     # Desinstalar Snap
     echo -e "${YELLOW}Removendo Snap...${NC}"
     sudo zypper remove -y snapd 2>/dev/null || echo "Snap não encontrado"
+    
+    # Desinstalar ferramentas de segurança
+    echo -e "${YELLOW}Removendo ferramentas de segurança...${NC}"
+    sudo zypper remove -y nmap wireshark john hydra aircrack-ng hashcat 2>/dev/null || echo "Ferramentas de segurança não encontradas"
+    
+    # Desinstalar ferramentas divertidas
+    echo -e "${YELLOW}Removendo ferramentas divertidas...${NC}"
+    sudo zypper remove -y fortune cowsay cmatrix 2>/dev/null || echo "Ferramentas divertidas não encontradas"
     
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
@@ -192,6 +209,14 @@ uninstall_debian() {
     echo -e "${YELLOW}Removendo Snap...${NC}"
     sudo apt remove -y snapd 2>/dev/null || echo "Snap não encontrado"
     
+    # Desinstalar ferramentas de segurança
+    echo -e "${YELLOW}Removendo ferramentas de segurança...${NC}"
+    sudo apt remove -y nmap wireshark john hydra aircrack-ng hashcat nikto 2>/dev/null || echo "Ferramentas de segurança não encontradas"
+    
+    # Desinstalar ferramentas divertidas
+    echo -e "${YELLOW}Removendo ferramentas divertidas...${NC}"
+    sudo apt remove -y fortune-mod cowsay cmatrix 2>/dev/null || echo "Ferramentas divertidas não encontradas"
+    
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
     sudo rm -f /etc/apt/sources.list.d/google-chrome.list
@@ -232,6 +257,36 @@ remove_custom_files() {
     rm -f ~/.local/share/applications/osu.desktop 2>/dev/null || echo "Desktop file do Osu! não encontrado"
     rm -f ~/.local/share/icons/osu.svg 2>/dev/null || echo "Ícone do Osu! não encontrado"
     
+    # Remover WinBoat
+    echo -e "${YELLOW}Removendo WinBoat...${NC}"
+    rm -f ~/Applications/WinBoat.AppImage 2>/dev/null || echo "WinBoat não encontrado"
+    rm -f ~/.local/share/applications/winboat.desktop 2>/dev/null || echo "Desktop file do WinBoat não encontrado"
+    rm -f ~/.local/share/icons/winboat.svg 2>/dev/null || echo "Ícone do WinBoat não encontrado"
+    
+    # Remover ferramentas OSINT
+    echo -e "${YELLOW}Removendo ferramentas OSINT...${NC}"
+    rm -rf ~/osint-tools 2>/dev/null || echo "Diretório OSINT não encontrado"
+    rm -rf ~/.local/bin/sherlock 2>/dev/null || echo "Sherlock não encontrado"
+    rm -rf ~/.local/bin/theharvester 2>/dev/null || echo "theHarvester não encontrado"
+    rm -rf ~/.local/bin/recon-ng 2>/dev/null || echo "Recon-ng não encontrado"
+    rm -rf ~/.local/bin/spiderfoot 2>/dev/null || echo "SpiderFoot não encontrado"
+    rm -rf ~/.local/bin/ghunt 2>/dev/null || echo "GHunt não encontrado"
+    rm -rf ~/.local/bin/phoneinfoga 2>/dev/null || echo "PhoneInfoga não encontrado"
+    rm -rf ~/.local/bin/maigret 2>/dev/null || echo "Maigret não encontrado"
+    
+    # Remover ferramentas Go (Gobuster, ffuf)
+    echo -e "${YELLOW}Removendo ferramentas Go...${NC}"
+    rm -f ~/go/bin/gobuster 2>/dev/null || echo "Gobuster não encontrado"
+    rm -f ~/go/bin/ffuf 2>/dev/null || echo "ffuf não encontrado"
+    
+    # Remover ferramentas Python (SQLMap, pipx)
+    echo -e "${YELLOW}Removendo ferramentas Python...${NC}"
+    pipx uninstall sqlmap 2>/dev/null || echo "SQLMap pipx não encontrado"
+    pip3 uninstall -y sqlmap 2>/dev/null || echo "SQLMap pip não encontrado"
+    
+    # Remover nyancat (cargo)
+    echo -e "${YELLOW}Removendo nyancat...${NC}"
+    cargo uninstall nyancat 2>/dev/null || echo "nyancat não encontrado"
     
     # Remover configurações do Git
     echo -e "${YELLOW}Removendo configurações do Git...${NC}"
@@ -263,6 +318,12 @@ clean_configurations() {
     rm -rf ~/.cache/spotify 2>/dev/null || echo "Cache do Spotify não encontrado"
     rm -rf ~/.cache/google-chrome 2>/dev/null || echo "Cache do Chrome não encontrado"
     rm -rf ~/.cache/brave-browser 2>/dev/null || echo "Cache do Brave não encontrado"
+    rm -rf ~/.cache/steam 2>/dev/null || echo "Cache do Steam não encontrado"
+    rm -rf ~/.cache/lutris 2>/dev/null || echo "Cache do Lutris não encontrado"
+    rm -rf ~/.cache/heroic 2>/dev/null || echo "Cache do Heroic não encontrado"
+    rm -rf ~/.cache/winboat 2>/dev/null || echo "Cache do WinBoat não encontrado"
+    rm -rf ~/.cache/wireshark 2>/dev/null || echo "Cache do Wireshark não encontrado"
+    rm -rf ~/.cache/nmap 2>/dev/null || echo "Cache do Nmap não encontrado"
     
     echo -e "${GREEN}✓ Configurações limpas!${NC}"
 }
@@ -273,7 +334,12 @@ show_summary() {
     echo -e "${GREEN}✅ Desinstalação concluída com sucesso!${NC}"
     echo ""
     echo -e "${BLUE}📋 Resumo da desinstalação:${NC}"
-    echo -e "${CYAN}   - Programas removidos${NC}"
+    echo -e "${CYAN}   - Programas básicos removidos${NC}"
+    echo -e "${CYAN}   - Ferramentas de segurança removidas${NC}"
+    echo -e "${CYAN}   - Ferramentas OSINT removidas${NC}"
+    echo -e "${CYAN}   - Ferramentas divertidas removidas${NC}"
+    echo -e "${CYAN}   - Plataformas de jogos removidas${NC}"
+    echo -e "${CYAN}   - WinBoat removido${NC}"
     echo -e "${CYAN}   - Repositórios removidos${NC}"
     echo -e "${CYAN}   - Chaves GPG removidas${NC}"
     echo -e "${CYAN}   - Arquivos personalizados removidos${NC}"
