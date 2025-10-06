@@ -51,17 +51,67 @@ Collection of automated scripts for installing essential programs on different L
 - **Steam** - Largest PC gaming platform
 - **Lutris** - Game manager (Steam, GOG, Epic, Emulators, etc.)
 - **Heroic Games Launcher** - Client for Epic Games Store and GOG
+- **WinBoat** - Run Windows apps natively on Linux
 - **Osu!** - Rhythm game
+
+## 🎉 Fun and Useful Tools
+
+- **fortune** - Random quote generator
+- **cowsay** - Talking cow (ASCII art)
+- **cmatrix** - Matrix effect in terminal
+- **nyancat** - Animated rainbow cat
+
+### **Usage Examples:**
+```bash
+# Random quotes with cow
+fortune | cowsay
+
+# Matrix effect
+cmatrix
+
+# Animated rainbow cat
+nyancat
+
+# Combining tools
+fortune | cowsay -f dragon
+```
 
 ### 🎵 **Multimedia**
 - **Spotify** - Music streaming (via Flatpak)
 - **yt-dlp** - Video downloader (youtube-dl successor)
+
+### 🎉 **Fun Tools**
+- **fortune** - Random quote generator
+- **cowsay** - Talking cow (ASCII art)
+- **cmatrix** - Matrix effect in terminal
+- **nyancat** - Animated rainbow cat
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
 - **Docker & Docker Compose** - Containerization
 - **Official Huion Driver** - Graphics tablet driver
 - **WireGuard** - Modern and secure VPN
+
+### 🔒 **Security Tools (Kali Linux)**
+- **Nmap** - Advanced network scanner
+- **Wireshark** - Network packet analysis
+- **John the Ripper** - Password cracking
+- **Hydra** - Authentication brute force
+- **Aircrack-ng** - WiFi security auditing
+- **SQLMap** - SQL injection detection and exploitation
+- **Nikto** - Web vulnerability scanner
+- **Hashcat** - GPU-accelerated hash cracking
+- **Gobuster** - Directory/DNS enumeration
+- **ffuf** - Fast web fuzzing
+
+### 🔍 **OSINT Tools**
+- **Sherlock** - Username search across 400+ social networks
+- **theHarvester** - Email, subdomain, and information gathering
+- **Recon-ng** - Complete reconnaissance framework
+- **SpiderFoot** - OSINT automation
+- **GHunt** - Google account OSINT
+- **PhoneInfoga** - Phone number OSINT
+- **Maigret** - Advanced username search across 2500+ sites
 
 ## 🚀 How to Use
 
@@ -279,6 +329,213 @@ Contributions are welcome! Feel free to:
 - 📋 **Issues**: https://github.com/xJCPMSx/linux-install-scripts/issues
 - 📖 **Full Documentation**: README.md
 - 💬 **Discussions**: GitHub Discussions
+
+## 🔒 Security Tools (Kali Linux)
+
+### **🔧 Automatic Installation:**
+- **Professional tools** from Kali Linux
+- **Penetration testing** and security auditing
+- **Automatic installation** of all essential tools
+- **Educational:** For learning and authorized ethical testing
+
+### **⚠️ IMPORTANT WARNING:**
+> **Ethical Use:** These tools are for educational purposes and testing on authorized systems only. Unauthorized use may be illegal. Use responsibly!
+
+### **💡 Usage Examples:**
+
+#### **Nmap - Network Scanner:**
+```bash
+# Basic scan
+nmap 192.168.1.0/24
+
+# Scan with service detection
+nmap -sV 192.168.1.1
+
+# Complete scan
+nmap -A -T4 192.168.1.1
+```
+
+#### **Wireshark - Packet Analysis:**
+```bash
+# Start GUI
+wireshark
+
+# Command-line capture
+tshark -i eth0
+```
+
+#### **Hydra - Brute Force:**
+```bash
+# SSH brute force
+hydra -l user -P passwords.txt ssh://192.168.1.1
+
+# FTP brute force
+hydra -l admin -P wordlist.txt ftp://192.168.1.1
+```
+
+#### **SQLMap - SQL Injection:**
+```bash
+# Test URL for SQL injection
+sqlmap -u "http://example.com/page?id=1" --dbs
+
+# Dump database
+sqlmap -u "http://example.com/page?id=1" -D database --dump
+```
+
+## 🔍 OSINT Tools
+
+### **🔧 Automatic Installation:**
+- **Open Source Intelligence** (OSINT)
+- **Tools installed** in `~/osint-tools/`
+- **Digital investigation** and reconnaissance
+- **Automated collection** of public information
+
+### **💡 Usage Examples:**
+
+#### **Sherlock - Username Search:**
+```bash
+# Search username on social networks
+cd ~/osint-tools/sherlock
+python3 sherlock/sherlock.py username
+
+# Save results to file
+python3 sherlock/sherlock.py username -o results.txt
+```
+
+#### **theHarvester - Email Collection:**
+```bash
+# Search emails from a domain
+cd ~/osint-tools/theHarvester
+python3 theHarvester.py -d example.com -b google
+
+# Search multiple sources
+python3 theHarvester.py -d example.com -b all
+```
+
+#### **Maigret - Advanced Search:**
+```bash
+# Search username across 2500+ sites
+maigret username
+
+# Search with HTML output
+maigret username --html
+
+# Search with specific tags
+maigret username --tags gaming,social
+```
+
+#### **GHunt - Google OSINT:**
+```bash
+# Investigate Google email
+ghunt email target@gmail.com
+
+# Investigate phone number
+ghunt phone +5511999999999
+```
+
+#### **PhoneInfoga - Phone OSINT:**
+```bash
+# Investigate phone number
+~/osint-tools/phoneinfoga/phoneinfoga scan -n "+5511999999999"
+
+# Web interface
+~/osint-tools/phoneinfoga/phoneinfoga serve
+# Access: http://localhost:8080
+```
+
+#### **SpiderFoot - OSINT Automation:**
+```bash
+# Start web interface
+cd ~/osint-tools/spiderfoot
+python3 sf.py -l 127.0.0.1:5001
+# Access: http://127.0.0.1:5001
+```
+
+### **📁 Tools Location:**
+```
+~/osint-tools/
+├── sherlock/          # Username search
+├── theHarvester/      # Email collection
+├── recon-ng/          # Reconnaissance framework
+├── spiderfoot/        # OSINT automation
+└── phoneinfoga/       # Phone OSINT
+```
+
+## 🪟 WinBoat - Run Windows Apps on Linux
+
+### **🔧 Automatic Installation:**
+- **Elegant interface** for running Windows on Linux
+- **Automated Windows installation** through the interface
+- **Seamless integration** with your Linux desktop
+- **Run any app** that works on Windows
+- **Open source** (MIT license)
+
+### **💡 Features:**
+
+#### **Elegant Interface:**
+- Intuitive interface that integrates Windows into Linux
+- Native Linux desktop experience
+- Dashboard with all functionalities
+
+#### **Automated Installation:**
+- Simple Windows installation process
+- Configure preferences and specifications
+- Let WinBoat handle the rest
+
+#### **Run Any App:**
+- Productivity tools (Office, Adobe Suite)
+- Professional applications (Affinity, Acrobat)
+- Games that don't work on Wine/Proton
+- Windows software in native OS windows
+
+#### **Filesystem Integration:**
+- Home directory mounted in Windows
+- Easily share files between systems
+- Transparent access to your Linux files
+
+#### **Advanced Features:**
+- USB passthrough (experimental since v0.8.0)
+- Smartcard passthrough
+- Resource monitoring
+- Peripheral support via USB
+
+### **💡 Basic Usage:**
+```bash
+# Run WinBoat
+~/Applications/WinBoat.AppImage
+
+# Or search for "WinBoat" in applications menu
+```
+
+### **📝 Use Cases:**
+- **Office 365:** Works perfectly ✅
+- **Adobe Suite:** Photoshop, Illustrator, Premiere
+- **Affinity:** Photo, Designer, Publisher
+- **Paint Tool Sai:** Versions that don't work on Wine
+- **AeroChat, Acrobat:** Windows-specific apps
+
+### **🔗 Comparison:**
+
+#### **vs Wine/CrossOver:**
+- Runs apps that don't work well on Wine
+- Full Windows desktop available
+- Better compatibility with Windows software
+
+#### **vs WinApps:**
+- Fully automated setup
+- Unified and cohesive interface
+- Complete experience without manual configuration
+- No need to edit configuration files
+
+### **⚠️ Notes:**
+- **GPU Passthrough:** Planned for future versions
+- **Anti-cheat:** Games with kernel anti-cheat don't work (block virtualization)
+- **Podman:** Support planned (currently requires Docker)
+
+### **📖 More Information:**
+- Website: https://www.winboat.app/
+- GitHub: https://github.com/WinBoat-App/WinBoat
+- License: MIT (Open Source)
 
 ## 📝 License
 

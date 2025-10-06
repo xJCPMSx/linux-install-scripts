@@ -128,6 +128,43 @@ echo "Instalando ferramentas adicionais..."
 sudo apt install -y vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
+# Instalar ferramentas divertidas e úteis
+echo ""
+echo "Instalando ferramentas divertidas e úteis..."
+if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
+    echo "   Instalando fortune, cowsay, cmatrix..."
+    sudo apt install -y fortune-mod cowsay cmatrix
+    
+    # Instalar nyancat (não disponível nos repos, instalar via cargo)
+    if ! command -v nyancat &> /dev/null; then
+        echo "   Instalando nyancat via cargo..."
+        if ! command -v cargo &> /dev/null; then
+            echo "   Cargo não encontrado, instalando Rust..."
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            source ~/.cargo/env
+        fi
+        
+        # Tentar instalar nyancat via cargo
+        if cargo install nyancat; then
+            echo "✓ nyancat instalado via cargo"
+        else
+            echo "⚠️  Falha ao instalar nyancat via cargo"
+            echo "   Você pode instalar manualmente mais tarde"
+        fi
+    else
+        echo "✓ nyancat já está instalado"
+    fi
+    
+    echo "✓ Ferramentas divertidas instaladas com sucesso"
+    echo "   Para usar:"
+    echo "   - fortune | cowsay"
+    echo "   - cmatrix"
+    echo "   - nyancat"
+    check_success "ferramentas divertidas"
+else
+    echo "✓ Ferramentas divertidas já estão instaladas"
+fi
+
 # Instalar Docker e Docker Compose
 echo "Instalando Docker e Docker Compose..."
 if ! command -v docker &> /dev/null; then
@@ -286,11 +323,14 @@ fi
 
 # Spotify via Flatpak
 echo "Instalando Spotify via Flatpak..."
-if ! sudo flatpak list | grep -q "com.spotify.Client"; then
-    sudo flatpak install -y flathub com.spotify.Client
-    check_success "Spotify"
-else
+if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
     echo "✓ Spotify já está instalado"
+else
+    # Garantir que flathub está configurado para o usuário
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    
+    flatpak install --user -y flathub com.spotify.Client
+    check_success "Spotify"
 fi
 
 # VSCode já foi instalado via Flatpak na seção anterior
@@ -299,27 +339,35 @@ fi
 echo "Instalando Cursor..."
 cursor_found=false
 
-# Verificar se está no PATH
-if command -v cursor &> /dev/null; then
-    echo "✓ Cursor já está instalado"
+# Verificar AppImage primeiro (mais comum e não executa)
+if [ -f "$HOME/Applications/cursor.AppImage" ] || [ -f "$HOME/Applications/Cursor.AppImage" ]; then
+    echo "✓ Cursor AppImage já está disponível"
+    cursor_found=true
+elif find "$HOME/Applications" -maxdepth 1 -name "*ursor*.AppImage" 2>/dev/null | grep -q "\.AppImage$"; then
+    echo "✓ Cursor AppImage já está disponível"
     cursor_found=true
 fi
 
-# Verificar se Cursor está instalado (diretório .cursor indica instalação)
+# Verificar se Cursor está instalado (diretório .cursor ou .config/Cursor indica instalação)
 if [ "$cursor_found" = false ]; then
-    if [ -d "$HOME/.cursor" ]; then
-        echo "✓ Cursor já está instalado (detectado diretório .cursor)"
+    if [ -d "$HOME/.cursor" ] || [ -d "$HOME/.config/Cursor" ]; then
+        echo "✓ Cursor já está instalado (detectado diretório de configuração)"
         cursor_found=true
     fi
 fi
 
-# Verificar AppImage se não encontrou via PATH ou diretório .cursor
+# Verificar instalação manual
 if [ "$cursor_found" = false ]; then
-    if [ -f "$HOME/Applications/cursor.AppImage" ] || [ -f "$HOME/Desktop/cursor.AppImage" ]; then
-        echo "✓ Cursor AppImage já está disponível"
+    if [ -f "/usr/local/bin/cursor" ] || [ -f "/opt/cursor/cursor" ]; then
+        echo "✓ Cursor já está instalado (instalação manual)"
         cursor_found=true
-    elif find "$HOME" -name "cursor*.AppImage" 2>/dev/null | grep -q "\.AppImage$"; then
-        echo "✓ Cursor AppImage já está disponível"
+    fi
+fi
+
+# Verificar se está no PATH (último recurso, usando type -P que não executa)
+if [ "$cursor_found" = false ]; then
+    if type -P cursor &>/dev/null; then
+        echo "✓ Cursor já está instalado (encontrado no PATH)"
         cursor_found=true
     fi
 fi
@@ -350,11 +398,16 @@ fi
 
 # Brave Browser
 echo "Instalando Brave Browser..."
-if ! command -v brave &> /dev/null && ! command -v brave-browser &> /dev/null; then
+if command -v brave &> /dev/null || command -v brave-browser &> /dev/null || flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
+    echo "✓ Brave Browser já está instalado"
+else
     echo "⚠️  Brave Browser não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
     
-    if sudo flatpak install -y flathub com.brave.Browser; then
+    # Garantir que flathub está configurado para o usuário
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    
+    if flatpak install --user -y flathub com.brave.Browser; then
         echo "✓ Brave Browser instalado via Flatpak"
     else
         echo "   Flatpak falhou, tentando download direto..."
@@ -365,8 +418,6 @@ if ! command -v brave &> /dev/null && ! command -v brave-browser &> /dev/null; t
         sudo apt install -y brave-browser
         check_success "Brave Browser"
     fi
-else
-    echo "✓ Brave Browser já está instalado"
 fi
 
 # Firefox
@@ -483,11 +534,14 @@ check_success "Lutris"
 # Heroic Games Launcher (Epic Games & GOG)
 echo ""
 echo "Instalando Heroic Games Launcher..."
-if command -v heroic &> /dev/null || sudo flatpak list | grep -q "com.heroicgameslauncher.hgl"; then
+if command -v heroic &> /dev/null || flatpak list --user 2>/dev/null | grep -q "com.heroicgameslauncher.hgl"; then
     echo "✓ Heroic Games Launcher já está instalado"
 else
     echo "   Instalando Heroic Games Launcher via Flatpak..."
-    if sudo flatpak install -y flathub com.heroicgameslauncher.hgl; then
+    # Garantir que flathub está configurado para o usuário
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    
+    if flatpak install --user -y flathub com.heroicgameslauncher.hgl; then
         echo "✓ Heroic Games Launcher instalado com sucesso"
         echo "   Heroic permite jogar jogos da Epic Games Store e GOG no Linux"
     else
@@ -495,6 +549,41 @@ else
     fi
 fi
 check_success "Heroic Games Launcher"
+
+# WinBoat (Windows apps on Linux)
+echo ""
+echo "Instalando WinBoat..."
+if command -v winboat &> /dev/null || [ -f "$HOME/Applications/WinBoat.AppImage" ]; then
+    echo "✓ WinBoat já está instalado"
+else
+    echo "   WinBoat permite executar aplicativos Windows no Linux com integração perfeita"
+    echo "   Baixando WinBoat AppImage..."
+    mkdir -p "$HOME/Applications"
+    
+    # Detectar arquitetura
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "x86_64" ]; then
+        # Baixar a versão mais recente do WinBoat
+        WINBOAT_URL="https://github.com/WinBoat-App/WinBoat/releases/latest/download/WinBoat-x86_64.AppImage"
+        if wget --timeout=30 -O "$HOME/Applications/WinBoat.AppImage" "$WINBOAT_URL" 2>/dev/null && [ -s "$HOME/Applications/WinBoat.AppImage" ]; then
+            chmod +x "$HOME/Applications/WinBoat.AppImage"
+            echo "✓ WinBoat instalado com sucesso"
+            echo "   Para usar: $HOME/Applications/WinBoat.AppImage"
+            echo "   WinBoat executa aplicativos Windows nativamente no Linux"
+            echo "   Suporta: Office, Adobe Suite, jogos, e muito mais"
+            check_success "WinBoat"
+        else
+            # Remover arquivo incompleto se existir
+            rm -f "$HOME/Applications/WinBoat.AppImage"
+            echo "✗ Erro ao baixar WinBoat"
+            echo "   Você pode baixar manualmente de: https://www.winboat.app/"
+            echo "   Download: https://github.com/WinBoat-App/WinBoat/releases"
+        fi
+    else
+        echo "⚠️  WinBoat AppImage não disponível para $ARCH"
+        echo "   Visite https://www.winboat.app/ para mais informações"
+    fi
+fi
 
 # Driver Oficial da Huion Tablet
 echo ""
@@ -659,6 +748,361 @@ else
 fi
 check_success "WireGuard"
 
+# ====================================
+# FERRAMENTAS DE SEGURANÇA (KALI LINUX)
+# ====================================
+echo ""
+echo "=========================================="
+echo "🔒 Instalando Ferramentas de Segurança"
+echo "=========================================="
+echo ""
+
+# Nmap (Scanner de Rede)
+echo "Instalando Nmap..."
+if command -v nmap &> /dev/null; then
+    echo "✓ Nmap já está instalado"
+else
+    sudo apt install -y nmap
+    check_success "Nmap"
+fi
+
+# Wireshark (Análise de Pacotes)
+echo "Instalando Wireshark..."
+if command -v wireshark &> /dev/null; then
+    echo "✓ Wireshark já está instalado"
+else
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y wireshark
+    # Adicionar usuário ao grupo wireshark
+    sudo usermod -aG wireshark "$USER" 2>/dev/null || true
+    echo "⚠️  IMPORTANTE: Faça logout e login novamente para usar Wireshark sem sudo"
+    check_success "Wireshark"
+fi
+
+# John the Ripper (Quebra de Senhas)
+echo "Instalando John the Ripper..."
+if command -v john &> /dev/null; then
+    echo "✓ John the Ripper já está instalado"
+else
+    sudo apt install -y john
+    check_success "John the Ripper"
+fi
+
+# Hydra (Brute Force)
+echo "Instalando Hydra..."
+if command -v hydra &> /dev/null; then
+    echo "✓ Hydra já está instalado"
+else
+    sudo apt install -y hydra
+    check_success "Hydra"
+fi
+
+# Aircrack-ng (Segurança WiFi)
+echo "Instalando Aircrack-ng..."
+if command -v aircrack-ng &> /dev/null; then
+    echo "✓ Aircrack-ng já está instalado"
+else
+    sudo apt install -y aircrack-ng
+    check_success "Aircrack-ng"
+fi
+
+# SQLMap (SQL Injection)
+echo "Instalando SQLMap..."
+if command -v sqlmap &> /dev/null; then
+    echo "✓ SQLMap já está instalado"
+else
+    # Instalar via pipx (melhor para ambientes gerenciados)
+    if ! command -v pipx &> /dev/null; then
+        sudo apt install -y pipx
+        pipx ensurepath
+    fi
+    pipx install sqlmap
+    echo "✓ SQLMap instalado via pipx"
+    check_success "SQLMap"
+fi
+
+# Nikto (Scanner Web)
+echo "Instalando Nikto..."
+if command -v nikto &> /dev/null || [ -f "$HOME/.local/bin/nikto" ]; then
+    echo "✓ Nikto já está instalado"
+else
+    # Tentar instalar via apt primeiro
+    if sudo apt install -y nikto 2>/dev/null; then
+        echo "✓ Nikto instalado via apt"
+        check_success "Nikto"
+    else
+        # Se falhar, instalar via Git
+        echo "   Instalando Nikto via Git..."
+        if ! command -v git &> /dev/null; then
+            sudo apt install -y git
+        fi
+        
+        # Criar diretório local para binários se não existir
+        mkdir -p "$HOME/.local/bin"
+        
+        # Clonar Nikto
+        if git clone https://github.com/sullo/nikto.git /tmp/nikto-temp 2>/dev/null; then
+            # Copiar para local apropriado
+            mkdir -p "$HOME/.local/share/nikto"
+            cp -r /tmp/nikto-temp/program/* "$HOME/.local/share/nikto/"
+            
+            # Criar link simbólico
+            ln -sf "$HOME/.local/share/nikto/nikto.pl" "$HOME/.local/bin/nikto"
+            chmod +x "$HOME/.local/bin/nikto"
+            
+            # Limpar
+            rm -rf /tmp/nikto-temp
+            
+            echo "✓ Nikto instalado com sucesso"
+            echo "   Para usar: nikto (certifique-se de que ~/.local/bin está no PATH)"
+            
+            # Adicionar ao PATH se não estiver
+            if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+                echo "   Adicionando ~/.local/bin ao PATH..."
+                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+            fi
+        else
+            echo "✗ Erro ao instalar Nikto"
+        fi
+        check_success "Nikto"
+    fi
+fi
+
+# Hashcat (Quebra de Hash)
+echo "Instalando Hashcat..."
+if command -v hashcat &> /dev/null; then
+    echo "✓ Hashcat já está instalado"
+else
+    sudo apt install -y hashcat
+    check_success "Hashcat"
+fi
+
+# Gobuster (Directory/DNS Bruteforce)
+echo "Instalando Gobuster..."
+if command -v gobuster &> /dev/null; then
+    echo "✓ Gobuster já está instalado"
+else
+    # Instalar via Go
+    if ! command -v go &> /dev/null; then
+        sudo apt install -y golang-go
+    fi
+    go install github.com/OJ/gobuster/v3@latest
+    echo "✓ Gobuster instalado via Go"
+    echo "   Executável: ~/go/bin/gobuster"
+    check_success "Gobuster"
+fi
+
+# ffuf (Fuzzing Web)
+echo "Instalando ffuf..."
+if command -v ffuf &> /dev/null; then
+    echo "✓ ffuf já está instalado"
+else
+    # Instalar via Go
+    if ! command -v go &> /dev/null; then
+        sudo apt install -y golang-go
+    fi
+    go install github.com/ffuf/ffuf/v2@latest
+    echo "✓ ffuf instalado via Go"
+    echo "   Executável: ~/go/bin/ffuf"
+    check_success "ffuf"
+fi
+
+echo ""
+echo "✓ Ferramentas de Segurança instaladas com sucesso!"
+
+# ====================================
+# FERRAMENTAS DE OSINT
+# ====================================
+echo ""
+echo "=========================================="
+echo "🔍 Instalando Ferramentas de OSINT"
+echo "=========================================="
+echo ""
+
+# Criar diretório para ferramentas OSINT
+mkdir -p "$HOME/osint-tools"
+
+# Sherlock (Busca de Username)
+echo "Instalando Sherlock..."
+if [ -d "$HOME/osint-tools/sherlock" ]; then
+    echo "✓ Sherlock já está instalado"
+else
+    echo "   Clonando repositório do Sherlock..."
+    git clone https://github.com/sherlock-project/sherlock.git "$HOME/osint-tools/sherlock"
+    cd "$HOME/osint-tools/sherlock"
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    deactivate
+    cat > "$HOME/osint-tools/sherlock/sherlock-run.sh" << 'EOF'
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/venv/bin/activate"
+python "$SCRIPT_DIR/sherlock/sherlock.py" "$@"
+deactivate
+EOF
+    chmod +x "$HOME/osint-tools/sherlock/sherlock-run.sh"
+    echo "✓ Sherlock instalado com sucesso"
+    echo "   Para usar: ~/osint-tools/sherlock/sherlock-run.sh <username>"
+    cd - > /dev/null
+    check_success "Sherlock"
+fi
+
+# theHarvester (Coleta de Emails)
+echo "Instalando theHarvester..."
+if [ -d "$HOME/osint-tools/theHarvester" ]; then
+    echo "✓ theHarvester já está instalado"
+else
+    echo "   Clonando repositório do theHarvester..."
+    git clone https://github.com/laramies/theHarvester.git "$HOME/osint-tools/theHarvester"
+    cd "$HOME/osint-tools/theHarvester"
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install .
+    deactivate
+    cat > "$HOME/osint-tools/theHarvester/theharvester-run.sh" << 'EOF'
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/venv/bin/activate"
+python "$SCRIPT_DIR/theHarvester.py" "$@"
+deactivate
+EOF
+    chmod +x "$HOME/osint-tools/theHarvester/theharvester-run.sh"
+    echo "✓ theHarvester instalado com sucesso"
+    echo "   Para usar: ~/osint-tools/theHarvester/theharvester-run.sh"
+    cd - > /dev/null
+    check_success "theHarvester"
+fi
+
+# Recon-ng (Framework de Reconhecimento)
+echo "Instalando Recon-ng..."
+if command -v recon-ng &> /dev/null || [ -d "$HOME/osint-tools/recon-ng" ]; then
+    echo "✓ Recon-ng já está instalado"
+else
+    echo "   Clonando repositório do Recon-ng..."
+    git clone https://github.com/lanmaster53/recon-ng.git "$HOME/osint-tools/recon-ng"
+    cd "$HOME/osint-tools/recon-ng"
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r REQUIREMENTS
+    deactivate
+    cat > "$HOME/osint-tools/recon-ng/recon-ng-run.sh" << 'EOF'
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/venv/bin/activate"
+python "$SCRIPT_DIR/recon-ng" "$@"
+deactivate
+EOF
+    chmod +x "$HOME/osint-tools/recon-ng/recon-ng-run.sh"
+    echo "✓ Recon-ng instalado com sucesso"
+    echo "   Para usar: ~/osint-tools/recon-ng/recon-ng-run.sh"
+    cd - > /dev/null
+    check_success "Recon-ng"
+fi
+
+# SpiderFoot (Automação OSINT)
+echo "Instalando SpiderFoot..."
+if [ -d "$HOME/osint-tools/spiderfoot" ]; then
+    echo "✓ SpiderFoot já está instalado"
+else
+    echo "   Instalando dependências de desenvolvimento para SpiderFoot..."
+    sudo apt install -y libxml2-dev libxslt1-dev python3-dev
+    
+    echo "   Clonando repositório do SpiderFoot..."
+    git clone https://github.com/smicallef/spiderfoot.git "$HOME/osint-tools/spiderfoot"
+    cd "$HOME/osint-tools/spiderfoot"
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install --upgrade pip setuptools wheel
+    
+    # Tentar instalar dependências
+    if pip install -r requirements.txt; then
+        deactivate
+        
+        cat > "$HOME/osint-tools/spiderfoot/spiderfoot-run.sh" << 'EOF'
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/venv/bin/activate"
+python "$SCRIPT_DIR/sf.py" "$@"
+deactivate
+EOF
+        chmod +x "$HOME/osint-tools/spiderfoot/spiderfoot-run.sh"
+        echo "✓ SpiderFoot instalado com sucesso"
+        echo "   Para usar: ~/osint-tools/spiderfoot/spiderfoot-run.sh -l 127.0.0.1:5001"
+        check_success "SpiderFoot"
+    else
+        deactivate
+        echo "✗ Erro ao instalar SpiderFoot"
+        echo "   Removendo instalação incompleta..."
+        rm -rf "$HOME/osint-tools/spiderfoot"
+        echo "   Tente executar o script novamente"
+    fi
+    cd - > /dev/null
+fi
+
+# GHunt (Google Account OSINT)
+echo "Instalando GHunt..."
+if command -v ghunt &> /dev/null; then
+    echo "✓ GHunt já está instalado"
+else
+    echo "   Instalando GHunt via pipx..."
+    if ! command -v pipx &> /dev/null; then
+        sudo apt install -y pipx
+        pipx ensurepath
+    fi
+    pipx install ghunt
+    echo "✓ GHunt instalado com sucesso"
+    echo "   Para usar: ghunt email <email>"
+    check_success "GHunt"
+fi
+
+# PhoneInfoga (Phone Number OSINT)
+echo "Instalando PhoneInfoga..."
+if command -v phoneinfoga &> /dev/null; then
+    echo "✓ PhoneInfoga já está instalado"
+else
+    echo "   Baixando PhoneInfoga..."
+    mkdir -p "$HOME/osint-tools/phoneinfoga"
+    cd "$HOME/osint-tools/phoneinfoga"
+    
+    # Detectar arquitetura
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "x86_64" ]; then
+        wget -O phoneinfoga.tar.gz https://github.com/sundowndev/phoneinfoga/releases/latest/download/phoneinfoga_Linux_x86_64.tar.gz
+    else
+        wget -O phoneinfoga.tar.gz https://github.com/sundowndev/phoneinfoga/releases/latest/download/phoneinfoga_Linux_arm64.tar.gz
+    fi
+    
+    tar -xzf phoneinfoga.tar.gz
+    chmod +x phoneinfoga
+    rm phoneinfoga.tar.gz
+    echo "✓ PhoneInfoga instalado com sucesso"
+    echo "   Para usar: ~/osint-tools/phoneinfoga/phoneinfoga"
+    cd - > /dev/null
+    check_success "PhoneInfoga"
+fi
+
+# Maigret (Busca de Username Avançada)
+echo "Instalando Maigret..."
+if command -v maigret &> /dev/null; then
+    echo "✓ Maigret já está instalado"
+else
+    echo "   Instalando Maigret via pipx..."
+    if ! command -v pipx &> /dev/null; then
+        sudo apt install -y pipx
+        pipx ensurepath
+    fi
+    pipx install maigret
+    echo "✓ Maigret instalado com sucesso"
+    echo "   Para usar: maigret <username>"
+    check_success "Maigret"
+fi
+
+echo ""
+echo "✓ Ferramentas de OSINT instaladas com sucesso!"
+echo ""
+echo "📁 Ferramentas OSINT instaladas em: ~/osint-tools/"
+echo ""
+
 # Configurar Java
 echo "Configurando Java..."
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/java 1
@@ -704,25 +1148,30 @@ git --version 2>/dev/null || echo "Git não encontrado"
 # Instalar extensões úteis do VSCode
 echo "Instalando extensões úteis do VSCode..."
 if command -v code &> /dev/null && [ "$EUID" -ne 0 ]; then
+    echo "   ⚠️  Esta operação pode demorar alguns minutos..."
+    echo "   Pressione Ctrl+C para pular as extensões do VSCode"
+    sleep 3
     echo "   Instalando extensões do VSCode..."
     
-    # Instalar extensões com verificação de erro
-    if code --install-extension ms-python.python 2>/dev/null; then
+    # Instalar extensões com timeout para evitar travamento
+    echo "   Instalando extensões com timeout de 30s cada..."
+    
+    if timeout 30 code --install-extension ms-python.python 2>/dev/null; then
         echo "   ✓ Python extension instalada"
     else
-        echo "   ⚠️  Erro ao instalar Python extension"
+        echo "   ⚠️  Timeout ou erro ao instalar Python extension"
     fi
     
-    if code --install-extension ms-vscode.cpptools 2>/dev/null; then
+    if timeout 30 code --install-extension ms-vscode.cpptools 2>/dev/null; then
         echo "   ✓ C++ extension instalada"
     else
-        echo "   ⚠️  Erro ao instalar C++ extension"
+        echo "   ⚠️  Timeout ou erro ao instalar C++ extension"
     fi
     
-    if code --install-extension redhat.vscode-yaml 2>/dev/null; then
+    if timeout 30 code --install-extension redhat.vscode-yaml 2>/dev/null; then
         echo "   ✓ YAML extension instalada"
     else
-        echo "   ⚠️  Erro ao instalar YAML extension"
+        echo "   ⚠️  Timeout ou erro ao instalar YAML extension"
     fi
     
     echo "✓ Extensões do VSCode processadas"
@@ -820,12 +1269,34 @@ echo "✓ Osu! (Jogo de ritmo)"
 echo "✓ Steam (Plataforma de jogos)"
 echo "✓ Lutris (Gerenciador de jogos)"
 echo "✓ Heroic Games Launcher (Epic Games & GOG)"
+echo "✓ WinBoat (Executa aplicativos Windows no Linux)"
 echo ""
 echo "🔧 Ferramentas e Drivers:"
 echo "✓ Driver Oficial da Huion (driver de tablet para tablets Huion)"
 echo "✓ WireGuard (VPN moderna e segura)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
 echo "✓ Dependências do libfprint"
+echo ""
+echo "🔒 Ferramentas de Segurança (Kali Linux):"
+echo "✓ Nmap (scanner de rede)"
+echo "✓ Wireshark (análise de pacotes)"
+echo "✓ John the Ripper (quebra de senhas)"
+echo "✓ Hydra (brute force)"
+echo "✓ Aircrack-ng (segurança WiFi)"
+echo "✓ SQLMap (SQL injection)"
+echo "✓ Nikto (scanner web)"
+echo "✓ Hashcat (quebra de hash)"
+echo "✓ Gobuster (directory/DNS bruteforce)"
+echo "✓ ffuf (fuzzing web)"
+echo ""
+echo "🔍 Ferramentas de OSINT:"
+echo "✓ Sherlock (busca de username em redes sociais)"
+echo "✓ theHarvester (coleta de emails e informações)"
+echo "✓ Recon-ng (framework de reconhecimento)"
+echo "✓ SpiderFoot (automação OSINT)"
+echo "✓ GHunt (OSINT de contas Google)"
+echo "✓ PhoneInfoga (OSINT de números de telefone)"
+echo "✓ Maigret (busca avançada de username)"
 echo ""
 
 echo "Recomendações:"
