@@ -631,7 +631,7 @@ else
     ARCH=$(uname -m)
     if [ "$ARCH" = "x86_64" ]; then
         # Baixar a versão mais recente do WinBoat
-        WINBOAT_URL="https://github.com/WinBoat-App/WinBoat/releases/latest/download/WinBoat-x86_64.AppImage"
+        WINBOAT_URL="https://github.com/TibixDev/winboat/releases/download/v0.8.5/winboat-0.8.5-x86_64.AppImage"
         if wget --timeout=30 -O "$HOME/Applications/WinBoat.AppImage" "$WINBOAT_URL" 2>/dev/null && [ -s "$HOME/Applications/WinBoat.AppImage" ]; then
             chmod +x "$HOME/Applications/WinBoat.AppImage"
             echo "✓ WinBoat instalado com sucesso"
