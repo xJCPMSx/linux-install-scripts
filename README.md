@@ -206,6 +206,12 @@ linux-install-scripts/
 - ✅ **Docker Compose** - Orquestração de serviços
 - ✅ **Ambientes isolados** para desenvolvimento
 
+### **🔧 Correções Automáticas:**
+- ✅ **KDE** - Correções automáticas para problemas de tema
+- ✅ **Flatpak** - Otimização de permissões para KDE
+- ✅ **Qt** - Configuração de variáveis de ambiente
+- ✅ **Alias** - Criação automática de comandos (ex: `spotify`)
+
 ## 📦 Sistemas de Pacotes
 
 ### **Gerenciadores Instalados:**
@@ -581,6 +587,50 @@ INSTALL_MAIGRET=true
 Depois execute:
 ```bash
 ./auto-install.sh
+```
+
+## 🔧 Solução de Problemas
+
+### **Problemas Comuns do KDE:**
+
+#### **Spotify não abre após mudança de tema:**
+```bash
+# O script aplica correções automáticas, mas se necessário:
+source ~/.bashrc
+spotify
+```
+
+#### **Apps Flatpak com problemas de tema:**
+```bash
+# Reset configurações
+flatpak override --reset com.spotify.Client
+flatpak override --user --filesystem=home com.spotify.Client
+```
+
+#### **Variáveis Qt não configuradas:**
+```bash
+# Adicionar ao ~/.bashrc
+export QT_QPA_PLATFORM=xcb
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export QT_SCALE_FACTOR=1
+```
+
+### **Outros Problemas:**
+
+#### **VSCode não abre:**
+```bash
+# Verificar instalação
+code --version
+# Se não funcionar, reinstalar
+sudo zypper install code  # openSUSE
+sudo apt install code    # Debian/Ubuntu
+```
+
+#### **Docker sem sudo:**
+```bash
+# Adicionar usuário ao grupo docker
+sudo usermod -aG docker $USER
+# Fazer logout e login novamente
 ```
 
 ## 📋 Requisitos

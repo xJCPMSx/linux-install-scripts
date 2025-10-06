@@ -206,6 +206,12 @@ linux-install-scripts/
 - **Automatic initialization** - Docker service starts at boot
 - **User configuration** - No need for sudo
 
+### **🔧 Automatic Fixes:**
+- **KDE** - Automatic fixes for theme issues
+- **Flatpak** - Permission optimization for KDE
+- **Qt** - Environment variables configuration
+- **Aliases** - Automatic command creation (e.g., `spotify`)
+
 ### **💡 Basic Usage:**
 ```bash
 # Check version

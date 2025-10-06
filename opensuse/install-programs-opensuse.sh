@@ -1212,6 +1212,61 @@ echo "Para configurar o Git, execute:"
 echo "git config --global user.name 'Seu Nome'"
 echo "git config --global user.email 'seu.email@exemplo.com'"
 
+# Correções para problemas comuns do KDE
+echo ""
+echo "=========================================="
+echo "🔧 Aplicando correções para KDE"
+echo "=========================================="
+echo "Aplicando correções para problemas comuns do KDE..."
+
+# Verificar se estamos no KDE
+if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
+    echo "   Detectado ambiente KDE, aplicando correções..."
+    
+    # Adicionar alias para Spotify se instalado via Flatpak
+    if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
+        echo "   Configurando alias para Spotify..."
+        if ! grep -q "alias spotify=" ~/.bashrc 2>/dev/null; then
+            echo 'alias spotify="flatpak run com.spotify.Client"' >> ~/.bashrc
+            echo "   ✓ Alias do Spotify adicionado"
+        else
+            echo "   ✓ Alias do Spotify já existe"
+        fi
+    fi
+    
+    # Adicionar variáveis Qt para corrigir problemas de tema
+    echo "   Configurando variáveis Qt..."
+    if ! grep -q "QT_QPA_PLATFORM" ~/.bashrc 2>/dev/null; then
+        echo 'export QT_QPA_PLATFORM=xcb' >> ~/.bashrc
+        echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0' >> ~/.bashrc
+        echo 'export QT_SCALE_FACTOR=1' >> ~/.bashrc
+        echo "   ✓ Variáveis Qt configuradas"
+    else
+        echo "   ✓ Variáveis Qt já configuradas"
+    fi
+    
+    # Configurar Flatpak para melhor compatibilidade
+    echo "   Configurando Flatpak para KDE..."
+    if command -v flatpak &> /dev/null; then
+        # Reset configurações problemáticas
+        flatpak override --reset com.spotify.Client 2>/dev/null || true
+        flatpak override --reset com.google.Chrome 2>/dev/null || true
+        flatpak override --reset com.brave.Browser 2>/dev/null || true
+        
+        # Adicionar permissões necessárias
+        flatpak override --user --filesystem=home com.spotify.Client 2>/dev/null || true
+        flatpak override --user --socket=wayland com.spotify.Client 2>/dev/null || true
+        flatpak override --user --socket=x11 com.spotify.Client 2>/dev/null || true
+        
+        echo "   ✓ Configurações do Flatpak otimizadas para KDE"
+    fi
+    
+    echo "✓ Correções do KDE aplicadas com sucesso"
+    echo "   Para aplicar as mudanças, execute: source ~/.bashrc"
+else
+    echo "   Ambiente não-KDE detectado, pulando correções específicas"
+fi
+
 # Instalar extensões úteis do VSCode (opcional)
 echo ""
 echo "Instalando extensões úteis do VSCode..."
