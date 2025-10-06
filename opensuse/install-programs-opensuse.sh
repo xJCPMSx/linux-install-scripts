@@ -617,6 +617,37 @@ else
 fi
 check_success "Heroic Games Launcher"
 
+# FreeRDP (Dependência do WinBoat)
+echo ""
+echo "Instalando FreeRDP (dependência do WinBoat)..."
+if command -v xfreerdp &> /dev/null; then
+    echo "✓ FreeRDP já está instalado"
+else
+    echo "   Instalando FreeRDP via Flatpak (versão estável)..."
+    if ! command -v flatpak &> /dev/null; then
+        sudo zypper install -y flatpak
+    fi
+    
+    # Adicionar repositório Flathub se necessário
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    
+    # Instalar FreeRDP via Flatpak
+    if flatpak install --user -y com.freerdp.FreeRDP 2>/dev/null; then
+        echo "✓ FreeRDP instalado com sucesso via Flatpak"
+        echo "   Para usar: flatpak run com.freerdp.FreeRDP"
+    else
+        echo "   Tentando instalar FreeRDP via repositório..."
+        sudo zypper install -y freerdp
+        if command -v xfreerdp &> /dev/null; then
+            echo "✓ FreeRDP instalado via repositório"
+        else
+            echo "⚠️  FreeRDP não pôde ser instalado automaticamente"
+            echo "   WinBoat pode não funcionar corretamente sem FreeRDP"
+        fi
+    fi
+fi
+check_success "FreeRDP"
+
 # WinBoat (Windows apps on Linux)
 echo ""
 echo "Instalando WinBoat..."
@@ -1265,7 +1296,8 @@ echo "Aplicando correções para problemas comuns do KDE..."
 if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     echo "   Detectado ambiente KDE, aplicando correções..."
     
-    # Adicionar alias para Spotify se instalado via Flatpak
+    # Adicionar aliases para aplicativos Flatpak se necessário
+    # Alias para Spotify
     if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
         echo "   Configurando alias para Spotify..."
         if ! grep -q "alias spotify=" ~/.bashrc 2>/dev/null; then
@@ -1273,6 +1305,28 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
             echo "   ✓ Alias do Spotify adicionado"
         else
             echo "   ✓ Alias do Spotify já existe"
+        fi
+    fi
+    
+    # Alias para Brave Browser
+    if flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
+        echo "   Configurando alias para Brave Browser..."
+        if ! grep -q "alias brave=" ~/.bashrc 2>/dev/null; then
+            echo 'alias brave="flatpak run com.brave.Browser"' >> ~/.bashrc
+            echo "   ✓ Alias do Brave Browser adicionado"
+        else
+            echo "   ✓ Alias do Brave Browser já existe"
+        fi
+    fi
+    
+    # Alias para Google Chrome
+    if flatpak list --user 2>/dev/null | grep -q "com.google.Chrome"; then
+        echo "   Configurando alias para Google Chrome..."
+        if ! grep -q "alias google-chrome=" ~/.bashrc 2>/dev/null; then
+            echo 'alias google-chrome="flatpak run com.google.Chrome"' >> ~/.bashrc
+            echo "   ✓ Alias do Google Chrome adicionado"
+        else
+            echo "   ✓ Alias do Google Chrome já existe"
         fi
     fi
     
