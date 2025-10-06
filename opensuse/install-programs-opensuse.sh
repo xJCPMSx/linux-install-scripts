@@ -421,6 +421,7 @@ if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! co
         if ! command -v cargo &> /dev/null; then
             echo "   Cargo não encontrado, instalando Rust..."
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            # shellcheck source=/dev/null
             source ~/.cargo/env
         fi
         
@@ -880,7 +881,7 @@ else
         # Adicionar ao PATH se não estiver
         if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
             echo "   Adicionando ~/.local/bin ao PATH..."
-            echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+            echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
         fi
     else
         echo "✗ Erro ao instalar Nikto"
@@ -953,6 +954,7 @@ else
     
     # Criar ambiente virtual
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install -r requirements.txt
     deactivate
@@ -984,6 +986,7 @@ else
     
     # Criar ambiente virtual
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install .
     deactivate
@@ -1015,6 +1018,7 @@ else
     
     # Criar ambiente virtual
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install -r REQUIREMENTS
     deactivate
@@ -1049,6 +1053,7 @@ else
     
     # Criar ambiente virtual
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install --upgrade pip setuptools wheel
     

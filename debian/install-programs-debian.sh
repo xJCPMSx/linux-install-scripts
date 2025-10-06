@@ -141,6 +141,7 @@ if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! co
         if ! command -v cargo &> /dev/null; then
             echo "   Cargo não encontrado, instalando Rust..."
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            # shellcheck source=/dev/null
             source ~/.cargo/env
         fi
         
@@ -858,7 +859,7 @@ else
             # Adicionar ao PATH se não estiver
             if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
                 echo "   Adicionando ~/.local/bin ao PATH..."
-                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+                echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
             fi
         else
             echo "✗ Erro ao instalar Nikto"
@@ -930,6 +931,7 @@ else
     git clone https://github.com/sherlock-project/sherlock.git "$HOME/osint-tools/sherlock"
     cd "$HOME/osint-tools/sherlock"
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install -r requirements.txt
     deactivate
@@ -956,6 +958,7 @@ else
     git clone https://github.com/laramies/theHarvester.git "$HOME/osint-tools/theHarvester"
     cd "$HOME/osint-tools/theHarvester"
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install .
     deactivate
@@ -982,6 +985,7 @@ else
     git clone https://github.com/lanmaster53/recon-ng.git "$HOME/osint-tools/recon-ng"
     cd "$HOME/osint-tools/recon-ng"
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install -r REQUIREMENTS
     deactivate
@@ -1011,6 +1015,7 @@ else
     git clone https://github.com/smicallef/spiderfoot.git "$HOME/osint-tools/spiderfoot"
     cd "$HOME/osint-tools/spiderfoot"
     python3 -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     pip install --upgrade pip setuptools wheel
     
