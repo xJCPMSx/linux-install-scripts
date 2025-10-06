@@ -933,7 +933,7 @@ else
     python3 -m venv venv
     # shellcheck source=/dev/null
     source venv/bin/activate
-    pip install -r requirements.txt
+    pip install .
     deactivate
     cat > "$HOME/osint-tools/sherlock/sherlock-run.sh" << 'EOF'
 #!/bin/bash
