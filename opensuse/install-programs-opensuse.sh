@@ -1279,9 +1279,11 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Adicionar variáveis Qt para corrigir problemas de tema
     echo "   Configurando variáveis Qt..."
     if ! grep -q "QT_QPA_PLATFORM" ~/.bashrc 2>/dev/null; then
-        echo 'export QT_QPA_PLATFORM=xcb' >> ~/.bashrc
-        echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0' >> ~/.bashrc
-        echo 'export QT_SCALE_FACTOR=1' >> ~/.bashrc
+        {
+            echo 'export QT_QPA_PLATFORM=xcb'
+            echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0'
+            echo 'export QT_SCALE_FACTOR=1'
+        } >> ~/.bashrc
         echo "   ✓ Variáveis Qt configuradas"
     else
         echo "   ✓ Variáveis Qt já configuradas"
