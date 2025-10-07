@@ -70,7 +70,7 @@ confirm_uninstall() {
     echo -e "${RED}   - WireGuard${NC}"
     echo -e "${RED}   - Driver Oficial da Huion${NC}"
     echo -e "${RED}   - Ferramentas de Segurança (Kali Linux)${NC}"
-    echo -e "${RED}   - Ferramentas de OSINT${NC}"
+    echo -e "${RED}   - Ferramentas de OSINT (Sherlock, theHarvester, Recon-ng, SpiderFoot, GHunt, PhoneInfoga, Maigret, Holehe)${NC}"
     echo -e "${RED}   - Ferramentas Divertidas${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
@@ -282,6 +282,9 @@ remove_custom_files() {
     # Remover ferramentas Python (SQLMap, pipx)
     echo -e "${YELLOW}Removendo ferramentas Python...${NC}"
     pipx uninstall sqlmap 2>/dev/null || echo "SQLMap pipx não encontrado"
+    pipx uninstall holehe 2>/dev/null || echo "Holehe pipx não encontrado"
+    pipx uninstall ghunt 2>/dev/null || echo "GHunt pipx não encontrado"
+    pipx uninstall maigret 2>/dev/null || echo "Maigret pipx não encontrado"
     pip3 uninstall -y sqlmap 2>/dev/null || echo "SQLMap pip não encontrado"
     
     # Remover nyancat (cargo)

@@ -218,14 +218,42 @@ fi
 
 # Spotify (via Flatpak)
 echo "Instalando Spotify via Flatpak..."
+# Verificar se Spotify já está instalado (múltiplas formas)
+spotify_installed=false
+
+# Verificar via flatpak (usuário)
 if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
-    echo "✓ Spotify já está instalado"
-else
+    echo "✓ Spotify já está instalado (Flatpak - usuário)"
+    spotify_installed=true
+# Verificar via flatpak (sistema)
+elif sudo flatpak list 2>/dev/null | grep -q "com.spotify.Client"; then
+    echo "✓ Spotify já está instalado (Flatpak - sistema)"
+    spotify_installed=true
+# Verificar via zypper (pacote nativo)
+elif zypper search spotify 2>/dev/null | grep -q "spotify-client" && rpm -q spotify-client 2>/dev/null; then
+    echo "✓ Spotify já está instalado (pacote nativo)"
+    spotify_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "spotify"; then
+    echo "✓ Spotify já está instalado (Snap)"
+    spotify_installed=true
+# Verificar se o comando spotify existe no PATH
+elif command -v spotify &> /dev/null; then
+    echo "✓ Spotify já está instalado (encontrado no PATH)"
+    spotify_installed=true
+fi
+
+if [ "$spotify_installed" = false ]; then
+    echo "   Spotify não encontrado, instalando via Flatpak..."
     # Garantir que flathub está configurado para o usuário
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
     
-    flatpak install --user -y flathub com.spotify.Client
-    check_success "Spotify"
+    if flatpak install --user -y flathub com.spotify.Client; then
+        echo "✓ Spotify instalado com sucesso"
+        check_success "Spotify"
+    else
+        echo "✗ Erro ao instalar Spotify via Flatpak"
+    fi
 fi
 
 # VSCode
@@ -293,9 +321,28 @@ fi
 
 # Google Chrome
 echo "Instalando Google Chrome..."
+chrome_installed=false
+
+# Verificar via comando
 if command -v google-chrome &> /dev/null; then
-    echo "✓ Google Chrome já está instalado"
-else
+    echo "✓ Google Chrome já está instalado (comando encontrado)"
+    chrome_installed=true
+# Verificar via rpm
+elif rpm -q google-chrome-stable 2>/dev/null; then
+    echo "✓ Google Chrome já está instalado (pacote nativo)"
+    chrome_installed=true
+# Verificar via flatpak
+elif flatpak list --user 2>/dev/null | grep -q "com.google.Chrome" || sudo flatpak list 2>/dev/null | grep -q "com.google.Chrome"; then
+    echo "✓ Google Chrome já está instalado (Flatpak)"
+    chrome_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "google-chrome"; then
+    echo "✓ Google Chrome já está instalado (Snap)"
+    chrome_installed=true
+fi
+
+if [ "$chrome_installed" = false ]; then
+    echo "   Google Chrome não encontrado, instalando..."
     # Tentar instalar com verificação de assinatura
     if sudo zypper install -y google-chrome-stable; then
         check_success "Google Chrome"
@@ -311,14 +358,34 @@ else
     fi
 fi
 
-# Brave Browser (verificar disponibilidade)
+# Brave Browser
 echo "Instalando Brave Browser..."
-# Verificar se já está instalado
-if command -v brave &> /dev/null || command -v brave-browser &> /dev/null || flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
-    echo "✓ Brave Browser já está instalado"
-else
-    echo "⚠️  Brave Browser não encontrado nos repositórios"
-    echo "   Tentando instalação via Flatpak..."
+brave_installed=false
+
+# Verificar via comando
+if command -v brave &> /dev/null || command -v brave-browser &> /dev/null; then
+    echo "✓ Brave Browser já está instalado (comando encontrado)"
+    brave_installed=true
+# Verificar via rpm
+elif rpm -q brave-browser 2>/dev/null; then
+    echo "✓ Brave Browser já está instalado (pacote nativo)"
+    brave_installed=true
+# Verificar via flatpak (usuário)
+elif flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
+    echo "✓ Brave Browser já está instalado (Flatpak - usuário)"
+    brave_installed=true
+# Verificar via flatpak (sistema)
+elif sudo flatpak list 2>/dev/null | grep -q "com.brave.Browser"; then
+    echo "✓ Brave Browser já está instalado (Flatpak - sistema)"
+    brave_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "brave"; then
+    echo "✓ Brave Browser já está instalado (Snap)"
+    brave_installed=true
+fi
+
+if [ "$brave_installed" = false ]; then
+    echo "   Brave Browser não encontrado, tentando instalação via Flatpak..."
     
     # Garantir que flathub está configurado para o usuário
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
@@ -1213,6 +1280,22 @@ else
     check_success "Maigret"
 fi
 
+# Holehe (Email OSINT)
+echo "Instalando Holehe..."
+if command -v holehe &> /dev/null; then
+    echo "✓ Holehe já está instalado"
+else
+    echo "   Instalando Holehe via pipx..."
+    if ! command -v pipx &> /dev/null; then
+        sudo zypper install -y python3-pipx
+    fi
+    pipx install holehe
+    echo "✓ Holehe instalado com sucesso"
+    echo "   Para usar: holehe <email>"
+    echo "   Holehe verifica se um email está registrado em mais de 120 sites"
+    check_success "Holehe"
+fi
+
 echo ""
 echo "✓ Ferramentas de OSINT instaladas com sucesso!"
 echo ""
@@ -1469,6 +1552,7 @@ echo "✓ SpiderFoot (automação OSINT)"
 echo "✓ GHunt (OSINT de contas Google)"
 echo "✓ PhoneInfoga (OSINT de números de telefone)"
 echo "✓ Maigret (busca avançada de username)"
+echo "✓ Holehe (verificação de email em mais de 120 sites)"
 echo ""
 
 # Criar ícones para aplicativos AppImage

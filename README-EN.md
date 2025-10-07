@@ -112,6 +112,7 @@ fortune | cowsay -f dragon
 - **GHunt** - Google account OSINT
 - **PhoneInfoga** - Phone number OSINT
 - **Maigret** - Advanced username search across 2500+ sites
+- **Holehe** - Email verification across 120+ sites
 
 ## 🚀 How to Use
 
@@ -171,6 +172,8 @@ linux-install-scripts/
 - ✅ **Multi-distribution support** - openSUSE, Debian, Ubuntu and derivatives
 - ✅ **Robust checks** - Detects installations in different ways
 - ✅ **Intelligent fallback** - Multiple installation options
+- ✅ **Enhanced verification** - Detects apps via command, dpkg, flatpak, snap
+- ✅ **New OSINT tool** - Holehe for email verification
 
 ### **🔒 Security:**
 - ✅ **Automatic GPG verification** - For repositories
@@ -430,6 +433,18 @@ maigret username --html
 maigret username --tags gaming,social
 ```
 
+#### **Holehe - Email Verification:**
+```bash
+# Check if email is registered on sites
+holehe email@example.com
+
+# Check multiple emails
+holehe email1@example.com email2@example.com
+
+# Use with custom timeout
+holehe --timeout 10 email@example.com
+```
+
 #### **GHunt - Google OSINT:**
 ```bash
 # Investigate Google email
@@ -465,6 +480,12 @@ python3 sf.py -l 127.0.0.1:5001
 ├── recon-ng/          # Reconnaissance framework
 ├── spiderfoot/        # OSINT automation
 └── phoneinfoga/       # Phone OSINT
+
+# Tools installed via pipx (globally available):
+├── holehe/            # Email verification
+├── maigret/           # Advanced username search
+├── ghunt/             # Google OSINT
+└── sqlmap/            # SQL injection
 ```
 
 ## 🪟 WinBoat - Run Windows Apps on Linux

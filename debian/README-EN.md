@@ -67,6 +67,8 @@ chmod +x install-programs-debian.sh
 - ✅ System dependencies
 - ✅ Main programs
 - ✅ Basic configurations
+- ✅ Enhanced verification - detects apps via command, dpkg, flatpak, snap
+- ✅ New OSINT tool - Holehe for email verification
 
 ### **Included Configurations:**
 - ✅ Java as default alternative

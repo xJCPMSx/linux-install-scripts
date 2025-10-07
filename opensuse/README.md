@@ -85,6 +85,8 @@ chmod +x install-programs-opensuse.sh
 - ✅ **Fallback robusto** - múltiplas fontes (repositórios, Flatpak, Snap, AppImage)
 - ✅ **Limpeza automática** de conflitos de repositórios
 - ✅ **Mensagens informativas** durante todo o processo
+- ✅ **Verificações aprimoradas** - detecta apps via comando, zypper, flatpak, snap
+- ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
 
 ### **🔧 Configuração Automática:**
 - ✅ **Repositórios** necessários adicionados automaticamente (VSCode, Chrome, Snappy)

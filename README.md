@@ -112,6 +112,7 @@ fortune | cowsay -f dragon
 - **GHunt** - OSINT de contas Google
 - **PhoneInfoga** - OSINT de números de telefone
 - **Maigret** - Busca avançada de username com mais de 2500 sites
+- **Holehe** - Verificação de email em mais de 120 sites
 
 ## 🚀 Como Usar
 
@@ -187,6 +188,8 @@ linux-install-scripts/
 - ✅ **Múltiplas fontes** - repositórios oficiais, Flatpak, Snap, AppImage
 - ✅ **Fallback inteligente** - tenta múltiplas opções de instalação
 - ✅ **Verificações robustas** - detecta instalações de diferentes formas
+- ✅ **Verificações aprimoradas** - detecta apps via comando, dpkg, flatpak, snap
+- ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
 
 ### **⚙️ Configuração Automática:**
 - ✅ **Java** configurado como alternativa padrão
@@ -427,6 +430,18 @@ maigret nome_usuario --html
 maigret nome_usuario --tags gaming,social
 ```
 
+#### **Holehe - Verificação de Email:**
+```bash
+# Verificar se email está registrado em sites
+holehe email@exemplo.com
+
+# Verificar múltiplos emails
+holehe email1@exemplo.com email2@exemplo.com
+
+# Usar com timeout personalizado
+holehe --timeout 10 email@exemplo.com
+```
+
 #### **GHunt - OSINT Google:**
 ```bash
 # Investigar email do Google
@@ -462,6 +477,12 @@ python3 sf.py -l 127.0.0.1:5001
 ├── recon-ng/          # Framework de reconhecimento
 ├── spiderfoot/        # Automação OSINT
 └── phoneinfoga/       # OSINT de telefone
+
+# Ferramentas instaladas via pipx (disponíveis globalmente):
+├── holehe/            # Verificação de email
+├── maigret/           # Busca avançada de username
+├── ghunt/             # OSINT Google
+└── sqlmap/            # SQL injection
 ```
 
 ## 🪟 WinBoat - Execute Apps Windows no Linux
@@ -582,6 +603,7 @@ INSTALL_SPIDERFOOT=true
 INSTALL_GHUNT=true
 INSTALL_PHONEINFOGA=true
 INSTALL_MAIGRET=true
+INSTALL_HOLEHE=true
 ```
 
 Depois execute:

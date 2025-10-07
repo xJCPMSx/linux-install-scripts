@@ -324,14 +324,42 @@ fi
 
 # Spotify via Flatpak
 echo "Instalando Spotify via Flatpak..."
+# Verificar se Spotify já está instalado (múltiplas formas)
+spotify_installed=false
+
+# Verificar via flatpak (usuário)
 if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
-    echo "✓ Spotify já está instalado"
-else
+    echo "✓ Spotify já está instalado (Flatpak - usuário)"
+    spotify_installed=true
+# Verificar via flatpak (sistema)
+elif sudo flatpak list 2>/dev/null | grep -q "com.spotify.Client"; then
+    echo "✓ Spotify já está instalado (Flatpak - sistema)"
+    spotify_installed=true
+# Verificar via apt (pacote nativo)
+elif dpkg -l | grep -q "spotify-client" 2>/dev/null; then
+    echo "✓ Spotify já está instalado (pacote nativo)"
+    spotify_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "spotify"; then
+    echo "✓ Spotify já está instalado (Snap)"
+    spotify_installed=true
+# Verificar se o comando spotify existe no PATH
+elif command -v spotify &> /dev/null; then
+    echo "✓ Spotify já está instalado (encontrado no PATH)"
+    spotify_installed=true
+fi
+
+if [ "$spotify_installed" = false ]; then
+    echo "   Spotify não encontrado, instalando via Flatpak..."
     # Garantir que flathub está configurado para o usuário
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
     
-    flatpak install --user -y flathub com.spotify.Client
-    check_success "Spotify"
+    if flatpak install --user -y flathub com.spotify.Client; then
+        echo "✓ Spotify instalado com sucesso"
+        check_success "Spotify"
+    else
+        echo "✗ Erro ao instalar Spotify via Flatpak"
+    fi
 fi
 
 # VSCode já foi instalado via Flatpak na seção anterior
@@ -390,20 +418,60 @@ fi
 
 # Google Chrome
 echo "Instalando Google Chrome..."
-if ! command -v google-chrome &> /dev/null; then
+chrome_installed=false
+
+# Verificar via comando
+if command -v google-chrome &> /dev/null; then
+    echo "✓ Google Chrome já está instalado (comando encontrado)"
+    chrome_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "google-chrome-stable" 2>/dev/null; then
+    echo "✓ Google Chrome já está instalado (pacote nativo)"
+    chrome_installed=true
+# Verificar via flatpak
+elif flatpak list --user 2>/dev/null | grep -q "com.google.Chrome" || sudo flatpak list 2>/dev/null | grep -q "com.google.Chrome"; then
+    echo "✓ Google Chrome já está instalado (Flatpak)"
+    chrome_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "google-chrome"; then
+    echo "✓ Google Chrome já está instalado (Snap)"
+    chrome_installed=true
+fi
+
+if [ "$chrome_installed" = false ]; then
+    echo "   Google Chrome não encontrado, instalando..."
     sudo apt install -y google-chrome-stable
     check_success "Google Chrome"
-else
-    echo "✓ Google Chrome já está instalado"
 fi
 
 # Brave Browser
 echo "Instalando Brave Browser..."
-if command -v brave &> /dev/null || command -v brave-browser &> /dev/null || flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
-    echo "✓ Brave Browser já está instalado"
-else
-    echo "⚠️  Brave Browser não encontrado nos repositórios"
-    echo "   Tentando instalação via Flatpak..."
+brave_installed=false
+
+# Verificar via comando
+if command -v brave &> /dev/null || command -v brave-browser &> /dev/null; then
+    echo "✓ Brave Browser já está instalado (comando encontrado)"
+    brave_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "brave-browser" 2>/dev/null; then
+    echo "✓ Brave Browser já está instalado (pacote nativo)"
+    brave_installed=true
+# Verificar via flatpak (usuário)
+elif flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
+    echo "✓ Brave Browser já está instalado (Flatpak - usuário)"
+    brave_installed=true
+# Verificar via flatpak (sistema)
+elif sudo flatpak list 2>/dev/null | grep -q "com.brave.Browser"; then
+    echo "✓ Brave Browser já está instalado (Flatpak - sistema)"
+    brave_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "brave"; then
+    echo "✓ Brave Browser já está instalado (Snap)"
+    brave_installed=true
+fi
+
+if [ "$brave_installed" = false ]; then
+    echo "   Brave Browser não encontrado, tentando instalação via Flatpak..."
     
     # Garantir que flathub está configurado para o usuário
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
@@ -423,43 +491,92 @@ fi
 
 # Firefox
 echo "Instalando Firefox..."
-if ! command -v firefox &> /dev/null; then
+firefox_installed=false
+
+# Verificar via comando
+if command -v firefox &> /dev/null; then
+    echo "✓ Firefox já está instalado (comando encontrado)"
+    firefox_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "firefox" 2>/dev/null; then
+    echo "✓ Firefox já está instalado (pacote nativo)"
+    firefox_installed=true
+# Verificar via flatpak
+elif flatpak list --user 2>/dev/null | grep -q "org.mozilla.firefox" || sudo flatpak list 2>/dev/null | grep -q "org.mozilla.firefox"; then
+    echo "✓ Firefox já está instalado (Flatpak)"
+    firefox_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "firefox"; then
+    echo "✓ Firefox já está instalado (Snap)"
+    firefox_installed=true
+fi
+
+if [ "$firefox_installed" = false ]; then
+    echo "   Firefox não encontrado, instalando..."
     sudo apt install -y firefox
     check_success "Firefox"
-else
-    echo "✓ Firefox já está instalado"
 fi
 
 # Java (OpenJDK)
 echo "Instalando Java (OpenJDK)..."
-# Tentar instalar OpenJDK 11 primeiro
-if sudo apt install -y openjdk-11-jdk openjdk-11-jre; then
-    echo "✓ Java OpenJDK 11 instalado"
-else
-    echo "⚠️  OpenJDK 11 não encontrado, tentando OpenJDK 17..."
-    if sudo apt install -y openjdk-17-jdk openjdk-17-jre; then
-        echo "✓ Java OpenJDK 17 instalado"
+java_installed=false
+
+# Verificar se Java já está instalado
+if command -v java &> /dev/null; then
+    echo "✓ Java já está instalado (comando encontrado)"
+    java_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "openjdk" 2>/dev/null || dpkg -l | grep -q "default-jdk" 2>/dev/null; then
+    echo "✓ Java já está instalado (pacote encontrado)"
+    java_installed=true
+fi
+
+if [ "$java_installed" = false ]; then
+    echo "   Java não encontrado, instalando..."
+    # Tentar instalar OpenJDK 11 primeiro
+    if sudo apt install -y openjdk-11-jdk openjdk-11-jre; then
+        echo "✓ Java OpenJDK 11 instalado"
     else
-        echo "⚠️  OpenJDK 17 não encontrado, tentando OpenJDK 21..."
-        if sudo apt install -y openjdk-21-jdk openjdk-21-jre; then
-            echo "✓ Java OpenJDK 21 instalado"
+        echo "⚠️  OpenJDK 11 não encontrado, tentando OpenJDK 17..."
+        if sudo apt install -y openjdk-17-jdk openjdk-17-jre; then
+            echo "✓ Java OpenJDK 17 instalado"
         else
-            echo "⚠️  Nenhuma versão do OpenJDK encontrada, tentando instalação genérica..."
-            sudo apt install -y default-jdk default-jre
-            check_success "Java (default-jdk)"
+            echo "⚠️  OpenJDK 17 não encontrado, tentando OpenJDK 21..."
+            if sudo apt install -y openjdk-21-jdk openjdk-21-jre; then
+                echo "✓ Java OpenJDK 21 instalado"
+            else
+                echo "⚠️  Nenhuma versão do OpenJDK encontrada, tentando instalação genérica..."
+                sudo apt install -y default-jdk default-jre
+                check_success "Java (default-jdk)"
+            fi
         fi
     fi
 fi
 
 # Node.js
 echo "Instalando Node.js..."
-if ! command -v node &> /dev/null; then
+nodejs_installed=false
+
+# Verificar se Node.js já está instalado
+if command -v node &> /dev/null; then
+    echo "✓ Node.js já está instalado (comando encontrado)"
+    nodejs_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "nodejs" 2>/dev/null; then
+    echo "✓ Node.js já está instalado (pacote encontrado)"
+    nodejs_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "node"; then
+    echo "✓ Node.js já está instalado (Snap)"
+    nodejs_installed=true
+fi
+
+if [ "$nodejs_installed" = false ]; then
+    echo "   Node.js não encontrado, instalando..."
     # Adicionar repositório do NodeSource
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
     sudo apt install -y nodejs
     check_success "Node.js"
-else
-    echo "✓ Node.js já está instalado"
 fi
 
 # Osu! (Jogo de ritmo)
@@ -492,10 +609,28 @@ fi
 # Steam (Plataforma de Jogos)
 echo ""
 echo "Instalando Steam..."
+steam_installed=false
+
+# Verificar se Steam já está instalado
 if command -v steam &> /dev/null; then
-    echo "✓ Steam já está instalado"
-else
-    echo "   Instalando Steam..."
+    echo "✓ Steam já está instalado (comando encontrado)"
+    steam_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "steam" 2>/dev/null; then
+    echo "✓ Steam já está instalado (pacote encontrado)"
+    steam_installed=true
+# Verificar via flatpak
+elif flatpak list --user 2>/dev/null | grep -q "com.valvesoftware.Steam" || sudo flatpak list 2>/dev/null | grep -q "com.valvesoftware.Steam"; then
+    echo "✓ Steam já está instalado (Flatpak)"
+    steam_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "steam"; then
+    echo "✓ Steam já está instalado (Snap)"
+    steam_installed=true
+fi
+
+if [ "$steam_installed" = false ]; then
+    echo "   Steam não encontrado, instalando..."
     if sudo apt install -y steam steam-installer; then
         echo "✓ Steam instalado com sucesso"
         echo "   Steam é a maior plataforma de distribuição de jogos para PC"
@@ -514,10 +649,28 @@ check_success "Steam"
 # Lutris (Gerenciador de Jogos)
 echo ""
 echo "Instalando Lutris..."
+lutris_installed=false
+
+# Verificar se Lutris já está instalado
 if command -v lutris &> /dev/null; then
-    echo "✓ Lutris já está instalado"
-else
-    echo "   Instalando Lutris..."
+    echo "✓ Lutris já está instalado (comando encontrado)"
+    lutris_installed=true
+# Verificar via dpkg
+elif dpkg -l | grep -q "lutris" 2>/dev/null; then
+    echo "✓ Lutris já está instalado (pacote encontrado)"
+    lutris_installed=true
+# Verificar via flatpak
+elif flatpak list --user 2>/dev/null | grep -q "net.lutris.Lutris" || sudo flatpak list 2>/dev/null | grep -q "net.lutris.Lutris"; then
+    echo "✓ Lutris já está instalado (Flatpak)"
+    lutris_installed=true
+# Verificar via snap
+elif snap list 2>/dev/null | grep -q "lutris"; then
+    echo "✓ Lutris já está instalado (Snap)"
+    lutris_installed=true
+fi
+
+if [ "$lutris_installed" = false ]; then
+    echo "   Lutris não encontrado, instalando..."
     if sudo apt install -y lutris; then
         echo "✓ Lutris instalado com sucesso"
         echo "   Lutris permite gerenciar jogos de várias plataformas (Steam, GOG, Epic, etc.)"
@@ -1175,6 +1328,23 @@ else
     check_success "Maigret"
 fi
 
+# Holehe (Email OSINT)
+echo "Instalando Holehe..."
+if command -v holehe &> /dev/null; then
+    echo "✓ Holehe já está instalado"
+else
+    echo "   Instalando Holehe via pipx..."
+    if ! command -v pipx &> /dev/null; then
+        sudo apt install -y pipx
+        pipx ensurepath
+    fi
+    pipx install holehe
+    echo "✓ Holehe instalado com sucesso"
+    echo "   Para usar: holehe <email>"
+    echo "   Holehe verifica se um email está registrado em mais de 120 sites"
+    check_success "Holehe"
+fi
+
 echo ""
 echo "✓ Ferramentas de OSINT instaladas com sucesso!"
 echo ""
@@ -1455,6 +1625,7 @@ echo "✓ SpiderFoot (automação OSINT)"
 echo "✓ GHunt (OSINT de contas Google)"
 echo "✓ PhoneInfoga (OSINT de números de telefone)"
 echo "✓ Maigret (busca avançada de username)"
+echo "✓ Holehe (verificação de email em mais de 120 sites)"
 echo ""
 
 echo "Recomendações:"

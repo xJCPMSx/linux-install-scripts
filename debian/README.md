@@ -86,6 +86,8 @@ chmod +x install-programs-debian.sh
 - ✅ **Fallback robusto** - múltiplas fontes (repositórios, Flatpak, Snap, AppImage, .deb)
 - ✅ **Limpeza automática** de conflitos de repositórios (remove repos problemáticos)
 - ✅ **Mensagens informativas** durante todo o processo
+- ✅ **Verificações aprimoradas** - detecta apps via comando, dpkg, flatpak, snap
+- ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
 
 ### **🔧 Configuração Automática:**
 - ✅ **Repositórios** oficiais adicionados (Chrome via .deb)

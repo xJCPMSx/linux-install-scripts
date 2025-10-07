@@ -66,6 +66,8 @@ chmod +x install-programs-opensuse.sh
 - ✅ System dependencies
 - ✅ Main programs
 - ✅ Basic configurations
+- ✅ Enhanced verification - detects apps via command, zypper, flatpak, snap
+- ✅ New OSINT tool - Holehe for email verification
 
 ### **Included Configurations:**
 - ✅ Java as default alternative
