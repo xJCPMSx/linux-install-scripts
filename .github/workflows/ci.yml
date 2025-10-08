@@ -29,8 +29,11 @@ jobs:
     - name: Configurar ambiente
       run: |
         echo "Configurando ambiente de teste..."
-        sudo apt-get update
-        sudo apt-get install -y shellcheck bash-completion
+        # Suprimir warnings do apt
+        export DEBIAN_FRONTEND=noninteractive
+        export APT_LISTCHANGES_FRONTEND=none
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq shellcheck bash-completion
     
     - name: Testar sintaxe dos scripts
       run: |
@@ -44,6 +47,7 @@ jobs:
     - name: Testar detecção de distribuição
       run: |
         echo "Testando detecção de distribuição..."
+        chmod +x auto-install.sh
         ./auto-install.sh --test-detect
     
     - name: Testar validação de configuração
@@ -129,8 +133,11 @@ jobs:
     - name: Instalar ferramentas de qualidade
       run: |
         echo "Instalando ferramentas de qualidade..."
-        sudo apt-get update
-        sudo apt-get install -y shellcheck bash-completion
+        # Suprimir warnings do apt
+        export DEBIAN_FRONTEND=noninteractive
+        export APT_LISTCHANGES_FRONTEND=none
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq shellcheck bash-completion
     
     - name: Análise de código
       run: |

@@ -14,6 +14,33 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
+# Função para exibir ajuda
+show_help() {
+    echo -e "${CYAN}========================================${NC}"
+    echo -e "${CYAN}🚀 Auto-Install Linux Scripts${NC}"
+    echo -e "${CYAN}========================================${NC}"
+    echo ""
+    echo -e "${YELLOW}Uso: $0 [opções]${NC}"
+    echo ""
+    echo -e "${BLUE}Opções:${NC}"
+    echo -e "${GREEN}  --test-detect, -t${NC}    Testar detecção de distribuição"
+    echo -e "${GREEN}  --help, -h${NC}          Mostrar esta ajuda"
+    echo -e "${GREEN}  --version, -v${NC}        Mostrar versão"
+    echo ""
+    echo -e "${BLUE}Exemplos:${NC}"
+    echo -e "${CYAN}  $0                       # Instalação automática${NC}"
+    echo -e "${CYAN}  $0 --test-detect         # Testar detecção${NC}"
+    echo -e "${CYAN}  $0 --help                # Mostrar ajuda${NC}"
+    echo ""
+}
+
+# Função para exibir versão
+show_version() {
+    echo -e "${CYAN}Auto-Install Linux Scripts v1.0-beta${NC}"
+    echo -e "${BLUE}Data: $(date)${NC}"
+    echo -e "${BLUE}Sistema: $(uname -s) $(uname -r)${NC}"
+}
+
 # Função para exibir cabeçalho
 show_header() {
     echo -e "${CYAN}========================================${NC}"
@@ -110,6 +137,19 @@ show_support_info() {
     echo ""
 }
 
+# Função para testar detecção
+test_detection() {
+    echo -e "${CYAN}🧪 Testando detecção de distribuição...${NC}"
+    echo ""
+    detect_distribution
+    echo -e "${GREEN}✅ Teste de detecção concluído com sucesso!${NC}"
+    echo -e "${BLUE}📋 Distribuição detectada: $DISTRO${NC}"
+    if [ -n "$VERSION" ]; then
+        echo -e "${BLUE}📋 Versão: $VERSION${NC}"
+    fi
+    echo ""
+}
+
 # Função principal
 main() {
     show_header
@@ -117,6 +157,30 @@ main() {
     run_appropriate_script
     show_support_info
 }
+
+# Tratamento de argumentos
+case "${1:-}" in
+    "--test-detect"|"-t")
+        test_detection
+        exit 0
+        ;;
+    "--help"|"-h")
+        show_help
+        exit 0
+        ;;
+    "--version"|"-v")
+        show_version
+        exit 0
+        ;;
+    "")
+        # Sem argumentos, executar instalação normal
+        ;;
+    *)
+        echo -e "${RED}❌ Argumento inválido: $1${NC}"
+        echo -e "${YELLOW}💡 Use --help para ver as opções disponíveis${NC}"
+        exit 1
+        ;;
+esac
 
 # Verificar se está sendo executado como root
 if [ "$EUID" -eq 0 ]; then
