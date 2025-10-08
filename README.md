@@ -54,28 +54,6 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 - **WinBoat** - Executa aplicativos Windows no Linux nativamente
 - **Osu!** - Jogo de ritmo
 
-## 🎉 Ferramentas Divertidas e Úteis
-
-- **fortune** - Gerador de frases aleatórias
-- **cowsay** - Vaca que fala (ASCII art)
-- **cmatrix** - Efeito Matrix no terminal
-- **nyancat** - Gato arco-íris animado
-
-### **Exemplos de Uso:**
-```bash
-# Frases aleatórias com vaca
-fortune | cowsay
-
-# Efeito Matrix
-cmatrix
-
-# Gato arco-íris animado
-nyancat
-
-# Combinando ferramentas
-fortune | cowsay -f dragon
-```
-
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música
 - **yt-dlp** - Download de vídeos
