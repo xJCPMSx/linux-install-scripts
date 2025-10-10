@@ -86,6 +86,26 @@ fortune | cowsay -f dragon
 - **cmatrix** - Matrix effect in terminal
 - **nyancat** - Animated rainbow cat
 
+#### **💡 Usage Tips:**
+```bash
+# Random quotes with cow
+fortune | cowsay
+
+# Matrix effect
+cmatrix
+
+# Animated rainbow cat
+nyancat
+
+# Combining tools
+fortune | cowsay -f dragon
+
+# If cowsay freezes terminal, try:
+cowsay "short message"
+# or use timeout:
+timeout 5 cowsay "message"
+```
+
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
 - **Docker & Docker Compose** - Containerization

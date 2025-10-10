@@ -139,7 +139,7 @@ uninstall_opensuse() {
     
     # Desinstalar ferramentas divertidas
     echo -e "${YELLOW}Removendo ferramentas divertidas...${NC}"
-    sudo zypper remove -y fortune cowsay cmatrix 2>/dev/null || echo "Ferramentas divertidas não encontradas"
+    sudo zypper remove -y fortune cowsay cmatrix nyancat 2>/dev/null || echo "Ferramentas divertidas não encontradas"
     
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
@@ -215,7 +215,7 @@ uninstall_debian() {
     
     # Desinstalar ferramentas divertidas
     echo -e "${YELLOW}Removendo ferramentas divertidas...${NC}"
-    sudo apt remove -y fortune-mod cowsay cmatrix 2>/dev/null || echo "Ferramentas divertidas não encontradas"
+    sudo apt remove -y fortune-mod cowsay cmatrix nyancat 2>/dev/null || echo "Ferramentas divertidas não encontradas"
     
     # Remover repositórios adicionados
     echo -e "${YELLOW}Removendo repositórios adicionados...${NC}"
@@ -287,9 +287,6 @@ remove_custom_files() {
     pipx uninstall maigret 2>/dev/null || echo "Maigret pipx não encontrado"
     pip3 uninstall -y sqlmap 2>/dev/null || echo "SQLMap pip não encontrado"
     
-    # Remover nyancat (cargo)
-    echo -e "${YELLOW}Removendo nyancat...${NC}"
-    cargo uninstall nyancat 2>/dev/null || echo "nyancat não encontrado"
     
     # Remover configurações do Git
     echo -e "${YELLOW}Removendo configurações do Git...${NC}"

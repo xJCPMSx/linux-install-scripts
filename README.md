@@ -64,6 +64,26 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 - **cmatrix** - Efeito Matrix no terminal
 - **nyancat** - Gato arco-íris animado
 
+#### **💡 Dicas de Uso:**
+```bash
+# Frases aleatórias com vaca
+fortune | cowsay
+
+# Efeito Matrix
+cmatrix
+
+# Gato arco-íris animado
+nyancat
+
+# Combinando ferramentas
+fortune | cowsay -f dragon
+
+# Se cowsay travar o terminal, tente:
+cowsay "mensagem curta"
+# ou use timeout:
+timeout 5 cowsay "mensagem"
+```
+
 ### 🛠️ **Ferramentas**
 - **AnyDesk** - Acesso remoto
 - **Docker e Docker Compose** - Containerização

@@ -135,22 +135,14 @@ if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! co
     echo "   Instalando fortune, cowsay, cmatrix..."
     sudo apt install -y fortune-mod cowsay cmatrix
     
-    # Instalar nyancat (não disponível nos repos, instalar via cargo)
+    # Instalar nyancat (disponível nos repositórios)
     if ! command -v nyancat &> /dev/null; then
-        echo "   Instalando nyancat via cargo..."
-        if ! command -v cargo &> /dev/null; then
-            echo "   Cargo não encontrado, instalando Rust..."
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            # shellcheck source=/dev/null
-            source ~/.cargo/env
-        fi
-        
-        # Tentar instalar nyancat via cargo
-        if cargo install nyancat; then
-            echo "✓ nyancat instalado via cargo"
+        echo "   Instalando nyancat via apt..."
+        if sudo apt install -y nyancat; then
+            echo "✓ nyancat instalado via apt"
         else
-            echo "⚠️  Falha ao instalar nyancat via cargo"
-            echo "   Você pode instalar manualmente mais tarde"
+            echo "⚠️  Falha ao instalar nyancat via apt"
+            echo "   Você pode instalar manualmente: sudo apt install nyancat"
         fi
     else
         echo "✓ nyancat já está instalado"
