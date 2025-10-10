@@ -228,6 +228,22 @@ INSTALL_SHERLOCK=true
 2. Set `false` for programs you don't want to install
 3. Run the script normally - it will respect your configurations
 
+### **🔧 Automatic Optimizations:**
+```ini
+[KDE_OPTIMIZATIONS]
+# KDE Plasma Optimizations
+DISABLE_KDE_WALLET=true          # Disable KDE Wallet
+OPTIMIZE_KDE_PERFORMANCE=true    # Optimize performance
+CONFIGURE_KDE_THEME=true         # Configure Breeze theme
+
+[SYSTEM_OPTIMIZATIONS]
+# System Optimizations
+ENABLE_TRIM=true                 # Enable TRIM for SSDs
+OPTIMIZE_SWAP=true              # Optimize swap settings
+DISABLE_UNNECESSARY_SERVICES=true # Disable unnecessary services
+OPTIMIZE_BOOT_TIME=true         # Optimize boot time
+```
+
 ## 🎮 Osu! - Rhythm Game
 
 ### **🔧 Automatic Installation:**

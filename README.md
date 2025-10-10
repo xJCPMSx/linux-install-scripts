@@ -241,6 +241,22 @@ INSTALL_SHERLOCK=true
 2. Defina `false` para programas que não deseja instalar
 3. Execute o script normalmente - ele respeitará suas configurações
 
+### **🔧 Otimizações Automáticas:**
+```ini
+[KDE_OPTIMIZATIONS]
+# Otimizações para KDE Plasma
+DISABLE_KDE_WALLET=true          # Desativa KDE Wallet
+OPTIMIZE_KDE_PERFORMANCE=true    # Otimiza performance
+CONFIGURE_KDE_THEME=true         # Configura tema Breeze
+
+[SYSTEM_OPTIMIZATIONS]
+# Otimizações do Sistema
+ENABLE_TRIM=true                 # Habilita TRIM para SSDs
+OPTIMIZE_SWAP=true              # Otimiza configurações de swap
+DISABLE_UNNECESSARY_SERVICES=true # Desabilita serviços desnecessários
+OPTIMIZE_BOOT_TIME=true         # Otimiza tempo de boot
+```
+
 ## 📦 Sistemas de Pacotes
 
 ### **Gerenciadores Instalados:**

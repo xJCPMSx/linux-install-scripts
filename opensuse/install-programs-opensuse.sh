@@ -37,6 +37,95 @@ check_success() {
     fi
 }
 
+# Função para otimizações do KDE
+optimize_kde() {
+    if [ "${DISABLE_KDE_WALLET:-true}" = "true" ]; then
+        echo "🔧 Otimizando KDE Plasma..."
+        
+        # Desativar KDE Wallet
+        echo "   Desativando KDE Wallet..."
+        kwriteconfig5 --file kwalletrc --group Wallet --key Enabled false
+        kwriteconfig5 --file kwalletrc --group Wallet --key First Use false
+        
+        # Desabilitar serviço KDE Wallet
+        systemctl --user mask kwalletd5 2>/dev/null || true
+        systemctl --user mask kwalletd6 2>/dev/null || true
+        
+        echo "✓ KDE Wallet desativado"
+    fi
+    
+    if [ "${OPTIMIZE_KDE_PERFORMANCE:-true}" = "true" ]; then
+        echo "   Otimizando performance do KDE..."
+        
+        # Otimizar compositor
+        kwriteconfig5 --file kwinrc --group Compositing --key Backend OpenGL
+        kwriteconfig5 --file kwinrc --group Compositing --key GLCore true
+        
+        # Otimizar animações
+        if [ "${DISABLE_KDE_ANIMATIONS:-false}" = "true" ]; then
+            kwriteconfig5 --file kwinrc --group Effect-kwin4_effect_translucency --key Decorations 0
+            kwriteconfig5 --file kwinrc --group Effect-kwin4_effect_translucency --key Dialogs 0
+        fi
+        
+        echo "✓ Performance do KDE otimizada"
+    fi
+    
+    if [ "${CONFIGURE_KDE_THEME:-true}" = "true" ]; then
+        echo "   Configurando tema do KDE..."
+        
+        # Configurar tema Breeze
+        kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle Breeze
+        kwriteconfig5 --file kdeglobals --group General --key ColorScheme Breeze
+        
+        echo "✓ Tema do KDE configurado"
+    fi
+}
+
+# Função para otimizações do sistema
+optimize_system() {
+    if [ "${ENABLE_TRIM:-true}" = "true" ]; then
+        echo "🔧 Otimizando sistema..."
+        
+        # Habilitar TRIM para SSDs
+        echo "   Habilitando TRIM para SSDs..."
+        sudo systemctl enable fstrim.timer
+        sudo systemctl start fstrim.timer
+        
+        echo "✓ TRIM habilitado"
+    fi
+    
+    if [ "${OPTIMIZE_SWAP:-true}" = "true" ]; then
+        echo "   Otimizando configurações de swap..."
+        
+        # Otimizar swappiness
+        echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+        echo 'vm.vfs_cache_pressure=50' | sudo tee -a /etc/sysctl.conf
+        
+        echo "✓ Swap otimizado"
+    fi
+    
+    if [ "${DISABLE_UNNECESSARY_SERVICES:-true}" = "true" ]; then
+        echo "   Desabilitando serviços desnecessários..."
+        
+        # Desabilitar serviços que podem ser desnecessários
+        sudo systemctl disable bluetooth 2>/dev/null || true
+        sudo systemctl disable cups 2>/dev/null || true
+        sudo systemctl disable avahi-daemon 2>/dev/null || true
+        
+        echo "✓ Serviços desnecessários desabilitados"
+    fi
+    
+    if [ "${OPTIMIZE_BOOT_TIME:-true}" = "true" ]; then
+        echo "   Otimizando tempo de boot..."
+        
+        # Otimizar boot
+        echo 'GRUB_TIMEOUT=3' | sudo tee -a /etc/default/grub
+        sudo grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
+        
+        echo "✓ Boot otimizado"
+    fi
+}
+
 # Função para testar repositórios
 test_repositories() {
     echo ""
@@ -1513,6 +1602,14 @@ else
     echo "   code --install-extension bradlc.vscode-tailwindcss"
     echo "   code --install-extension esbenp.prettier-vscode"
 fi
+
+# Aplicar otimizações do KDE se estiver rodando KDE
+if [ -n "$KDE_FULL_SESSION" ] || [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    optimize_kde
+fi
+
+# Aplicar otimizações do sistema
+optimize_system
 
 echo ""
 echo "=========================================="
