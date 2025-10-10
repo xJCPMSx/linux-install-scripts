@@ -227,9 +227,16 @@ optimize_gaming() {
         
         # Habilitar Vulkan
         if [ "${ENABLE_VULKAN:-true}" = "true" ]; then
-            echo "   Habilitando Vulkan..."
-            sudo zypper install -y vulkan-loader vulkan-tools vulkan-validation-layers
-            echo "✓ Vulkan habilitado"
+            echo "   Verificando Vulkan..."
+            
+            # Verificar se os pacotes já estão instalados
+            if zypper search --installed-only vulkan-tools vulkan-validationlayers libvulkan1 >/dev/null 2>&1; then
+                echo "✓ Vulkan já está instalado"
+            else
+                echo "   Habilitando Vulkan..."
+                sudo zypper install -y vulkan-tools vulkan-validationlayers libvulkan1
+                echo "✓ Vulkan habilitado"
+            fi
         fi
         
         # Configurar OpenGL

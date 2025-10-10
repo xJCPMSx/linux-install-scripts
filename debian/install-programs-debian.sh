@@ -232,9 +232,16 @@ optimize_gaming() {
         
         # Habilitar Vulkan
         if [ "${ENABLE_VULKAN:-true}" = "true" ]; then
-            echo "   Habilitando Vulkan..."
-            sudo apt install -y vulkan-tools vulkan-validationlayers-dev
-            echo "✓ Vulkan habilitado"
+            echo "   Verificando Vulkan..."
+            
+            # Verificar se os pacotes já estão instalados
+            if dpkg -l vulkan-tools vulkan-validationlayers-dev >/dev/null 2>&1; then
+                echo "✓ Vulkan já está instalado"
+            else
+                echo "   Habilitando Vulkan..."
+                sudo apt install -y vulkan-tools vulkan-validationlayers-dev
+                echo "✓ Vulkan habilitado"
+            fi
         fi
         
         # Configurar OpenGL
