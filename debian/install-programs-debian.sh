@@ -130,6 +130,166 @@ optimize_system() {
     fi
 }
 
+# Função para otimizações de jogos no Debian/Ubuntu
+optimize_gaming() {
+    if [ "${ENABLE_GAMING_OPTIMIZATIONS:-true}" = "true" ]; then
+        echo "🎮 Otimizando sistema para jogos..."
+        
+        # Instalar drivers Mesa otimizados
+        if [ "${INSTALL_MESA_DRIVERS:-true}" = "true" ]; then
+            echo "   Instalando drivers Mesa otimizados..."
+            sudo apt update
+            sudo apt install -y mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
+            echo "✓ Drivers Mesa instalados"
+        fi
+        
+        # Configurar performance do Mesa
+        if [ "${CONFIGURE_MESA_PERFORMANCE:-true}" = "true" ]; then
+            echo "   Configurando performance do Mesa..."
+            
+            # Configurar variáveis de ambiente para Mesa
+            echo 'export MESA_GL_VERSION_OVERRIDE=4.5' >> ~/.bashrc
+            echo 'export MESA_GLSL_VERSION_OVERRIDE=450' >> ~/.bashrc
+            echo 'export MESA_GLES_VERSION_OVERRIDE=3.2' >> ~/.bashrc
+            
+            # Configurar para melhor performance
+            echo 'export MESA_GL_THREAD=1' >> ~/.bashrc
+            echo 'export MESA_NO_ERROR=1' >> ~/.bashrc
+            
+            echo "✓ Mesa configurado para performance"
+        fi
+        
+        # Otimizar GPU
+        if [ "${OPTIMIZE_GPU_PERFORMANCE:-true}" = "true" ]; then
+            echo "   Otimizando performance da GPU..."
+            
+            # Configurar GPU para modo performance
+            echo 'export __GL_THREADED_OPTIMIZATIONS=1' >> ~/.bashrc
+            echo 'export __GL_SYNC_TO_VBLANK=0' >> ~/.bashrc
+            echo 'export __GL_YIELD="NOTHING"' >> ~/.bashrc
+            
+            echo "✓ GPU otimizada para performance"
+        fi
+        
+        # Configurar Wine para jogos
+        if [ "${CONFIGURE_WINE_PERFORMANCE:-true}" = "true" ]; then
+            echo "   Configurando Wine para jogos..."
+            
+            # Configurar Wine para melhor performance
+            echo 'export WINEDEBUG=-all' >> ~/.bashrc
+            echo 'export WINEDLLOVERRIDES="dxgi=n;d3d11=n;d3d10=n;d3d9=n"' >> ~/.bashrc
+            
+            echo "✓ Wine configurado para performance"
+        fi
+        
+        # Habilitar GameMode
+        if [ "${ENABLE_GAMEMODE:-true}" = "true" ]; then
+            echo "   Habilitando GameMode..."
+            sudo apt install -y gamemode libgamemode0
+            echo "✓ GameMode instalado e habilitado"
+        fi
+        
+        # Configurar Steam
+        if [ "${CONFIGURE_STEAM_PERFORMANCE:-true}" = "true" ]; then
+            echo "   Configurando Steam para performance..."
+            
+            # Configurar Steam para melhor performance
+            echo 'export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"' >> ~/.bashrc
+            echo 'export STEAM_COMPAT_DATA_PATH="$HOME/.steam/steam/steamapps/compatdata"' >> ~/.bashrc
+            
+            echo "✓ Steam configurado para performance"
+        fi
+        
+        # Configurar Lutris
+        if [ "${OPTIMIZE_LUTRIS_SETTINGS:-true}" = "true" ]; then
+            echo "   Configurando Lutris..."
+            
+            # Configurar Lutris para melhor performance
+            echo 'export LUTRIS_SKIP_INSTALLER_DLG=1' >> ~/.bashrc
+            echo 'export LUTRIS_ENABLE_RUNTIME=0' >> ~/.bashrc
+            
+            echo "✓ Lutris configurado"
+        fi
+        
+        # Configurar DXVK
+        if [ "${CONFIGURE_DXVK:-true}" = "true" ]; then
+            echo "   Configurando DXVK..."
+            
+            # Configurar DXVK para melhor performance
+            echo 'export DXVK_HUD=0' >> ~/.bashrc
+            echo 'export DXVK_LOG_LEVEL=none' >> ~/.bashrc
+            echo 'export DXVK_ASYNC=1' >> ~/.bashrc
+            
+            echo "✓ DXVK configurado"
+        fi
+        
+        # Habilitar Vulkan
+        if [ "${ENABLE_VULKAN:-true}" = "true" ]; then
+            echo "   Habilitando Vulkan..."
+            sudo apt install -y vulkan-tools vulkan-validationlayers-dev
+            echo "✓ Vulkan habilitado"
+        fi
+        
+        # Configurar OpenGL
+        if [ "${CONFIGURE_OPENGL:-true}" = "true" ]; then
+            echo "   Configurando OpenGL..."
+            
+            # Configurar OpenGL para melhor performance
+            echo 'export __GL_SHADER_DISK_CACHE=1' >> ~/.bashrc
+            echo 'export __GL_SHADER_DISK_CACHE_PATH="$HOME/.cache/mesa_shader_cache"' >> ~/.bashrc
+            
+            echo "✓ OpenGL configurado"
+        fi
+        
+        # Otimizar memória para jogos
+        if [ "${OPTIMIZE_MEMORY_GAMING:-true}" = "true" ]; then
+            echo "   Otimizando memória para jogos..."
+            
+            # Configurar memória para jogos
+            echo 'vm.dirty_ratio=15' | sudo tee -a /etc/sysctl.conf
+            echo 'vm.dirty_background_ratio=5' | sudo tee -a /etc/sysctl.conf
+            echo 'vm.vfs_cache_pressure=50' | sudo tee -a /etc/sysctl.conf
+            
+            echo "✓ Memória otimizada para jogos"
+        fi
+        
+        # Desabilitar compositor durante jogos (KDE)
+        if [ "${DISABLE_COMPOSITOR_GAMING:-true}" = "true" ]; then
+            echo "   Configurando desabilitação do compositor durante jogos..."
+            
+            # Configurar KWin para desabilitar compositor durante jogos
+            kwriteconfig5 --file kwinrc --group Compositing --key DisableTearingCheck true
+            kwriteconfig5 --file kwinrc --group Compositing --key GLCore true
+            
+            echo "✓ Compositor configurado para jogos"
+        fi
+        
+        # Configurar mouse para jogos
+        if [ "${CONFIGURE_GAMING_MOUSE:-true}" = "true" ]; then
+            echo "   Configurando mouse para jogos..."
+            
+            # Configurar mouse para melhor responsividade
+            echo 'export MOUSE_DPI=800' >> ~/.bashrc
+            echo 'export MOUSE_POLLING_RATE=1000' >> ~/.bashrc
+            
+            echo "✓ Mouse configurado para jogos"
+        fi
+        
+        # Configurar teclado para jogos
+        if [ "${ENABLE_GAMING_KEYBOARD:-true}" = "true" ]; then
+            echo "   Configurando teclado para jogos..."
+            
+            # Configurar teclado para melhor responsividade
+            echo 'export KEYBOARD_REPEAT_RATE=30' >> ~/.bashrc
+            echo 'export KEYBOARD_REPEAT_DELAY=250' >> ~/.bashrc
+            
+            echo "✓ Teclado configurado para jogos"
+        fi
+        
+        echo "✓ Otimizações de jogos aplicadas com sucesso!"
+    fi
+}
+
 # Função para limpar repositórios conflitantes
 limpar_repositorios() {
     echo "🧹 Limpando repositórios conflitantes..."
@@ -1736,6 +1896,9 @@ fi
 
 # Aplicar otimizações do sistema
 optimize_system
+
+# Aplicar otimizações de jogos
+optimize_gaming
 
 echo "Recomendações:"
 echo "1. Reinicie o sistema para garantir que todos os drivers funcionem corretamente"

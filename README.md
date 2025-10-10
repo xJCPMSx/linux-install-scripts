@@ -255,7 +255,55 @@ ENABLE_TRIM=true                 # Habilita TRIM para SSDs
 OPTIMIZE_SWAP=true              # Otimiza configurações de swap
 DISABLE_UNNECESSARY_SERVICES=true # Desabilita serviços desnecessários
 OPTIMIZE_BOOT_TIME=true         # Otimiza tempo de boot
+
+[GAMING_OPTIMIZATIONS]
+# Otimizações específicas para jogos
+ENABLE_GAMING_OPTIMIZATIONS=true # Habilita otimizações de jogos
+INSTALL_MESA_DRIVERS=true       # Instala drivers Mesa otimizados
+CONFIGURE_MESA_PERFORMANCE=true # Configura Mesa para performance
+OPTIMIZE_GPU_PERFORMANCE=true   # Otimiza performance da GPU
+CONFIGURE_WINE_PERFORMANCE=true  # Configura Wine para jogos
+ENABLE_GAMEMODE=true            # Habilita GameMode
+CONFIGURE_STEAM_PERFORMANCE=true # Configura Steam para performance
+OPTIMIZE_LUTRIS_SETTINGS=true   # Otimiza configurações do Lutris
+CONFIGURE_DXVK=true             # Configura DXVK para melhor performance
+ENABLE_VULKAN=true              # Habilita suporte Vulkan
+CONFIGURE_OPENGL=true           # Configura OpenGL para performance
+OPTIMIZE_MEMORY_GAMING=true     # Otimiza memória para jogos
+DISABLE_COMPOSITOR_GAMING=true  # Desabilita compositor durante jogos
+CONFIGURE_GAMING_MOUSE=true     # Configura mouse para jogos
+ENABLE_GAMING_KEYBOARD=true     # Configura teclado para jogos
 ```
+
+### **🎮 Otimizações de Jogos:**
+O script inclui otimizações específicas para melhorar a performance em jogos:
+
+#### **🔧 Drivers e Performance:**
+- **Drivers Mesa** otimizados para melhor compatibilidade
+- **Configurações de GPU** para modo performance
+- **Vulkan** habilitado para jogos modernos
+- **OpenGL** configurado para melhor performance
+
+#### **🎯 Plataformas de Jogos:**
+- **Steam** configurado para melhor performance
+- **Lutris** otimizado para jogos não-Steam
+- **Wine** configurado para jogos Windows
+- **DXVK** habilitado para conversão DirectX → Vulkan
+
+#### **⚡ GameMode:**
+- **GameMode** instalado e configurado
+- **Prioridade de CPU** otimizada durante jogos
+- **Governor de CPU** ajustado para performance
+
+#### **🖱️ Periféricos:**
+- **Mouse** configurado para melhor responsividade
+- **Teclado** otimizado para jogos
+- **Compositor** desabilitado durante jogos (KDE)
+
+#### **💾 Memória:**
+- **Swap** otimizado para jogos
+- **Cache de shaders** habilitado
+- **Configurações de memória** ajustadas para jogos
 
 ## 📦 Sistemas de Pacotes
 

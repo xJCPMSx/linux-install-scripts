@@ -242,7 +242,55 @@ ENABLE_TRIM=true                 # Enable TRIM for SSDs
 OPTIMIZE_SWAP=true              # Optimize swap settings
 DISABLE_UNNECESSARY_SERVICES=true # Disable unnecessary services
 OPTIMIZE_BOOT_TIME=true         # Optimize boot time
+
+[GAMING_OPTIMIZATIONS]
+# Gaming-specific optimizations
+ENABLE_GAMING_OPTIMIZATIONS=true # Enable gaming optimizations
+INSTALL_MESA_DRIVERS=true       # Install optimized Mesa drivers
+CONFIGURE_MESA_PERFORMANCE=true # Configure Mesa for performance
+OPTIMIZE_GPU_PERFORMANCE=true   # Optimize GPU performance
+CONFIGURE_WINE_PERFORMANCE=true  # Configure Wine for gaming
+ENABLE_GAMEMODE=true            # Enable GameMode
+CONFIGURE_STEAM_PERFORMANCE=true # Configure Steam for performance
+OPTIMIZE_LUTRIS_SETTINGS=true   # Optimize Lutris settings
+CONFIGURE_DXVK=true             # Configure DXVK for better performance
+ENABLE_VULKAN=true              # Enable Vulkan support
+CONFIGURE_OPENGL=true           # Configure OpenGL for performance
+OPTIMIZE_MEMORY_GAMING=true     # Optimize memory for gaming
+DISABLE_COMPOSITOR_GAMING=true  # Disable compositor during gaming
+CONFIGURE_GAMING_MOUSE=true     # Configure mouse for gaming
+ENABLE_GAMING_KEYBOARD=true     # Configure keyboard for gaming
 ```
+
+### **🎮 Gaming Optimizations:**
+The script includes specific optimizations to improve gaming performance:
+
+#### **🔧 Drivers and Performance:**
+- **Mesa drivers** optimized for better compatibility
+- **GPU settings** for performance mode
+- **Vulkan** enabled for modern games
+- **OpenGL** configured for better performance
+
+#### **🎯 Gaming Platforms:**
+- **Steam** configured for better performance
+- **Lutris** optimized for non-Steam games
+- **Wine** configured for Windows games
+- **DXVK** enabled for DirectX → Vulkan conversion
+
+#### **⚡ GameMode:**
+- **GameMode** installed and configured
+- **CPU priority** optimized during gaming
+- **CPU governor** adjusted for performance
+
+#### **🖱️ Peripherals:**
+- **Mouse** configured for better responsiveness
+- **Keyboard** optimized for gaming
+- **Compositor** disabled during gaming (KDE)
+
+#### **💾 Memory:**
+- **Swap** optimized for gaming
+- **Shader cache** enabled
+- **Memory settings** adjusted for gaming
 
 ## 🎮 Osu! - Rhythm Game
 
