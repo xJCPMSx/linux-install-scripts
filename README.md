@@ -188,6 +188,7 @@ linux-install-scripts/
 - ✅ **Verificações robustas** - detecta instalações de diferentes formas
 - ✅ **Verificações aprimoradas** - detecta apps via comando, dpkg, flatpak, snap
 - ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
+- ✅ **Configuração personalizável** - arquivo `config/config.conf` para controlar instalações
 
 ### **⚙️ Configuração Automática:**
 - ✅ **Java** configurado como alternativa padrão
@@ -212,6 +213,33 @@ linux-install-scripts/
 - ✅ **Flatpak** - Otimização de permissões para KDE
 - ✅ **Qt** - Configuração de variáveis de ambiente
 - ✅ **Alias** - Criação automática de comandos (ex: `spotify`)
+
+## ⚙️ Configuração Personalizada
+
+### **📝 Arquivo de Configuração:**
+O arquivo `config/config.conf` permite personalizar quais programas instalar:
+
+```ini
+[FUN_TOOLS]
+# Ferramentas Divertidas
+INSTALL_FUN_TOOLS=true
+INSTALL_FORTUNE=true
+INSTALL_COWSAY=true
+INSTALL_CMATRIX=true
+INSTALL_NYANCAT=true
+
+[OSINT]
+# Ferramentas OSINT
+INSTALL_OSINT_TOOLS=true
+INSTALL_HOLEHE=true
+INSTALL_SHERLOCK=true
+# ... outras ferramentas
+```
+
+### **💡 Como Usar:**
+1. Edite `config/config.conf` antes de executar o script
+2. Defina `false` para programas que não deseja instalar
+3. Execute o script normalmente - ele respeitará suas configurações
 
 ## 📦 Sistemas de Pacotes
 

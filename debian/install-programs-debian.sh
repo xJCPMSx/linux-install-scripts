@@ -19,6 +19,19 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Função para carregar configurações do config.conf
+load_config() {
+    local config_file="config/config.conf"
+    if [ -f "$config_file" ]; then
+        # shellcheck source=/dev/null
+        source "$config_file" 2>/dev/null || true
+        echo "✓ Configurações carregadas de $config_file"
+    else
+        echo "⚠️  Arquivo de configuração não encontrado: $config_file"
+        echo "   Usando configurações padrão"
+    fi
+}
+
 # Função para verificar sucesso
 check_success() {
     if [ $? -eq 0 ]; then
@@ -88,6 +101,9 @@ if [ "$EUID" -eq 0 ]; then
     echo -e "${YELLOW}⚠️  Executando como root. Algumas configurações podem não funcionar corretamente.${NC}"
 fi
 
+# Carregar configurações
+load_config
+
 # Executar limpeza de repositórios PRIMEIRO
 limpar_repositorios
 
@@ -131,7 +147,8 @@ check_success "ferramentas adicionais"
 # Instalar ferramentas divertidas e úteis
 echo ""
 echo "Instalando ferramentas divertidas e úteis..."
-if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
+if [ "${INSTALL_FUN_TOOLS:-true}" = "true" ]; then
+    if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
     echo "   Instalando fortune, cowsay, cmatrix..."
     sudo apt install -y fortune-mod cowsay cmatrix
     
@@ -154,8 +171,11 @@ if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! co
     echo "   - cmatrix"
     echo "   - nyancat"
     check_success "ferramentas divertidas"
+    else
+        echo "✓ Ferramentas divertidas já estão instaladas"
+    fi
 else
-    echo "✓ Ferramentas divertidas já estão instaladas"
+    echo "⚠️  Instalação de ferramentas divertidas desabilitada no config.conf"
 fi
 
 # Instalar Docker e Docker Compose

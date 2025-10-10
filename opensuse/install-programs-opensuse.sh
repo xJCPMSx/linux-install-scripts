@@ -14,6 +14,19 @@ echo "🐧 Sistema: $(uname -s) $(uname -r)"
 echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
 echo ""
 
+# Função para carregar configurações do config.conf
+load_config() {
+    local config_file="config/config.conf"
+    if [ -f "$config_file" ]; then
+        # shellcheck source=/dev/null
+        source "$config_file" 2>/dev/null || true
+        echo "✓ Configurações carregadas de $config_file"
+    else
+        echo "⚠️  Arquivo de configuração não encontrado: $config_file"
+        echo "   Usando configurações padrão"
+    fi
+}
+
 # Função para verificar se o comando foi executado com sucesso
 check_success() {
     if [ $? -eq 0 ]; then
@@ -85,6 +98,9 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     echo "Sem argumentos: Executa instalação completa"
     exit 0
 fi
+
+# Carregar configurações
+load_config
 
 # Limpar repositórios problemáticos (se existirem)
 echo "Limpando repositórios problemáticos..."
@@ -478,7 +494,8 @@ fi
 # Instalar ferramentas divertidas e úteis
 echo ""
 echo "Instalando ferramentas divertidas e úteis..."
-if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
+if [ "${INSTALL_FUN_TOOLS:-true}" = "true" ]; then
+    if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
     echo "   Instalando fortune, cowsay, cmatrix..."
     sudo zypper install -y fortune cowsay cmatrix
     
@@ -501,8 +518,11 @@ if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! co
     echo "   - cmatrix"
     echo "   - nyancat"
     check_success "ferramentas divertidas"
+    else
+        echo "✓ Ferramentas divertidas já estão instaladas"
+    fi
 else
-    echo "✓ Ferramentas divertidas já estão instaladas"
+    echo "⚠️  Instalação de ferramentas divertidas desabilitada no config.conf"
 fi
 
 # Instalar Docker e Docker Compose

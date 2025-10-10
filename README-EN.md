@@ -194,11 +194,39 @@ linux-install-scripts/
 - ✅ **Intelligent fallback** - Multiple installation options
 - ✅ **Enhanced verification** - Detects apps via command, dpkg, flatpak, snap
 - ✅ **New OSINT tool** - Holehe for email verification
+- ✅ **Customizable configuration** - `config/config.conf` file to control installations
 
 ### **🔒 Security:**
 - ✅ **Automatic GPG verification** - For repositories
 - ✅ **Security audit** - Using Snyk and CodeQL
 - ✅ **CI/CD** - Automated tests on every commit
+
+## ⚙️ Custom Configuration
+
+### **📝 Configuration File:**
+The `config/config.conf` file allows you to customize which programs to install:
+
+```ini
+[FUN_TOOLS]
+# Fun Tools
+INSTALL_FUN_TOOLS=true
+INSTALL_FORTUNE=true
+INSTALL_COWSAY=true
+INSTALL_CMATRIX=true
+INSTALL_NYANCAT=true
+
+[OSINT]
+# OSINT Tools
+INSTALL_OSINT_TOOLS=true
+INSTALL_HOLEHE=true
+INSTALL_SHERLOCK=true
+# ... other tools
+```
+
+### **💡 How to Use:**
+1. Edit `config/config.conf` before running the script
+2. Set `false` for programs you don't want to install
+3. Run the script normally - it will respect your configurations
 
 ## 🎮 Osu! - Rhythm Game
 
