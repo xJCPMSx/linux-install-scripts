@@ -133,9 +133,16 @@ optimize_gaming() {
         
         # Instalar drivers Mesa otimizados
         if [ "${INSTALL_MESA_DRIVERS:-true}" = "true" ]; then
-            echo "   Instalando drivers Mesa otimizados..."
-            sudo zypper install -y Mesa Mesa-dri Mesa-libGL1 Mesa-libGLU1 Mesa-libEGL1 Mesa-libGLESv2-1
-            echo "✓ Drivers Mesa instalados"
+            echo "   Verificando drivers Mesa..."
+            
+            # Verificar se os pacotes já estão instalados
+            if zypper search --installed-only Mesa Mesa-dri Mesa-libGL1 Mesa-libEGL1 libGLU1 >/dev/null 2>&1; then
+                echo "✓ Drivers Mesa já estão instalados"
+            else
+                echo "   Instalando drivers Mesa otimizados..."
+                sudo zypper install -y Mesa Mesa-dri Mesa-libGL1 Mesa-libEGL1 libGLU1
+                echo "✓ Drivers Mesa instalados"
+            fi
         fi
         
         # Configurar performance do Mesa

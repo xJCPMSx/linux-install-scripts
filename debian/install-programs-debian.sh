@@ -137,10 +137,17 @@ optimize_gaming() {
         
         # Instalar drivers Mesa otimizados
         if [ "${INSTALL_MESA_DRIVERS:-true}" = "true" ]; then
-            echo "   Instalando drivers Mesa otimizados..."
-            sudo apt update
-            sudo apt install -y mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
-            echo "✓ Drivers Mesa instalados"
+            echo "   Verificando drivers Mesa..."
+            
+            # Verificar se os pacotes já estão instalados
+            if dpkg -l mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa >/dev/null 2>&1; then
+                echo "✓ Drivers Mesa já estão instalados"
+            else
+                echo "   Instalando drivers Mesa otimizados..."
+                sudo apt update
+                sudo apt install -y mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
+                echo "✓ Drivers Mesa instalados"
+            fi
         fi
         
         # Configurar performance do Mesa
