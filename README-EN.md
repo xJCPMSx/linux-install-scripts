@@ -1,11 +1,14 @@
+<!-- Markdown version -->
 # Linux Installation Scripts
 
-[![Linux](https://img.shields.io/badge/Linux-Supported-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
-[![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
-[![Debian](https://img.shields.io/badge/Debian-11%2B-13-A80030?logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-24.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-1.1--stable-green.svg" alt="Version">
+  <img src="https://img.shields.io/badge/Linux-Supported-brightgreen.svg" alt="Linux">
+  <img src="https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-A80030?logo=debian" alt="Debian">
+  <img src="https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?logo=ubuntu" alt="Ubuntu">
+  <img src="https://img.shields.io/badge/openSUSE-Supported-35B44A?logo=opensuse" alt="openSUSE">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+</p>
 
 ## 🌍 Languages / Idiomas
 
@@ -92,13 +95,10 @@ cd linux-install-scripts
 - ✅ Informative messages throughout the process
 
 ### **🤖 AI Tools (v1.1-stable):**
+- ✅ Cursor - AI Code Editor
 - ✅ Antigravity - AI tool via Python/PIP
 - ✅ Claude Code - Official Anthropic CLI for AI-assisted software engineering
 - ✅ OpenCode - Development extensions
-
-### **💻 Code Editors:**
-- ✅ VSCode - Editor via Flatpak
-- ✅ Cursor - AI-powered editor (AppImage)
 
 ### **🖥️ System Tools:**
 - ✅ Fastfetch/Neofetch - System information (automatic detection)
@@ -251,7 +251,7 @@ fi
 - ✅ Scripts tested and functional (v1.1-stable)
 - ✅ Backward compatibility with Debian 11, Ubuntu 20.04+
 - ✅ Full Debian 13 (Trixie) support
-- ✅ AI Tools: Antigravity, Claude Code
+- ✅ AI Tools: Cursor, Antigravity, Claude Code
 - ✅ Smart fallback for Fastfetch/Neofetch
 - ⚠️ Reboot recommended after Docker and Huion Driver
 

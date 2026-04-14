@@ -1,11 +1,14 @@
+<!-- Markdown version -->
 # Scripts de Instalação Linux
 
-[![Linux](https://img.shields.io/badge/Linux-Supported-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
-[![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
-[![Debian](https://img.shields.io/badge/Debian-11%2B-13-A80030?logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-24.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-1.1--stable-green.svg" alt="Version">
+  <img src="https://img.shields.io/badge/Linux-Supported-brightgreen.svg" alt="Linux">
+  <img src="https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-A80030?logo=debian" alt="Debian">
+  <img src="https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?logo=ubuntu" alt="Ubuntu">
+  <img src="https://img.shields.io/badge/openSUSE-Supported-35B44A?logo=opensuse" alt="openSUSE">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+</p>
 
 ## 🌍 Languages / Idiomas
 
@@ -92,13 +95,10 @@ cd linux-install-scripts
 - ✅ Mensagens informativas durante todo o processo
 
 ### **🤖 Ferramentas de IA (v1.1-stable):**
+- ✅ Cursor - Editor de código com IA (AI Code Editor)
 - ✅ Antigravity - Ferramenta de IA via Python/PIP
 - ✅ Claude Code - CLI oficial da Anthropic para engenharia de software assistida por IA
 - ✅ OpenCode - Extensões de desenvolvimento
-
-### **💻 Editores de Código:**
-- ✅ VSCode - Editor via Flatpak
-- ✅ Cursor - Editor com IA (AppImage)
 
 ### **🖥️ Ferramentas do Sistema:**
 - ✅ Fastfetch/Neofetch - Informações do sistema (detecção automática)
@@ -251,7 +251,7 @@ fi
 - ✅ Scripts testados e funcionais (v1.1-stable)
 - ✅ Retrocompatibilidade com Debian 11, Ubuntu 20.04+
 - ✅ Suporte completo ao Debian 13 (Trixie)
-- ✅ Ferramentas de IA: Antigravity, Claude Code
+- ✅ Ferramentas de IA: Cursor, Antigravity, Claude Code
 - ✅ Fallback inteligente para Fastfetch/Neofetch
 - ⚠️ Reinicialização recomendada após Docker e Driver Huion
 
