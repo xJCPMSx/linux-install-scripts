@@ -1574,10 +1574,9 @@ else
         pip install lxml==5.2.2 || pip install lxml==5.1.0 || pip install lxml==5.0.0
     fi
     
-    # Se lxml ainda não estiver instalado, pular e continuar
-    if ! pip show lxml >/dev/null 2>&1; then
-        echo "   ⚠️ lxml não pôde ser instalado (incompatível com Python $PYTHON_VERSION)"
-        echo "   Tentando instalar outras dependências..."
+    # Remover lxml do requirements.txt para evitar conflito de versão
+    if [ -f requirements.txt ]; then
+        sed -i '/^lxml/d' requirements.txt
     fi
     
     echo "   Instalando dependências do SpiderFoot..."

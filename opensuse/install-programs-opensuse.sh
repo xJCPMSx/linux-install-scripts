@@ -1567,19 +1567,16 @@ else
     pip install --upgrade pip setuptools wheel
     
     echo "   Instalando lxml (tratamento especial para Python 3.13+)..."
-    # Python 3.13 tem incompatibilidades com lxml - tentar múltiplas abordagens
     if ! pip install --prefer-binary lxml 2>/dev/null; then
         echo "   Tentando instalar lxml com versão específica..."
         pip install lxml==5.2.2 || pip install lxml==5.1.0 || pip install lxml==5.0.0
     fi
     
-    # Se lxml ainda não estiver instalado, pular e continuar (algumas features podem funcionar sem ele)
-    if ! pip show lxml >/dev/null 2>&1; then
-        echo "   ⚠️ lxml não pôde ser instalado (incompatível com Python $PYTHON_VERSION)"
-        echo "   Tentando instalar outras dependências..."
+    # Remover lxml do requirements.txt para evitar conflito de versão
+    if [ -f requirements.txt ]; then
+        sed -i '/^lxml/d' requirements.txt
     fi
     
-    # Instala o resto das dependências (sem lxml se falhou)
     echo "   Instalando dependências do SpiderFoot..."
     if pip install -r requirements.txt 2>/dev/null; then
         deactivate
