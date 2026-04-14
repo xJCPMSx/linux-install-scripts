@@ -2,9 +2,8 @@
 
 [![Linux](https://img.shields.io/badge/Linux-Supported-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 [![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
-[![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
-[![Kali](https://img.shields.io/badge/Kali-Supported-purple.svg)](https://www.kali.org/)
+[![Debian](https://img.shields.io/badge/Debian-11%2B-13-A80030?logo=debian)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-24.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
