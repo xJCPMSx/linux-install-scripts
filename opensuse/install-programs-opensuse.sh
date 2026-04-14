@@ -27,6 +27,9 @@ ZYPPER_REFRESH="$ZYPPER refresh"
 ZYPPER_ADDREPO="$ZYPPER addrepo -n"
 ZYPPER_REMOVEREPO="$ZYPPER removerepo -n"
 
+# Variável global para .bashrc (evita SC2034)
+BASHRC="${HOME}/.bashrc"
+
 # Função para carregar configurações do config.conf
 load_config() {
     local config_file="config/config.conf"
@@ -50,11 +53,10 @@ check_success() {
     fi
 }
 
-# Função para adicionar variáveis ao .bashrc sem duplicação (evita SC2129)
+# Função para adicionar variáveis ao .bashrc sem duplicação (evita SC2129 e SC2034)
 add_to_bashrc() {
     local line="$1"
-    local bashrc="${HOME}/.bashrc"
-    if ! grep -Fq "$line" "$BASHRC" 2>/dev/null; then
+    if ! grep -qxF "$line" "$BASHRC" 2>/dev/null; then
         echo "$line" >> "$BASHRC"
     fi
 }
@@ -1803,8 +1805,6 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     echo "   Detectado ambiente KDE, aplicando correções..."
     
     # Adicionar aliases para aplicativos Flatpak se necessário
-    # Avoid SC2168: não usar local fora de função
-    BASHRC="${HOME}/.bashrc"
     
     # Alias para Spotify
     if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
