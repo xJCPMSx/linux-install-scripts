@@ -174,7 +174,7 @@ fix_intel_graphics() {
         local grub_file="/etc/default/grub"
         if [ -f "$grub_file" ]; then
             if ! grep -q "i915.enable_psr=0" "$grub_file"; then
-                sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="i915.enable_psr=0 /' "$grub_file"
+                sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="i915.enable_psr=0 /' "$grub_file"  # shellcheck disable=SC2016
                 sudo update-bootloader --refresh 2>/dev/null || sudo grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
                 echo "   ✓ Parâmetro PSR adicionado ao GRUB."
             else
@@ -840,7 +840,8 @@ if command -v node &> /dev/null; then
     if command -v npm &> /dev/null; then
         NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
         if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
-            NPM_PREFIX_DISPLAY=$(echo "$NPM_PREFIX" | sed "s|^$HOME|~|")
+            NPM_PREFIX_DISPLAY="${NPM_PREFIX#$HOME}"  # Substitui /home/user por ~
+            NPM_PREFIX_DISPLAY="~${NPM_PREFIX_DISPLAY}"
             echo "   ⚠️ npm usa prefix personalizado: $NPM_PREFIX_DISPLAY"
             echo "   Isso pode causar conflitos com script npm install --global"
         fi

@@ -869,7 +869,8 @@ if command -v node &> /dev/null; then
     if command -v npm &> /dev/null; then
         NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
         if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
-            NPM_PREFIX_DISPLAY=$(echo "$NPM_PREFIX" | sed "s|^$HOME|~|")
+            NPM_PREFIX_DISPLAY="${NPM_PREFIX#$HOME}"  # Substitui /home/user por ~
+NPM_PREFIX_DISPLAY="~${NPM_PREFIX_DISPLAY}"
             echo "   ⚠️ npm usa prefix personalizado: $NPM_PREFIX_DISPLAY"
             echo "   Isso pode causar conflitos com script npm install --global"
         fi
