@@ -480,6 +480,7 @@ echo "Instalando dependências essenciais..."
 # Fastfetch: Debian 13+ e Ubuntu 24.04+
 # Neofetch: sistemas legados (Debian 11/12, Ubuntu 20.04/22.04)
 # ============================================
+# shellcheck disable=SC1091
 source /etc/os-release
 if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
     echo "   Detectado sistema moderno: Instalando Fastfetch..."
