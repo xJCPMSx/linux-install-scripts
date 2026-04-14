@@ -17,15 +17,13 @@ services:
       - TZ=America/Sao_Paulo
       - LANG=pt_BR.UTF-8
       - DISPLAY=${DISPLAY}
+      - HOME=/home/developer
     volumes:
-      # Montar diretório de trabalho
-      - ../:/home/developer/linux-install-scripts
+      # Montar diretório de trabalho apenas se necessário (não sobrescreve build)
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      # Montar diretório home do usuário
-      - ${HOME}:/home/developer/host-home
-      # Montar configurações
-      - ${HOME}/.config:/home/developer/.config
-      - ${HOME}/.local:/home/developer/.local
+      # Usa caminhos específicos do container, não $HOME do host
+      - ${HOME}/.ssh:/home/developer/.ssh:ro
+      - ${HOME}/.gitconfig:/home/developer/.gitconfig:ro
     ports:
       - "3000:3000"
       - "8080:8080"
@@ -48,10 +46,9 @@ services:
       - TZ=America/Sao_Paulo
       - LANG=pt_BR.UTF-8
       - DISPLAY=${DISPLAY}
+      - HOME=/home/developer
     volumes:
-      - ../:/home/developer/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${HOME}:/home/developer/host-home
     ports:
       - "3001:3000"
       - "8081:8080"
