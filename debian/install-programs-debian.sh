@@ -80,15 +80,6 @@ check_success() {
     fi
 }
 
-# Função para adicionar variáveis ao .bashrc sem duplicação
-add_to_bashrc() {
-    local line="$1"
-    local bashrc="${HOME}/.bashrc"
-    if ! grep -Fq "$line" "$bashrc" 2>/dev/null; then
-        echo "$line" >> "$bashrc"
-    fi
-}
-
 # Função para otimizações do KDE
 optimize_kde() {
     if [ "${DISABLE_KDE_WALLET:-true}" = "true" ]; then
@@ -243,8 +234,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_STEAM_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando Steam para performance..."
             
-            add_to_bashrc "export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam"
-            add_to_bashrc "export STEAM_COMPAT_DATA_PATH=$HOME/.steam/steam/steamapps/compatdata"
+            add_to_bashrc "export STEAM_COMPAT_CLIENT_INSTALL_PATH=\"$HOME/.steam/steam\""
+            add_to_bashrc "export STEAM_COMPAT_DATA_PATH=\"$HOME/.steam/steam/steamapps/compatdata\""
             
             echo "✓ Steam configurado para performance"
         fi
@@ -289,7 +280,7 @@ optimize_gaming() {
             echo "   Configurando OpenGL..."
             
             add_to_bashrc "export __GL_SHADER_DISK_CACHE=1"
-            add_to_bashrc "export __GL_SHADER_DISK_CACHE_PATH=$HOME/.cache/mesa_shader_cache"
+            add_to_bashrc "export __GL_SHADER_DISK_CACHE_PATH=\"$HOME/.cache/mesa_shader_cache\""
             
             echo "✓ OpenGL configurado"
         fi
@@ -1411,7 +1402,7 @@ else
             # Adicionar ao PATH se não estiver
             if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
                 echo "   Adicionando ~/.local/bin ao PATH..."
-                add_to_bashrc "export PATH=$HOME/.local/bin:\$PATH"
+                add_to_bashrc "export PATH=\"$HOME/.local/bin:\$PATH\""
             fi
         else
             echo "✗ Erro ao instalar Nikto"
