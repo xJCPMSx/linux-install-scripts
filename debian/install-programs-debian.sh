@@ -16,21 +16,47 @@ set -e
 # ============================================
 # Configurações para execução não-interativa do apt
 # ============================================
-export DEBIAN_FRONTEND=noninteractive
+# Configurações para execução não-interativa do apt
+# ============================================
+# Funções para evitar SC2089/SC2090 (variáveis com flags complexas)
+apt_install() {
+    sudo apt-get -y \
+        -o Dpkg::Options::="--force-confdef" \
+        -o Dpkg::Options::="--force-confold" \
+        install "$@"
+}
 
-# -y: confirma automaticamente
-# -o Dpkg::Options::="--force-confdef": usa ação padrão para perguntas de config
-# -o Dpkg::Options::="--force-confold": mantém arquivos de config existentes
-APT="sudo apt-get -y"
-APT_IN="$APT -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\""
-APT_RM="$APT remove"
-APT_UPD="$APT update"
+apt_remove() {
+    sudo apt-get -y remove "$@"
+}
+
+apt_update() {
+    sudo apt-get -y update
+}
+
+apt_upgrade() {
+    sudo apt-get -y \
+        -o Dpkg::Options::="--force-confdef" \
+        -o Dpkg::Options::="--force-confold" \
+        upgrade
+}
 
 # Cores para output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+
+# Variável global para .bashrc (evita SC2034)
+BASHRC="${HOME}/.bashrc"
+
+# Função para adicionar variáveis ao .bashrc sem duplicação (evita SC2129)
+add_to_bashrc() {
+    local line="$1"
+    if ! grep -qxF "$line" "$BASHRC" 2>/dev/null; then
+        echo "$line" >> "$BASHRC"
+    fi
+}
 
 # Função para carregar configurações do config.conf
 load_config() {
@@ -166,8 +192,8 @@ optimize_gaming() {
                 echo "✓ Drivers Mesa já estão instalados"
             else
                 echo "   Instalando drivers Mesa otimizados..."
-                $APT_UPD
-                $APT_IN mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
+                apt_update
+                apt_install mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
                 echo "✓ Drivers Mesa instalados"
             fi
         fi
@@ -214,7 +240,7 @@ optimize_gaming() {
         # Habilitar GameMode
         if [ "${ENABLE_GAMEMODE:-true}" = "true" ]; then
             echo "   Habilitando GameMode..."
-            $APT_IN gamemode libgamemode0
+            apt_install gamemode libgamemode0
             echo "✓ GameMode instalado e habilitado"
         fi
         
@@ -261,7 +287,7 @@ optimize_gaming() {
                 echo "✓ Vulkan já está instalado"
             else
                 echo "   Habilitando Vulkan..."
-                $APT_IN vulkan-tools vulkan-validationlayers-dev
+                apt_install vulkan-tools vulkan-validationlayers-dev
                 echo "✓ Vulkan habilitado"
             fi
         fi
@@ -363,7 +389,7 @@ limpar_repositorios() {
     
     # Forçar atualização sem repositórios externos
     echo "Testando atualização básica..."
-    $APT_UPD --allow-releaseinfo-change || {
+    apt_update --allow-releaseinfo-change || {
         echo "⚠️  Ainda há conflitos, limpando mais agressivamente..."
         sudo rm -f /etc/apt/sources.list.d/*.list
         sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
@@ -371,7 +397,7 @@ limpar_repositorios() {
         sudo apt clean
         sudo apt-get autoclean
         echo "Tentando novamente..."
-        $APT_UPD --allow-releaseinfo-change
+        apt_update --allow-releaseinfo-change
     }
     
     echo "✅ Limpeza de repositórios concluída!"
@@ -402,39 +428,39 @@ limpar_repositorios
 
 # Atualizar sistema
 echo "Atualizando sistema..."
-$APT_UPD && $APT upgrade
+apt_update && apt_upgrade
 check_success "sistema"
 
 # Instalar dependências essenciais
 echo "Instalando dependências essenciais..."
-$APT_IN curl wget gnupg software-properties-common apt-transport-https ca-certificates lsb-release
+apt_install curl wget gnupg software-properties-common apt-transport-https ca-certificates lsb-release
 check_success "dependências essenciais"
 
 # Instalar compiladores e ferramentas de desenvolvimento
 echo "Instalando compiladores e ferramentas de desenvolvimento..."
-$APT_IN build-essential gcc g++ make cmake ninja-build git
+apt_install build-essential gcc g++ make cmake ninja-build git
 check_success "compiladores"
 
 # Instalar dependências de desenvolvimento
 echo "Instalando dependências de desenvolvimento..."
 # Instalar pacotes básicos primeiro
-$APT_IN libglib2.0-dev libcairo2-dev libssl-dev gtk-doc-tools
+apt_install libglib2.0-dev libcairo2-dev libssl-dev gtk-doc-tools
 
 # Tentar instalar pacotes específicos com fallbacks
 echo "   Instalando libgusb-dev..."
-$APT_IN libgusb-dev || echo "⚠️  libgusb-dev não encontrado, continuando..."
+apt_install libgusb-dev || echo "⚠️  libgusb-dev não encontrado, continuando..."
 
 echo "   Instalando libgirepository1.0-dev..."
-$APT_IN libgirepository1.0-dev || echo "⚠️  libgirepository1.0-dev não encontrado, continuando..."
+apt_install libgirepository1.0-dev || echo "⚠️  libgirepository1.0-dev não encontrado, continuando..."
 
 echo "   Instalando libgudev-1.0-dev..."
-$APT_IN libgudev-1.0-dev || $APT_IN libudev-dev || echo "⚠️  libgudev não encontrado, continuando..."
+apt_install libgudev-1.0-dev || apt_install libudev-dev || echo "⚠️  libgudev não encontrado, continuando..."
 
 check_success "dependências de desenvolvimento"
 
 # Instalar ferramentas adicionais úteis
 echo "Instalando ferramentas adicionais..."
-$APT_IN vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
+apt_install vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
 # Instalar ferramentas divertidas e úteis
@@ -443,12 +469,12 @@ echo "Instalando ferramentas divertidas e úteis..."
 if [ "${INSTALL_FUN_TOOLS:-true}" = "true" ]; then
     if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
     echo "   Instalando fortune, cowsay, cmatrix..."
-    $APT_IN fortune-mod cowsay cmatrix
+    apt_install fortune-mod cowsay cmatrix
     
     # Instalar nyancat (disponível nos repositórios)
     if ! command -v nyancat &> /dev/null; then
         echo "   Instalando nyancat via apt..."
-        if $APT_IN nyancat; then
+        if apt_install nyancat; then
             echo "✓ nyancat instalado via apt"
         else
             echo "⚠️  Falha ao instalar nyancat via apt"
@@ -475,10 +501,10 @@ fi
 echo "Instalando Docker e Docker Compose..."
 if ! command -v docker &> /dev/null; then
     # Remover versões antigas
-    $APT_RM docker docker-engine docker.io containerd runc 2>/dev/null || true
+    apt_remove docker docker-engine docker.io containerd runc 2>/dev/null || true
     
     # Instalar dependências
-    $APT_IN ca-certificates curl gnupg lsb-release
+    apt_install ca-certificates curl gnupg lsb-release
     
     # Adicionar chave GPG oficial do Docker
     sudo mkdir -p /etc/apt/keyrings
@@ -488,10 +514,10 @@ if ! command -v docker &> /dev/null; then
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # Atualizar lista de pacotes
-    $APT_UPD
+    apt_update
     
     # Instalar Docker
-    $APT_IN docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     
     # Adicionar usuário ao grupo docker
     sudo usermod -aG docker "$USER"
@@ -527,7 +553,7 @@ if ! command -v yt-dlp &> /dev/null; then
         echo "✓ yt-dlp instalado via pip"
     else
         # Fallback para apt (pode estar desatualizado)
-        $APT_IN yt-dlp
+        apt_install yt-dlp
         echo "✓ yt-dlp instalado via apt"
     fi
 else
@@ -538,7 +564,7 @@ check_success "yt-dlp"
 # Instalar Flatpak primeiro
 echo "Instalando Flatpak..."
 if ! command -v flatpak &> /dev/null; then
-    $APT_IN flatpak
+    apt_install flatpak
     echo "✓ Flatpak instalado"
 else
     echo "✓ Flatpak já está instalado"
@@ -555,7 +581,7 @@ check_success "Flatpak"
 # Instalar Snap
 echo "Instalando Snap..."
 if ! command -v snap &> /dev/null; then
-    $APT_IN snapd
+    apt_install snapd
     echo "✓ Snap instalado"
 else
     echo "✓ Snap já está instalado"
@@ -601,7 +627,7 @@ fi
 
 # Atualizar lista de pacotes
 echo "Atualizando lista de pacotes..."
-$APT_UPD || {
+apt_update || {
     echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
     # Limpar repositórios problemáticos
     sudo rm -f /etc/apt/sources.list.d/*.list
@@ -609,7 +635,7 @@ $APT_UPD || {
     sudo rm -f /usr/share/keyrings/*.gpg
     echo "✓ Repositórios problemáticos removidos"
     echo "Tentando atualizar novamente..."
-    $APT_UPD
+    apt_update
 }
 
 
@@ -620,7 +646,7 @@ echo "Instalando programas principais..."
 echo "Instalando AnyDesk..."
 if ! command -v anydesk &> /dev/null; then
     wget -O anydesk.deb https://download.anydesk.com/linux/anydesk_6.3.2-1_amd64.deb
-    sudo dpkg -i anydesk.deb || $APT_IN -f -y
+    sudo dpkg -i anydesk.deb || apt_install -f -y
     rm anydesk.deb
     check_success "AnyDesk"
 else
@@ -745,7 +771,7 @@ fi
 
 if [ "$chrome_installed" = false ]; then
     echo "   Google Chrome não encontrado, instalando..."
-    $APT_IN google-chrome-stable
+    apt_install google-chrome-stable
     check_success "Google Chrome"
 fi
 
@@ -788,8 +814,8 @@ if [ "$brave_installed" = false ]; then
         # Adicionar repositório do Brave
         curl -fsSL https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/brave-browser-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-        $APT_UPD
-        $APT_IN brave-browser
+        apt_update
+        apt_install brave-browser
         check_success "Brave Browser"
     fi
 fi
@@ -818,7 +844,7 @@ fi
 
 if [ "$firefox_installed" = false ]; then
     echo "   Firefox não encontrado, instalando..."
-    $APT_IN firefox
+    apt_install firefox
     check_success "Firefox"
 fi
 
@@ -839,19 +865,19 @@ fi
 if [ "$java_installed" = false ]; then
     echo "   Java não encontrado, instalando..."
     # Tentar instalar OpenJDK 11 primeiro
-    if $APT_IN openjdk-11-jdk openjdk-11-jre; then
+    if apt_install openjdk-11-jdk openjdk-11-jre; then
         echo "✓ Java OpenJDK 11 instalado"
     else
         echo "⚠️  OpenJDK 11 não encontrado, tentando OpenJDK 17..."
-        if $APT_IN openjdk-17-jdk openjdk-17-jre; then
+        if apt_install openjdk-17-jdk openjdk-17-jre; then
             echo "✓ Java OpenJDK 17 instalado"
         else
             echo "⚠️  OpenJDK 17 não encontrado, tentando OpenJDK 21..."
-            if $APT_IN openjdk-21-jdk openjdk-21-jre; then
+            if apt_install openjdk-21-jdk openjdk-21-jre; then
                 echo "✓ Java OpenJDK 21 instalado"
             else
                 echo "⚠️  Nenhuma versão do OpenJDK encontrada, tentando instalação genérica..."
-                $APT_IN default-jdk default-jre
+                apt_install default-jdk default-jre
                 check_success "Java (default-jdk)"
             fi
         fi
@@ -886,7 +912,7 @@ fi
 if [ "$nodejs_installed" = false ]; then
     echo "   Node.js não encontrado, instalando..."
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    $APT_IN nodejs
+    apt_install nodejs
     check_success "Node.js"
 fi
 
@@ -942,7 +968,7 @@ fi
 
 if [ "$steam_installed" = false ]; then
     echo "   Steam não encontrado, instalando..."
-    if $APT_IN steam steam-installer; then
+    if apt_install steam steam-installer; then
         echo "✓ Steam instalado com sucesso"
         echo "   Steam é a maior plataforma de distribuição de jogos para PC"
         echo "   Para melhor compatibilidade, instale os drivers gráficos apropriados"
@@ -982,7 +1008,7 @@ fi
 
 if [ "$lutris_installed" = false ]; then
     echo "   Lutris não encontrado, instalando..."
-    if $APT_IN lutris; then
+    if apt_install lutris; then
         echo "✓ Lutris instalado com sucesso"
         echo "   Lutris permite gerenciar jogos de várias plataformas (Steam, GOG, Epic, etc.)"
     else
@@ -1023,7 +1049,7 @@ if command -v xfreerdp &> /dev/null; then
 else
     echo "   Instalando FreeRDP via Flatpak (versão estável)..."
     if ! command -v flatpak &> /dev/null; then
-        $APT_IN flatpak
+        apt_install flatpak
     fi
     
     # Adicionar repositório Flathub se necessário
@@ -1035,7 +1061,7 @@ else
         echo "   Para usar: flatpak run com.freerdp.FreeRDP"
     else
         echo "   Tentando instalar FreeRDP via repositório..."
-        $APT_IN freerdp2-x11
+        apt_install freerdp2-x11
         if command -v xfreerdp &> /dev/null; then
             echo "✓ FreeRDP instalado via repositório"
         else
@@ -1275,7 +1301,7 @@ if command -v wg &> /dev/null || command -v wg-quick &> /dev/null; then
     echo "✓ WireGuard já está instalado"
 else
     echo "   Instalando WireGuard..."
-    if $APT_IN wireguard wireguard-tools; then
+    if apt_install wireguard wireguard-tools; then
         echo "✓ WireGuard instalado com sucesso"
         echo "   WireGuard é uma VPN moderna, rápida e segura"
         echo "   Configuração: /etc/wireguard/"
@@ -1300,7 +1326,7 @@ echo "Instalando Nmap..."
 if command -v nmap &> /dev/null; then
     echo "✓ Nmap já está instalado"
 else
-    $APT_IN nmap
+    apt_install nmap
     check_success "Nmap"
 fi
 
@@ -1321,7 +1347,7 @@ echo "Instalando John the Ripper..."
 if command -v john &> /dev/null; then
     echo "✓ John the Ripper já está instalado"
 else
-    $APT_IN john
+    apt_install john
     check_success "John the Ripper"
 fi
 
@@ -1330,7 +1356,7 @@ echo "Instalando Hydra..."
 if command -v hydra &> /dev/null; then
     echo "✓ Hydra já está instalado"
 else
-    $APT_IN hydra
+    apt_install hydra
     check_success "Hydra"
 fi
 
@@ -1339,7 +1365,7 @@ echo "Instalando Aircrack-ng..."
 if command -v aircrack-ng &> /dev/null; then
     echo "✓ Aircrack-ng já está instalado"
 else
-    $APT_IN aircrack-ng
+    apt_install aircrack-ng
     check_success "Aircrack-ng"
 fi
 
@@ -1350,7 +1376,7 @@ if command -v sqlmap &> /dev/null; then
 else
     # Instalar via pipx (melhor para ambientes gerenciados)
     if ! command -v pipx &> /dev/null; then
-        $APT_IN pipx
+        apt_install pipx
         pipx ensurepath
     fi
     pipx install sqlmap
@@ -1364,14 +1390,14 @@ if command -v nikto &> /dev/null || [ -f "$HOME/.local/bin/nikto" ]; then
     echo "✓ Nikto já está instalado"
 else
     # Tentar instalar via apt primeiro
-    if $APT_IN nikto 2>/dev/null; then
+    if apt_install nikto 2>/dev/null; then
         echo "✓ Nikto instalado via apt"
         check_success "Nikto"
     else
         # Se falhar, instalar via Git
         echo "   Instalando Nikto via Git..."
         if ! command -v git &> /dev/null; then
-            $APT_IN git
+            apt_install git
         fi
         
         # Criar diretório local para binários se não existir
@@ -1396,7 +1422,7 @@ else
             # Adicionar ao PATH se não estiver
             if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
                 echo "   Adicionando ~/.local/bin ao PATH..."
-                echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
+                add_to_bashrc "export PATH=$HOME/.local/bin:\$PATH"
             fi
         else
             echo "✗ Erro ao instalar Nikto"
@@ -1410,7 +1436,7 @@ echo "Instalando Hashcat..."
 if command -v hashcat &> /dev/null; then
     echo "✓ Hashcat já está instalado"
 else
-    $APT_IN hashcat
+    apt_install hashcat
     check_success "Hashcat"
 fi
 
@@ -1421,7 +1447,7 @@ if command -v gobuster &> /dev/null; then
 else
     # Instalar via Go
     if ! command -v go &> /dev/null; then
-        $APT_IN golang-go
+        apt_install golang-go
     fi
     go install github.com/OJ/gobuster/v3@latest
     echo "✓ Gobuster instalado via Go"
@@ -1436,7 +1462,7 @@ if command -v ffuf &> /dev/null; then
 else
     # Instalar via Go
     if ! command -v go &> /dev/null; then
-        $APT_IN golang-go
+        apt_install golang-go
     fi
     go install github.com/ffuf/ffuf/v2@latest
     echo "✓ ffuf instalado via Go"
@@ -1549,7 +1575,7 @@ else
     echo "   Versão do Python detectada: $PYTHON_VERSION"
     
     echo "   Instalando dependências de build para Python com C extensions..."
-    $APT_IN build-essential libxml2-dev libxslt1-dev python3-dev
+    apt_install build-essential libxml2-dev libxslt1-dev python3-dev
     
     echo "   Clonando repositório do SpiderFoot..."
     mkdir -p "$HOME/osint-tools"
@@ -1606,7 +1632,7 @@ if command -v ghunt &> /dev/null; then
 else
     echo "   Instalando GHunt via pipx..."
     if ! command -v pipx &> /dev/null; then
-        $APT_IN pipx
+        apt_install pipx
         pipx ensurepath
     fi
     pipx install ghunt
@@ -1648,7 +1674,7 @@ if command -v maigret &> /dev/null; then
 else
     echo "   Instalando Maigret via pipx..."
     if ! command -v pipx &> /dev/null; then
-        $APT_IN pipx
+        apt_install pipx
         pipx ensurepath
     fi
     pipx install maigret
@@ -1664,7 +1690,7 @@ if command -v holehe &> /dev/null; then
 else
     echo "   Instalando Holehe via pipx..."
     if ! command -v pipx &> /dev/null; then
-        $APT_IN pipx
+        apt_install pipx
         pipx ensurepath
     fi
     pipx install holehe
