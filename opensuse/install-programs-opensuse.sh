@@ -54,8 +54,8 @@ check_success() {
 add_to_bashrc() {
     local line="$1"
     local bashrc="${HOME}/.bashrc"
-    if ! grep -Fq "$line" "$bashrc" 2>/dev/null; then
-        echo "$line" >> "$bashrc"
+    if ! grep -Fq "$line" "$BASHRC" 2>/dev/null; then
+        echo "$line" >> "$BASHRC"
     fi
 }
 
@@ -848,7 +848,7 @@ if command -v node &> /dev/null; then
     if command -v npm &> /dev/null; then
         NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
         if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
-            NPM_PREFIX_DISPLAY="${NPM_PREFIX#$HOME}"  # Substitui /home/user por ~
+            NPM_PREFIX_DISPLAY="${NPM_PREFIX#"$HOME"}"  # Remove /home/user do início
             NPM_PREFIX_DISPLAY="~${NPM_PREFIX_DISPLAY}"
             echo "   ⚠️ npm usa prefix personalizado: $NPM_PREFIX_DISPLAY"
             echo "   Isso pode causar conflitos com script npm install --global"
@@ -1803,13 +1803,14 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     echo "   Detectado ambiente KDE, aplicando correções..."
     
     # Adicionar aliases para aplicativos Flatpak se necessário
-    local bashrc="${HOME}/.bashrc"
+    # Avoid SC2168: não usar local fora de função
+    BASHRC="${HOME}/.bashrc"
     
     # Alias para Spotify
     if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
         echo "   Configurando alias para Spotify..."
-        if ! grep -q "alias spotify=" "$bashrc" 2>/dev/null; then
-            echo 'alias spotify="flatpak run com.spotify.Client"' >> "$bashrc"
+        if ! grep -q "alias spotify=" "$BASHRC" 2>/dev/null; then
+            echo 'alias spotify="flatpak run com.spotify.Client"' >> "$BASHRC"
             echo "   ✓ Alias do Spotify adicionado"
         else
             echo "   ✓ Alias do Spotify já existe"
@@ -1819,8 +1820,8 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Alias para Brave Browser
     if flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
         echo "   Configurando alias para Brave Browser..."
-        if ! grep -q "alias brave=" "$bashrc" 2>/dev/null; then
-            echo 'alias brave="flatpak run com.brave.Browser"' >> "$bashrc"
+        if ! grep -q "alias brave=" "$BASHRC" 2>/dev/null; then
+            echo 'alias brave="flatpak run com.brave.Browser"' >> "$BASHRC"
             echo "   ✓ Alias do Brave Browser adicionado"
         else
             echo "   ✓ Alias do Brave Browser já existe"
@@ -1830,8 +1831,8 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Alias para Google Chrome
     if flatpak list --user 2>/dev/null | grep -q "com.google.Chrome"; then
         echo "   Configurando alias para Google Chrome..."
-        if ! grep -q "alias google-chrome=" "$bashrc" 2>/dev/null; then
-            echo 'alias google-chrome="flatpak run com.google.Chrome"' >> "$bashrc"
+        if ! grep -q "alias google-chrome=" "$BASHRC" 2>/dev/null; then
+            echo 'alias google-chrome="flatpak run com.google.Chrome"' >> "$BASHRC"
             echo "   ✓ Alias do Google Chrome adicionado"
         else
             echo "   ✓ Alias do Google Chrome já existe"
@@ -1840,12 +1841,12 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     
     # Adicionar variáveis Qt para corrigir problemas de tema
     echo "   Configurando variáveis Qt..."
-    if ! grep -q "QT_QPA_PLATFORM" "$bashrc" 2>/dev/null; then
+    if ! grep -q "QT_QPA_PLATFORM" "$BASHRC" 2>/dev/null; then
         {
             echo 'export QT_QPA_PLATFORM=xcb'
             echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0'
             echo 'export QT_SCALE_FACTOR=1'
-        } >> "$bashrc"
+        } >> "$BASHRC"
         echo "   ✓ Variáveis Qt configuradas"
     else
         echo "   ✓ Variáveis Qt já configuradas"
