@@ -30,6 +30,15 @@ ZYPPER_REMOVEREPO="$ZYPPER removerepo -n"
 # Variável global para .bashrc (evita SC2034)
 BASHRC="${HOME}/.bashrc"
 
+# Função para corrigir prefix do npm (evita erro "config prefix cannot be changed")
+fix_npm_prefix() {
+    if [ -f "$HOME/.npmrc" ]; then
+        sed -i '/^prefix=/d' "$HOME/.npmrc" 2>/dev/null || true
+    fi
+    unset npm_config_prefix 2>/dev/null || true
+    export NPM_CONFIG_PREFIX="" 2>/dev/null || true
+}
+
 # Função para carregar configurações do config.conf
 load_config() {
     local config_file="config/config.conf"
@@ -807,10 +816,7 @@ if command -v node &> /dev/null; then
     echo "✓ Node.js já está instalado"
     if command -v npm &> /dev/null; then
         # Corrigir prefix do npm que causa erro em versões recentes
-        if [ -f "$HOME/.npmrc" ]; then
-            sed -i '/^prefix=/d' "$HOME/.npmrc" 2>/dev/null || true
-        fi
-        unset npm_config_prefix 2>/dev/null || true
+        fix_npm_prefix
         
         NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
         if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
@@ -1742,10 +1748,7 @@ node --version
 echo ""
 echo "Versão do npm:"
 # Corrigir prefix do npm antes da verificação final
-if [ -f "$HOME/.npmrc" ]; then
-    sed -i '/^prefix=/d' "$HOME/.npmrc" 2>/dev/null || true
-fi
-unset npm_config_prefix 2>/dev/null || true
+fix_npm_prefix
 npm --version
 
 echo ""
