@@ -806,6 +806,12 @@ echo "Instalando Node.js..."
 if command -v node &> /dev/null; then
     echo "✓ Node.js já está instalado"
     if command -v npm &> /dev/null; then
+        # Corrigir prefix do npm que causa erro em versões recentes
+        if [ -f "$HOME/.npmrc" ]; then
+            sed -i '/^prefix=/d' "$HOME/.npmrc" 2>/dev/null || true
+        fi
+        unset npm_config_prefix 2>/dev/null || true
+        
         NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
         if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
             NPM_PREFIX_DISPLAY="${NPM_PREFIX#"$HOME"}"  # Remove /home/user do início
