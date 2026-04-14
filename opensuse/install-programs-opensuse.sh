@@ -174,7 +174,15 @@ fix_intel_graphics() {
         local grub_file="/etc/default/grub"
         if [ -f "$grub_file" ]; then
             if ! grep -q "i915.enable_psr=0" "$grub_file"; then
-                sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="i915.enable_psr=0 /' "$grub_file"  # shellcheck disable=SC2016
+                # Usar awk para evitar problemas de aspas no sed
+                sudo awk '
+                    /^GRUB_CMDLINE_LINUX_DEFAULT=/ {
+                        if (!/i915.enable_psr=0/) {
+                            sub(/"$/, " i915.enable_psr=0", $0)
+                        }
+                    }
+                    { print }
+                ' "$grub_file" | sudo tee "$grub_file" > /dev/null
                 sudo update-bootloader --refresh 2>/dev/null || sudo grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
                 echo "   ✓ Parâmetro PSR adicionado ao GRUB."
             else
