@@ -194,6 +194,7 @@ linux-install-scripts/
 - ✅ **Intelligent fallback** - Multiple installation options
 - ✅ **Enhanced verification** - Detects apps via command, dpkg, flatpak, snap
 - ✅ **New OSINT tool** - Holehe for email verification
+- ✅ **Intel Graphics Optimization** - Automatic detection and configuration of kernel parameters (`i915.enable_psr=0`) and drivers to prevent freezes.
 - ✅ **Customizable configuration** - `config/config.conf` file to control installations
 
 ### **🔒 Security:**
@@ -246,7 +247,7 @@ OPTIMIZE_BOOT_TIME=true         # Optimize boot time
 [GAMING_OPTIMIZATIONS]
 # Gaming-specific optimizations
 ENABLE_GAMING_OPTIMIZATIONS=true # Enable gaming optimizations
-INSTALL_MESA_DRIVERS=true       # Install optimized Mesa drivers
+INSTALL_MESA_DRIVERS=true       # Install optimized Mesa drivers (includes Intel fixes)
 CONFIGURE_MESA_PERFORMANCE=true # Configure Mesa for performance
 OPTIMIZE_GPU_PERFORMANCE=true   # Optimize GPU performance
 CONFIGURE_WINE_PERFORMANCE=true  # Configure Wine for gaming

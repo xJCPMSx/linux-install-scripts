@@ -14,6 +14,19 @@ echo "🐧 Sistema: $(uname -s) $(uname -r)"
 echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
 echo ""
 
+# ============================================
+# Variáveis para execução não-interativa do zypper
+# ============================================
+# -n/--non-interactive: não pede confirmação (equivalente a -y do apt)
+# -l/--auto-agree-with-licenses: aceita licenças automaticamente
+# --allow-vendor-change: permite mudança de fornecedor
+ZYPPER="sudo zypper -n"
+ZYPPER_IN="$ZYPPER install -l --allow-vendor-change"
+ZYPPER_RM="$ZYPPER remove"
+ZYPPER_REFRESH="$ZYPPER refresh"
+ZYPPER_ADDREPO="$ZYPPER addrepo -n"
+ZYPPER_REMOVEREPO="$ZYPPER removerepo -n"
+
 # Função para carregar configurações do config.conf
 load_config() {
     local config_file="config/config.conf"
@@ -126,23 +139,86 @@ optimize_system() {
     fi
 }
 
+# Função para detectar o fabricante da GPU
+detect_gpu() {
+    if lspci | grep -qi "intel"; then
+        echo "intel"
+    elif lspci | grep -qi "nvidia"; then
+        echo "nvidia"
+    elif lspci | grep -qi "amd" || lspci | grep -qi "ati"; then
+        echo "amd"
+    else
+        echo "unknown"
+    fi
+}
+
+# Função para otimizações de gráficos Intel (baseado no fix_grafics.sh)
+fix_intel_graphics() {
+    local gpu_type
+    gpu_type=$(detect_gpu)
+    
+    if [[ "$gpu_type" == "intel" ]]; then
+        echo "🎨 Aplicando otimizações para gráficos Intel..."
+        
+        # 1. Desativar PSR (Panel Self Refresh) para evitar congelamentos
+        echo "   Configurando parâmetro de kernel i915.enable_psr=0..."
+        local grub_file="/etc/default/grub"
+        if [ -f "$grub_file" ]; then
+            if ! grep -q "i915.enable_psr=0" "$grub_file"; then
+                sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="i915.enable_psr=0 /' "$grub_file"
+                sudo update-bootloader --refresh 2>/dev/null || sudo grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
+                echo "   ✓ Parâmetro PSR adicionado ao GRUB."
+            else
+                echo "   ✓ Parâmetro PSR já configurado."
+            fi
+        fi
+
+        # 2. Remover driver legado que pode causar conflitos (recomendado usar modesetting)
+        echo "   Removendo driver legado xf86-video-intel..."
+        if rpm -q xf86-video-intel &>/dev/null; then
+            $ZYPPER_RM xf86-video-intel 2>/dev/null || true
+            echo "   ✓ Driver legado removido."
+        else
+            echo "   ✓ Driver legado não está presente (ignorando)."
+        fi
+
+        # 3. Instalar bibliotecas de aceleração de hardware
+        echo "   Instalando bibliotecas Mesa e codecs de vídeo Intel..."
+        # Usamos intel-vaapi-driver explicitamente pois vaapi-intel-driver é apenas um alias/recurso
+        $ZYPPER_IN Mesa-libva intel-vaapi-driver libva-utils
+        
+        # 4. Limpeza de cache de GPU
+        echo "   Limpando caches de GPU antigos..."
+        # Verificar se existem diretórios home para evitar erros em sistemas vazios
+        if [ -d "/home" ]; then
+            find /home -maxdepth 3 -type d -name "GPUCache" -exec rm -rf {} + 2>/dev/null || true
+        fi
+        
+        echo "✓ Otimizações de gráficos Intel concluídas"
+    fi
+}
+
 # Função para otimizações de jogos no openSUSE Tumbleweed
 optimize_gaming() {
     if [ "${ENABLE_GAMING_OPTIMIZATIONS:-true}" = "true" ]; then
         echo "🎮 Otimizando sistema para jogos..."
         
-        # Instalar drivers Mesa otimizados
+        # Integrar otimizações de gráficos Intel
+        fix_intel_graphics
+
+        # Instalar drivers Mesa e Vulkan otimizados
         if [ "${INSTALL_MESA_DRIVERS:-true}" = "true" ]; then
-            echo "   Verificando drivers Mesa..."
+            echo "   Verificando drivers Mesa e Vulkan..."
             
-            # Verificar se os pacotes já estão instalados
-            if zypper search --installed-only Mesa Mesa-dri Mesa-libGL1 Mesa-libEGL1 libGLU1 >/dev/null 2>&1; then
-                echo "✓ Drivers Mesa já estão instalados"
-            else
-                echo "   Instalando drivers Mesa otimizados..."
-                sudo zypper install -y Mesa Mesa-dri Mesa-libGL1 Mesa-libEGL1 libGLU1
-                echo "✓ Drivers Mesa instalados"
-            fi
+            # Lista de pacotes essenciais para Mesa e Vulkan
+            local packages=(
+                Mesa Mesa-dri Mesa-libGL1 Mesa-libEGL1 libGLU1 
+                vulkan-tools vulkan-validationlayers libvulkan1
+            )
+            
+            echo "   Instalando drivers e ferramentas gráficas..."
+            $ZYPPER_IN "${packages[@]}"
+            echo "✓ Drivers gráficos e Vulkan instalados"
         fi
         
         # Configurar performance do Mesa
@@ -187,7 +263,7 @@ optimize_gaming() {
         # Habilitar GameMode
         if [ "${ENABLE_GAMEMODE:-true}" = "true" ]; then
             echo "   Habilitando GameMode..."
-            sudo zypper install -y gamemode libgamemode0
+            $ZYPPER_IN gamemode libgamemode0
             echo "✓ GameMode instalado e habilitado"
         fi
         
@@ -225,19 +301,7 @@ optimize_gaming() {
             echo "✓ DXVK configurado"
         fi
         
-        # Habilitar Vulkan
-        if [ "${ENABLE_VULKAN:-true}" = "true" ]; then
-            echo "   Verificando Vulkan..."
-            
-            # Verificar se os pacotes já estão instalados
-            if zypper search --installed-only vulkan-tools vulkan-validationlayers libvulkan1 >/dev/null 2>&1; then
-                echo "✓ Vulkan já está instalado"
-            else
-                echo "   Habilitando Vulkan..."
-                sudo zypper install -y vulkan-tools vulkan-validationlayers libvulkan1
-                echo "✓ Vulkan habilitado"
-            fi
-        fi
+        # Vulkan já instalado na seção de drivers
         
         # Configurar OpenGL
         if [ "${CONFIGURE_OPENGL:-true}" = "true" ]; then
@@ -361,13 +425,20 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     exit 0
 fi
 
-# Carregar configurações
+# ============================================
+# Verificações Iniciais
+# ============================================
 load_config
+
+if ! command -v zypper &> /dev/null; then
+    echo "✗ Erro: zypper não encontrado. Este script requer openSUSE."
+    exit 1
+fi
 
 # Limpar repositórios problemáticos (se existirem)
 echo "Limpando repositórios problemáticos..."
-sudo zypper removerepo spotify 2>/dev/null || true
-sudo zypper removerepo spotify-2 2>/dev/null || true
+$ZYPPER_REMOVEREPO spotify 2>/dev/null || true
+$ZYPPER_REMOVEREPO spotify-2 2>/dev/null || true
 
 # Atualizar repositórios (já feito anteriormente)
 echo "Repositórios já atualizados"
@@ -380,14 +451,14 @@ echo "Instalando compiladores e ferramentas essenciais..."
 if command -v gcc &> /dev/null && command -v git &> /dev/null; then
     echo "✓ Compiladores já estão instalados"
 else
-    sudo zypper install -y gcc gcc-c++ cmake ninja git meson
+    $ZYPPER_IN gcc gcc-c++ cmake ninja git meson
     check_success "compiladores e ferramentas"
 fi
 
 # Instalar dependências de desenvolvimento (do setup-libfprint.sh)
 echo ""
 echo "Instalando dependências de desenvolvimento..."
-sudo zypper install -y \
+$ZYPPER_IN \
   glib2-devel \
   libgusb-devel \
   gobject-introspection-devel \
@@ -405,7 +476,7 @@ echo "Adicionando repositórios adicionais..."
 echo "Adicionando repositório VSCode..."
 if ! zypper repos | grep -q "vscode"; then
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    sudo zypper addrepo --refresh https://packages.microsoft.com/yumrepos/vscode vscode
+    $ZYPPER_ADDREPO --refresh https://packages.microsoft.com/yumrepos/vscode vscode
     echo "✓ Repositório VSCode adicionado"
 else
     echo "✓ Repositório VSCode já existe"
@@ -414,13 +485,11 @@ fi
 # Repositório para Google Chrome
 echo "Adicionando repositório Google Chrome..."
 if ! zypper repos | grep -q "google-chrome"; then
-    # Adicionar chave GPG do Google Chrome
     sudo rpm --import https://dl.google.com/linux/linux_signing_key.pub
-    sudo zypper addrepo --refresh https://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
+    $ZYPPER_ADDREPO --refresh https://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
     echo "✓ Repositório Google Chrome adicionado com chave GPG"
 else
     echo "✓ Repositório Google Chrome já existe"
-    # Verificar se a chave GPG está presente
     if ! rpm -qa | grep -q "gpg-pubkey-7fac5994-*"; then
         echo "   Adicionando chave GPG do Google Chrome..."
         sudo rpm --import https://dl.google.com/linux/linux_signing_key.pub
@@ -430,7 +499,7 @@ fi
 # Repositório para Spotify (usando Flatpak como alternativa mais confiável)
 echo "Configurando Spotify via Flatpak..."
 if ! command -v flatpak &> /dev/null; then
-    sudo zypper install -y flatpak
+    $ZYPPER_IN flatpak
     echo "✓ Flatpak instalado"
 else
     echo "✓ Flatpak já está instalado"
@@ -447,11 +516,11 @@ fi
 echo "Instalando Snap..."
 if ! command -v snap &> /dev/null; then
     echo "   Adicionando repositório Snappy..."
-    sudo zypper addrepo --refresh https://download.opensuse.org/repositories/system:/snappy/openSUSE_Tumbleweed snappy
-    sudo zypper refresh
+    $ZYPPER_ADDREPO --refresh https://download.opensuse.org/repositories/system:/snappy/openSUSE_Tumbleweed snappy
+    $ZYPPER_REFRESH
     
     echo "   Instalando snapd..."
-    sudo zypper install -y snapd
+    $ZYPPER_IN snapd
     
     echo "   Configurando serviços..."
     sudo systemctl enable --now snapd
@@ -464,7 +533,7 @@ fi
 check_success "Snap"
 
 # Atualizar repositórios após adicionar novos
-sudo zypper refresh
+$ZYPPER_REFRESH
 
 # Instalar programas principais
 echo ""
@@ -477,14 +546,14 @@ if command -v anydesk &> /dev/null; then
     echo "✓ AnyDesk já está instalado"
 else
     if zypper search anydesk 2>/dev/null | grep -q "anydesk"; then
-        sudo zypper install -y anydesk
+        $ZYPPER_IN anydesk
         check_success "AnyDesk"
     else
         echo "⚠️  AnyDesk não encontrado nos repositórios"
         echo "   Instalando via download direto..."
         # Download e instalação manual do AnyDesk
         if wget -O anydesk.rpm https://download.anydesk.com/opensuse/anydesk-6.3.2-1.x86_64.rpm; then
-            sudo zypper install -y anydesk.rpm
+            $ZYPPER_IN anydesk.rpm
             rm anydesk.rpm
             check_success "AnyDesk (via download)"
         else
@@ -539,7 +608,7 @@ echo "Instalando VSCode..."
 if command -v code &> /dev/null; then
     echo "✓ VSCode já está instalado"
 else
-    sudo zypper install -y code
+    $ZYPPER_IN code
     check_success "VSCode"
 fi
 
@@ -622,12 +691,12 @@ fi
 if [ "$chrome_installed" = false ]; then
     echo "   Google Chrome não encontrado, instalando..."
     # Tentar instalar com verificação de assinatura
-    if sudo zypper install -y google-chrome-stable; then
+    if $ZYPPER_IN google-chrome-stable; then
         check_success "Google Chrome"
     else
         echo "⚠️  Erro de assinatura GPG do Google Chrome"
         echo "   Tentando instalar ignorando verificação de assinatura..."
-        if sudo zypper install --allow-unsigned-rpm -y google-chrome-stable; then
+        if $ZYPPER_IN --allow-unsigned-rpm -y google-chrome-stable; then
             echo "✓ Google Chrome instalado (ignorando verificação de assinatura)"
         else
             echo "✗ Erro ao instalar Google Chrome"
@@ -675,7 +744,7 @@ if [ "$brave_installed" = false ]; then
         echo "   Flatpak falhou, tentando download direto..."
         # Download e instalação manual do Brave (URL corrigida)
         if wget -O brave-browser.rpm https://brave-browser-rpm-release.s3.brave.com/brave-browser-stable.rpm; then
-            sudo zypper install -y brave-browser.rpm
+            $ZYPPER_IN brave-browser.rpm
             rm brave-browser.rpm
             check_success "Brave Browser (via download)"
         else
@@ -703,7 +772,7 @@ else
     else
         echo "   Flatpak falhou, tentando instalação via zypper..."
         # Instalação via zypper
-        sudo zypper install -y MozillaFirefox
+        $ZYPPER_IN MozillaFirefox
         check_success "Firefox"
     fi
 fi
@@ -713,7 +782,7 @@ echo "Instalando Java (OpenJDK)..."
 if command -v java &> /dev/null; then
     echo "✓ Java já está instalado"
 else
-    sudo zypper install -y java-11-openjdk java-11-openjdk-devel
+    $ZYPPER_IN java-11-openjdk java-11-openjdk-devel
     check_success "Java"
 fi
 
@@ -721,8 +790,16 @@ fi
 echo "Instalando Node.js..."
 if command -v node &> /dev/null; then
     echo "✓ Node.js já está instalado"
+    if command -v npm &> /dev/null; then
+        NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
+        if [ "$NPM_PREFIX" != "/usr" ] && [ "$NPM_PREFIX" != "$HOME/.local" ]; then
+            NPM_PREFIX_DISPLAY=$(echo "$NPM_PREFIX" | sed "s|^$HOME|~|")
+            echo "   ⚠️ npm usa prefix personalizado: $NPM_PREFIX_DISPLAY"
+            echo "   Isso pode causar conflitos com script npm install --global"
+        fi
+    fi
 else
-    sudo zypper install -y nodejs npm
+    $ZYPPER_IN nodejs npm
     check_success "Node.js"
 fi
 
@@ -733,7 +810,7 @@ echo "Instalando dependências adicionais úteis..."
 if command -v wget &> /dev/null && command -v make &> /dev/null && command -v curl &> /dev/null; then
     echo "✓ Dependências adicionais já estão instaladas"
 else
-    sudo zypper install -y \
+    $ZYPPER_IN \
       curl \
       wget \
       unzip \
@@ -759,16 +836,16 @@ echo "Instalando ferramentas divertidas e úteis..."
 if [ "${INSTALL_FUN_TOOLS:-true}" = "true" ]; then
     if ! command -v fortune &> /dev/null || ! command -v cowsay &> /dev/null || ! command -v cmatrix &> /dev/null; then
     echo "   Instalando fortune, cowsay, cmatrix..."
-    sudo zypper install -y fortune cowsay cmatrix
+    $ZYPPER_IN fortune cowsay cmatrix
     
     # Instalar nyancat (disponível nos repositórios)
     if ! command -v nyancat &> /dev/null; then
         echo "   Instalando nyancat via zypper..."
-        if sudo zypper install -y nyancat; then
+        if $ZYPPER_IN nyancat; then
             echo "✓ nyancat instalado via zypper"
         else
             echo "⚠️  Falha ao instalar nyancat via zypper"
-            echo "   Você pode instalar manualmente: sudo zypper install nyancat"
+            echo "   Você pode instalar manualmente: $ZYPPER_IN nyancat"
         fi
     else
         echo "✓ nyancat já está instalado"
@@ -790,25 +867,23 @@ fi
 # Instalar Docker e Docker Compose
 echo "Instalando Docker e Docker Compose..."
 if ! command -v docker &> /dev/null; then
-    # Remover repositórios Docker problemáticos primeiro
     echo "🧹 Limpando repositórios Docker problemáticos..."
-    sudo zypper removerepo docker-ce 2>/dev/null || true
-    sudo zypper removerepo docker-community 2>/dev/null || true
-    sudo zypper removerepo docker 2>/dev/null || true
+    $ZYPPER_REMOVEREPO docker-ce 2>/dev/null || true
+    $ZYPPER_REMOVEREPO docker-community 2>/dev/null || true
+    $ZYPPER_REMOVEREPO docker 2>/dev/null || true
     
-    # Atualizar repositórios após limpeza
     echo "🔄 Atualizando repositórios após limpeza..."
-    sudo zypper refresh
+    $ZYPPER_REFRESH
     
     # Remover versões antigas
-    sudo zypper remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
+    $ZYPPER_RM docker docker-engine docker.io containerd runc 2>/dev/null || true
     
     # Instalar dependências
-    sudo zypper install -y curl ca-certificates
+    $ZYPPER_IN curl ca-certificates
     
     # Instalar Docker via pacotes do sistema (mais confiável para Tumbleweed)
     echo "📦 Instalando Docker via pacotes do sistema..."
-    sudo zypper install -y docker docker-compose
+    $ZYPPER_IN docker docker-compose
     
     # Adicionar usuário ao grupo docker
     sudo usermod -aG docker "$USER"
@@ -837,14 +912,14 @@ echo "Instalando yt-dlp..."
 if ! command -v yt-dlp &> /dev/null; then
     # Tentar instalar via pip primeiro (mais atualizado)
     if command -v pip3 &> /dev/null; then
-        pip3 install --user yt-dlp
+        pip3 install --user yt-dlp --break-system-packages
         echo "✓ yt-dlp instalado via pip3"
     elif command -v pip &> /dev/null; then
-        pip install --user yt-dlp
+        pip install --user yt-dlp --break-system-packages
         echo "✓ yt-dlp instalado via pip"
     else
         # Fallback para zypper
-        sudo zypper install -y yt-dlp
+        $ZYPPER_IN yt-dlp
         echo "✓ yt-dlp instalado via zypper"
     fi
 else
@@ -894,7 +969,7 @@ if command -v steam &> /dev/null || flatpak list --user 2>/dev/null | grep -i "s
     echo "✓ Steam já está instalado"
 else
     echo "   Instalando Steam..."
-    if sudo zypper install -y steam; then
+    if $ZYPPER_IN steam; then
         echo "✓ Steam instalado com sucesso"
         echo "   Steam é a maior plataforma de distribuição de jogos para PC"
         echo "   Para melhor compatibilidade, instale os drivers gráficos apropriados"
@@ -920,7 +995,7 @@ if command -v lutris &> /dev/null || flatpak list --user 2>/dev/null | grep -i "
     echo "✓ Lutris já está instalado"
 else
     echo "   Instalando Lutris..."
-    if sudo zypper install -y lutris; then
+    if $ZYPPER_IN lutris; then
         echo "✓ Lutris instalado com sucesso"
         echo "   Lutris permite gerenciar jogos de várias plataformas (Steam, GOG, Epic, etc.)"
     else
@@ -966,7 +1041,7 @@ if command -v xfreerdp &> /dev/null; then
 else
     echo "   Instalando FreeRDP via Flatpak (versão estável)..."
     if ! command -v flatpak &> /dev/null; then
-        sudo zypper install -y flatpak
+        $ZYPPER_IN flatpak
     fi
     
     # Adicionar repositório Flathub se necessário
@@ -978,7 +1053,7 @@ else
         echo "   Para usar: flatpak run com.freerdp.FreeRDP"
     else
         echo "   Tentando instalar FreeRDP via repositório..."
-        sudo zypper install -y freerdp
+        $ZYPPER_IN freerdp
         if command -v xfreerdp &> /dev/null; then
             echo "✓ FreeRDP instalado via repositório"
         else
@@ -1180,7 +1255,7 @@ if command -v wg &> /dev/null || command -v wg-quick &> /dev/null; then
     echo "✓ WireGuard já está instalado"
 else
     echo "   Instalando WireGuard..."
-    if sudo zypper install -y wireguard-tools; then
+    if $ZYPPER_IN wireguard-tools; then
         echo "✓ WireGuard instalado com sucesso"
         echo "   WireGuard é uma VPN moderna, rápida e segura"
         echo "   Configuração: /etc/wireguard/"
@@ -1205,7 +1280,7 @@ echo "Instalando Nmap..."
 if command -v nmap &> /dev/null; then
     echo "✓ Nmap já está instalado"
 else
-    sudo zypper install -y nmap
+    $ZYPPER_IN nmap
     check_success "Nmap"
 fi
 
@@ -1214,7 +1289,7 @@ echo "Instalando Wireshark..."
 if command -v wireshark &> /dev/null; then
     echo "✓ Wireshark já está instalado"
 else
-    sudo zypper install -y wireshark
+    $ZYPPER_IN wireshark
     # Adicionar usuário ao grupo wireshark
     sudo usermod -aG wireshark "$USER" 2>/dev/null || true
     echo "⚠️  IMPORTANTE: Faça logout e login novamente para usar Wireshark sem sudo"
@@ -1226,7 +1301,7 @@ echo "Instalando John the Ripper..."
 if command -v john &> /dev/null; then
     echo "✓ John the Ripper já está instalado"
 else
-    sudo zypper install -y john
+    $ZYPPER_IN john
     check_success "John the Ripper"
 fi
 
@@ -1235,7 +1310,7 @@ echo "Instalando Hydra..."
 if command -v hydra &> /dev/null; then
     echo "✓ Hydra já está instalado"
 else
-    sudo zypper install -y hydra
+    $ZYPPER_IN hydra
     check_success "Hydra"
 fi
 
@@ -1244,7 +1319,7 @@ echo "Instalando Aircrack-ng..."
 if command -v aircrack-ng &> /dev/null; then
     echo "✓ Aircrack-ng já está instalado"
 else
-    sudo zypper install -y aircrack-ng
+    $ZYPPER_IN aircrack-ng
     check_success "Aircrack-ng"
 fi
 
@@ -1255,7 +1330,7 @@ if command -v sqlmap &> /dev/null; then
 else
     # Instalar via pipx (melhor para ambientes gerenciados)
     if ! command -v pipx &> /dev/null; then
-        sudo zypper install -y python3-pipx
+        $ZYPPER_IN python3-pipx
     fi
     pipx install sqlmap
     echo "✓ SQLMap instalado via pipx"
@@ -1270,7 +1345,7 @@ else
     # Nikto não está disponível nos repos do openSUSE, instalar via Git
     echo "   Instalando Nikto via Git..."
     if ! command -v git &> /dev/null; then
-        sudo zypper install -y git
+        $ZYPPER_IN git
     fi
     
     # Criar diretório local para binários se não existir
@@ -1308,7 +1383,7 @@ echo "Instalando Hashcat..."
 if command -v hashcat &> /dev/null; then
     echo "✓ Hashcat já está instalado"
 else
-    sudo zypper install -y hashcat
+    $ZYPPER_IN hashcat
     check_success "Hashcat"
 fi
 
@@ -1319,7 +1394,7 @@ if command -v gobuster &> /dev/null; then
 else
     # Instalar via Go
     if ! command -v go &> /dev/null; then
-        sudo zypper install -y go
+        $ZYPPER_IN go
     fi
     go install github.com/OJ/gobuster/v3@latest
     echo "✓ Gobuster instalado via Go"
@@ -1334,7 +1409,7 @@ if command -v ffuf &> /dev/null; then
 else
     # Instalar via Go
     if ! command -v go &> /dev/null; then
-        sudo zypper install -y go
+        $ZYPPER_IN go
     fi
     go install github.com/ffuf/ffuf/v2@latest
     echo "✓ ffuf instalado via Go"
@@ -1458,21 +1533,39 @@ echo "Instalando SpiderFoot..."
 if [ -d "$HOME/osint-tools/spiderfoot" ]; then
     echo "✓ SpiderFoot já está instalado"
 else
-    echo "   Instalando dependências de desenvolvimento para SpiderFoot..."
-    sudo zypper install -y libxml2-devel libxslt-devel
+    PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    echo "   Versão do Python detectada: $PYTHON_VERSION"
+    
+    echo "   Instalando dependências de build para Python com C extensions..."
+    $ZYPPER_IN python3-devel gcc libxml2-devel libxslt-devel
     
     echo "   Clonando repositório do SpiderFoot..."
+    mkdir -p "$HOME/osint-tools"
     git clone https://github.com/smicallef/spiderfoot.git "$HOME/osint-tools/spiderfoot"
     cd "$HOME/osint-tools/spiderfoot"
     
-    # Criar ambiente virtual
+    echo "   Criando ambiente virtual..."
     python3 -m venv venv
     # shellcheck source=/dev/null
     source venv/bin/activate
     pip install --upgrade pip setuptools wheel
     
-    # Tentar instalar dependências
-    if pip install -r requirements.txt; then
+    echo "   Instalando lxml (tratamento especial para Python 3.13+)..."
+    # Python 3.13 tem incompatibilidades com lxml - tentar múltiplas abordagens
+    if ! pip install --prefer-binary lxml 2>/dev/null; then
+        echo "   Tentando instalar lxml com versão específica..."
+        pip install lxml==5.2.2 || pip install lxml==5.1.0 || pip install lxml==5.0.0
+    fi
+    
+    # Se lxml ainda não estiver instalado, pular e continuar (algumas features podem funcionar sem ele)
+    if ! pip show lxml >/dev/null 2>&1; then
+        echo "   ⚠️ lxml não pôde ser instalado (incompatível com Python $PYTHON_VERSION)"
+        echo "   Tentando instalar outras dependências..."
+    fi
+    
+    # Instala o resto das dependências (sem lxml se falhou)
+    echo "   Instalando dependências do SpiderFoot..."
+    if pip install -r requirements.txt 2>/dev/null; then
         deactivate
         
         # Criar script wrapper
@@ -1493,7 +1586,7 @@ EOF
         echo "✗ Erro ao instalar SpiderFoot"
         echo "   Removendo instalação incompleta..."
         rm -rf "$HOME/osint-tools/spiderfoot"
-        echo "   Tente executar o script novamente"
+        echo "   Nota: Python $PYTHON_VERSION pode não ser compatível com SpiderFoot"
     fi
     cd - > /dev/null
 fi
@@ -1505,7 +1598,7 @@ if command -v ghunt &> /dev/null; then
 else
     echo "   Instalando GHunt via pipx..."
     if ! command -v pipx &> /dev/null; then
-        sudo zypper install -y python3-pipx
+        $ZYPPER_IN python3-pipx
     fi
     pipx install ghunt
     echo "✓ GHunt instalado com sucesso"
@@ -1546,7 +1639,7 @@ if command -v maigret &> /dev/null; then
 else
     echo "   Instalando Maigret via pipx..."
     if ! command -v pipx &> /dev/null; then
-        sudo zypper install -y python3-pipx
+        $ZYPPER_IN python3-pipx
     fi
     pipx install maigret
     echo "✓ Maigret instalado com sucesso"
@@ -1561,7 +1654,7 @@ if command -v holehe &> /dev/null; then
 else
     echo "   Instalando Holehe via pipx..."
     if ! command -v pipx &> /dev/null; then
-        sudo zypper install -y python3-pipx
+        $ZYPPER_IN python3-pipx
     fi
     pipx install holehe
     echo "✓ Holehe instalado com sucesso"

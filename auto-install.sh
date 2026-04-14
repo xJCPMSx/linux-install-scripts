@@ -158,6 +158,15 @@ main() {
     show_support_info
 }
 
+# Verificar se sudo está instalado e disponível
+check_sudo() {
+    if ! command -v sudo &> /dev/null; then
+        echo -e "${RED}❌ Erro: 'sudo' não está instalado. Este script requer privilégios de administrador.${NC}"
+        echo -e "${YELLOW}💡 Instale o sudo primeiro ou execute o script em uma distro que o suporte.${NC}"
+        exit 1
+    fi
+}
+
 # Tratamento de argumentos
 case "${1:-}" in
     "--test-detect"|"-t")
@@ -182,9 +191,13 @@ case "${1:-}" in
         ;;
 esac
 
-# Verificar se está sendo executado como root
+# Verificações iniciais
+check_sudo
+
+# Verificar se está sendo executado como root diretamente
 if [ "$EUID" -eq 0 ]; then
-    echo -e "${YELLOW}⚠️  Executando como root. Alguns programas podem ser instalados em locais diferentes.${NC}"
+    echo -e "${YELLOW}⚠️  Aviso: Executando diretamente como root.${NC}"
+    echo -e "${YELLOW}💡 É recomendado executar como usuário comum (o script pedirá sudo quando necessário).${NC}"
     echo ""
 fi
 

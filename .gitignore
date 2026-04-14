@@ -12,6 +12,7 @@ install.log
 # Arquivos de configuração local
 config.local
 .env
+config.conf
 
 # Arquivos de backup
 *.bak
@@ -36,3 +37,20 @@ cache/
 # Arquivos de teste
 test-*
 debug-*
+
+# node_modules e Python venv
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# OSINT tools (grandes demais para versionar)
+osint-tools/
+.HuionTablet/
+*.local/share/applications/*.desktop
+
+# Pacotes baixados
+Downloads/
+Applications/

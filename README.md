@@ -188,6 +188,7 @@ linux-install-scripts/
 - ✅ **Verificações robustas** - detecta instalações de diferentes formas
 - ✅ **Verificações aprimoradas** - detecta apps via comando, dpkg, flatpak, snap
 - ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
+- ✅ **Otimização de Gráficos Intel** - Detecção automática e configuração de parâmetros de kernel (`i915.enable_psr=0`) e drivers para evitar congelamentos.
 - ✅ **Configuração personalizável** - arquivo `config/config.conf` para controlar instalações
 
 ### **⚙️ Configuração Automática:**
@@ -259,7 +260,7 @@ OPTIMIZE_BOOT_TIME=true         # Otimiza tempo de boot
 [GAMING_OPTIMIZATIONS]
 # Otimizações específicas para jogos
 ENABLE_GAMING_OPTIMIZATIONS=true # Habilita otimizações de jogos
-INSTALL_MESA_DRIVERS=true       # Instala drivers Mesa otimizados
+INSTALL_MESA_DRIVERS=true       # Instala drivers Mesa otimizados (inclui correções para Intel)
 CONFIGURE_MESA_PERFORMANCE=true # Configura Mesa para performance
 OPTIMIZE_GPU_PERFORMANCE=true   # Otimiza performance da GPU
 CONFIGURE_WINE_PERFORMANCE=true  # Configura Wine para jogos
