@@ -4,6 +4,7 @@
 [![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
 [![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
+[![Kali](https://img.shields.io/badge/Kali-Supported-purple.svg)](https://www.kali.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
@@ -34,7 +35,7 @@ Collection of automated scripts for installing essential programs on different L
 
 ## 🎯 Available Scripts
 
-### **🖥️ Automatic Installation:**
+### **🖥️ Automatic Installation (Recommended):**
 ```bash
 # Automatic distribution detection
 git clone https://github.com/xJCPMSx/linux-install-scripts.git
@@ -47,7 +48,7 @@ cd linux-install-scripts
 | Distribution | Script | Status |
 |--------------|--------|--------|
 | **Debian/Ubuntu** | `debian/install-programs-debian.sh` | ✅ Stable v1.1 |
-| **openSUSE** | `opensuse/install-programs-opensuse.sh` | ✅ Stable |
+| **openSUSE** | `opensuse/install-programs-opensuse.sh` | ✅ Stable v1.1 |
 
 ### **🗑️ Uninstallation:**
 ```bash
@@ -93,13 +94,18 @@ cd linux-install-scripts
 
 ### **🤖 AI Tools (v1.1-stable):**
 - ✅ Antigravity - AI tool via Python/PIP
-- ✅ Claude Code - Official Anthropic CLI
+- ✅ Claude Code - Official Anthropic CLI for AI-assisted software engineering
 - ✅ OpenCode - Development extensions
 
+### **🖥️ System Tools:**
+- ✅ Fastfetch/Neofetch - System information (automatic detection)
+- ✅ yt-dlp - Video download
+- ✅ Docker and Docker Compose - Containerization
+
 ### **🔒 Security & OSINT:**
-- ✅ Nmap, Wireshark, John, Hydra, Aircrack-ng
+- ✅ Nmap, Wireshark, John the Ripper, Hydra, Aircrack-ng
 - ✅ SQLMap, Nikto, Hashcat, Gobuster, ffuf
-- ✅ SpiderFoot, Sherlock, theHarvester, GHunt, Holehe
+- ✅ SpiderFoot, Sherlock, theHarvester, GHunt, Holehe, Maigret, PhoneInfoga
 
 ### **🎮 Gaming Optimization:**
 - ✅ Steam, Lutris, Heroic, Osu!, WinBoat
@@ -113,11 +119,137 @@ cd linux-install-scripts
 - ✅ Automatic TRIM for SSDs
 - ✅ Java, Git, Node.js automatically configured
 
+## 📖 Quick Usage Guides
+
+### **📂 OSINT Tools Location**
+
+OSINT and Security tools are installed in:
+```
+~/osint-tools/
+```
+
+**Globally available tools:**
+- `sherlock`, `maigret`, `holehe` → Run via `python3 ~/osint-tools/tool.py`
+- `theHarvester` → Available globally via pip
+- `sf` (SpiderFoot) → Available globally via pip
+
+---
+
+### **🔎 Sherlock - Username Search**
+
+```bash
+# Basic search
+python3 ~/osint-tools/sherlock/sherlock.py username
+
+# JSON output
+python3 ~/osint-tools/sherlock/sherlock.py username --json
+
+# Save results
+python3 ~/osint-tools/sherlock/sherlock.py username --output results.txt
+```
+
+### **🕷️ SpiderFoot - Automated OSINT**
+
+```bash
+# Start web interface (port 5001)
+sf -s 127.0.0.1
+
+# CLI
+sfcli -s example.com -M sfp_arin -M sfp_dnsresolv
+```
+**Access:** http://localhost:5001 for web interface
+
+### **🎯 Maigret - Advanced Username Search**
+
+```bash
+# Detailed search
+python3 ~/osint-tools/maigret/maigret.py username
+
+# With screenshots
+python3 ~/osint-tools/maigret/maigret.py username -v
+```
+
+### **📞 PhoneInfoga - Phone OSINT**
+
+```bash
+# Basic scan
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n +5511999999999
+
+# Full scan
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n +5511999999999 -i
+```
+
+### **🛡️ Nmap - Network Scanner**
+
+```bash
+# Basic scan
+nmap 192.168.1.1
+
+# Full scan with service detection
+nmap -sV -sC -p- 192.168.1.1
+
+# Scan entire network
+nmap -sP 192.168.1.0/24
+```
+
+### **💉 SQLMap - SQL Injection**
+
+```bash
+# Test URL
+sqlmap -u "http://target.com/page.php?id=1"
+
+# Database enumeration
+sqlmap -u "http://target.com/page.php?id=1" --dbs
+
+# Dump data
+sqlmap -u "http://target.com/page.php?id=1" -D db -T users --dump
+```
+
+### **🔓 Hydra - Brute Force**
+
+```bash
+# SSH brute force
+hydra -l user -P wordlist.txt ssh://192.168.1.1
+
+# HTTP POST
+hydra -l admin -P wordlist.txt 192.168.1.1 http-post-form "/login:user=^USER^&pass=^PASS^:F=incorrect"
+```
+
+---
+
+## 🧠 Fallback Intelligence
+
+### **Fastfetch / Neofetch**
+
+The script automatically detects the operating system and installs the most appropriate system information tool:
+
+| System | Tool |
+|--------|------|
+| **Debian 13+** | Fastfetch |
+| **Ubuntu 24.04+** | Fastfetch |
+| **Debian 11/12** | Neofetch (fallback) |
+| **Ubuntu 20.04/22.04** | Neofetch (fallback) |
+| **openSUSE** | Fastfetch |
+
+**Implemented logic:**
+```bash
+source /etc/os-release
+if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
+    apt_install fastfetch
+else
+    apt_install neofetch
+fi
+```
+
+---
+
 ## 📝 Important Notes
 
-- ✅ Scripts tested and functional
+- ✅ Scripts tested and functional (v1.1-stable)
 - ✅ Backward compatibility with Debian 11, Ubuntu 20.04+
 - ✅ Full Debian 13 (Trixie) support
+- ✅ AI Tools: Antigravity, Claude Code
+- ✅ Smart fallback for Fastfetch/Neofetch
 - ⚠️ Reboot recommended after Docker and Huion Driver
 
 ## 📄 License
