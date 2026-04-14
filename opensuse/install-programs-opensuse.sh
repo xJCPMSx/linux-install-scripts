@@ -244,13 +244,11 @@ optimize_gaming() {
         if [ "${CONFIGURE_MESA_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando performance do Mesa..."
             
-            {
-                echo 'export MESA_GL_VERSION_OVERRIDE=4.5'
-                echo 'export MESA_GLSL_VERSION_OVERRIDE=450'
-                echo 'export MESA_GLES_VERSION_OVERRIDE=3.2'
-                echo 'export MESA_GL_THREAD=1'
-                echo 'export MESA_NO_ERROR=1'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export MESA_GL_VERSION_OVERRIDE=4.5"
+            add_to_bashrc "export MESA_GLSL_VERSION_OVERRIDE=450"
+            add_to_bashrc "export MESA_GLES_VERSION_OVERRIDE=3.2"
+            add_to_bashrc "export MESA_GL_THREAD=1"
+            add_to_bashrc "export MESA_NO_ERROR=1"
             
             echo "✓ Mesa configurado para performance"
         fi
@@ -259,11 +257,9 @@ optimize_gaming() {
         if [ "${OPTIMIZE_GPU_PERFORMANCE:-true}" = "true" ]; then
             echo "   Otimizando performance da GPU..."
             
-            {
-                echo 'export __GL_THREADED_OPTIMIZATIONS=1'
-                echo 'export __GL_SYNC_TO_VBLANK=0'
-                echo 'export __GL_YIELD="NOTHING"'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export __GL_THREADED_OPTIMIZATIONS=1"
+            add_to_bashrc "export __GL_SYNC_TO_VBLANK=0"
+            add_to_bashrc "export __GL_YIELD=NOTHING"
             
             echo "✓ GPU otimizada para performance"
         fi
@@ -272,10 +268,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_WINE_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando Wine para jogos..."
             
-            {
-                echo 'export WINEDEBUG=-all'
-                echo 'export WINEDLLOVERRIDES="dxgi=n;d3d11=n;d3d10=n;d3d9=n"'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export WINEDEBUG=-all"
+            add_to_bashrc "export WINEDLLOVERRIDES=dxgi\\;d3d11\\;d3d10\\;d3d9"
             
             echo "✓ Wine configurado para performance"
         fi
@@ -291,10 +285,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_STEAM_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando Steam para performance..."
             
-            {
-                echo 'export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"'
-                echo 'export STEAM_COMPAT_DATA_PATH="$HOME/.steam/steam/steamapps/compatdata"'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam"
+            add_to_bashrc "export STEAM_COMPAT_DATA_PATH=$HOME/.steam/steam/steamapps/compatdata"
             
             echo "✓ Steam configurado para performance"
         fi
@@ -303,10 +295,8 @@ optimize_gaming() {
         if [ "${OPTIMIZE_LUTRIS_SETTINGS:-true}" = "true" ]; then
             echo "   Configurando Lutris..."
             
-            {
-                echo 'export LUTRIS_SKIP_INSTALLER_DLG=1'
-                echo 'export LUTRIS_ENABLE_RUNTIME=0'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export LUTRIS_SKIP_INSTALLER_DLG=1"
+            add_to_bashrc "export LUTRIS_ENABLE_RUNTIME=0"
             
             echo "✓ Lutris configurado"
         fi
@@ -318,39 +308,13 @@ optimize_gaming() {
             echo "✓ GameMode instalado e habilitado"
         fi
         
-        # Configurar Steam
-        if [ "${CONFIGURE_STEAM_PERFORMANCE:-true}" = "true" ]; then
-            echo "   Configurando Steam para performance..."
-            
-            {
-                echo 'export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"'
-                echo 'export STEAM_COMPAT_DATA_PATH="$HOME/.steam/steam/steamapps/compatdata"'
-            } >> "${HOME}/.bashrc"
-            
-            echo "✓ Steam configurado para performance"
-        fi
-        
-        # Configurar Lutris
-        if [ "${OPTIMIZE_LUTRIS_SETTINGS:-true}" = "true" ]; then
-            echo "   Configurando Lutris..."
-            
-            {
-                echo 'export LUTRIS_SKIP_INSTALLER_DLG=1'
-                echo 'export LUTRIS_ENABLE_RUNTIME=0'
-            } >> "${HOME}/.bashrc"
-            
-            echo "✓ Lutris configurado"
-        fi
-        
         # Configurar DXVK
         if [ "${CONFIGURE_DXVK:-true}" = "true" ]; then
             echo "   Configurando DXVK..."
             
-            {
-                echo 'export DXVK_HUD=0'
-                echo 'export DXVK_LOG_LEVEL=none'
-                echo 'export DXVK_ASYNC=1'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export DXVK_HUD=0"
+            add_to_bashrc "export DXVK_LOG_LEVEL=none"
+            add_to_bashrc "export DXVK_ASYNC=1"
             
             echo "✓ DXVK configurado"
         fi
@@ -361,10 +325,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_OPENGL:-true}" = "true" ]; then
             echo "   Configurando OpenGL..."
             
-            {
-                echo 'export __GL_SHADER_DISK_CACHE=1'
-                echo 'export __GL_SHADER_DISK_CACHE_PATH="$HOME/.cache/mesa_shader_cache"'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export __GL_SHADER_DISK_CACHE=1"
+            add_to_bashrc "export __GL_SHADER_DISK_CACHE_PATH=$HOME/.cache/mesa_shader_cache"
             
             echo "✓ OpenGL configurado"
         fi
@@ -396,10 +358,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_GAMING_MOUSE:-true}" = "true" ]; then
             echo "   Configurando mouse para jogos..."
             
-            {
-                echo 'export MOUSE_DPI=800'
-                echo 'export MOUSE_POLLING_RATE=1000'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export MOUSE_DPI=800"
+            add_to_bashrc "export MOUSE_POLLING_RATE=1000"
             
             echo "✓ Mouse configurado para jogos"
         fi
@@ -408,10 +368,8 @@ optimize_gaming() {
         if [ "${ENABLE_GAMING_KEYBOARD:-true}" = "true" ]; then
             echo "   Configurando teclado para jogos..."
             
-            {
-                echo 'export KEYBOARD_REPEAT_RATE=30'
-                echo 'export KEYBOARD_REPEAT_DELAY=250'
-            } >> "${HOME}/.bashrc"
+            add_to_bashrc "export KEYBOARD_REPEAT_RATE=30"
+            add_to_bashrc "export KEYBOARD_REPEAT_DELAY=250"
             
             echo "✓ Teclado configurado para jogos"
         fi
@@ -1428,7 +1386,7 @@ else
         # Adicionar ao PATH se não estiver
         if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
             echo "   Adicionando ~/.local/bin ao PATH..."
-            echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
+            add_to_bashrc "export PATH=$HOME/.local/bin:\$PATH"
         fi
     else
         echo "✗ Erro ao instalar Nikto"
@@ -1842,11 +1800,9 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Adicionar variáveis Qt para corrigir problemas de tema
     echo "   Configurando variáveis Qt..."
     if ! grep -q "QT_QPA_PLATFORM" "$BASHRC" 2>/dev/null; then
-        {
-            echo 'export QT_QPA_PLATFORM=xcb'
-            echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0'
-            echo 'export QT_SCALE_FACTOR=1'
-        } >> "$BASHRC"
+        add_to_bashrc "export QT_QPA_PLATFORM=xcb"
+        add_to_bashrc "export QT_AUTO_SCREEN_SCALE_FACTOR=0"
+        add_to_bashrc "export QT_SCALE_FACTOR=1"
         echo "   ✓ Variáveis Qt configuradas"
     else
         echo "   ✓ Variáveis Qt já configuradas"
