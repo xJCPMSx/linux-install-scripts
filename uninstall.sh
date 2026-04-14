@@ -20,7 +20,7 @@ show_header() {
     echo -e "${CYAN}========================================${NC}"
     echo -e "${BLUE}📅 Data: $(date)${NC}"
     echo -e "${BLUE}🐧 Sistema: $(uname -s) $(uname -r)${NC}"
-    echo -e "${BLUE}🔧 Versão: Uninstall v1.0-beta${NC}"
+    echo -e "${BLUE}🔧 Versão: Uninstall v1.1-stable${NC}"
     echo ""
 }
 
@@ -71,6 +71,9 @@ confirm_uninstall() {
     echo -e "${RED}   - Driver Oficial da Huion${NC}"
     echo -e "${RED}   - Ferramentas de Segurança (Kali Linux)${NC}"
     echo -e "${RED}   - Ferramentas de OSINT (Sherlock, theHarvester, Recon-ng, SpiderFoot, GHunt, PhoneInfoga, Maigret, Holehe)${NC}"
+    echo -e "${RED}   - Ferramentas de IA (Claude Code, Antigravity, Cursor)${NC}"
+    echo -e "${RED}   - Fastfetch${NC}"
+    echo -e "${RED}   - FreeRDP 3${NC}"
     echo -e "${RED}   - Ferramentas Divertidas${NC}"
     echo -e "${RED}   - Extensões do VSCode${NC}"
     echo -e "${RED}   - Configurações do Git${NC}"
@@ -194,6 +197,25 @@ uninstall_debian() {
     echo -e "${YELLOW}Removendo Node.js...${NC}"
     sudo apt remove -y nodejs npm 2>/dev/null || echo "Node.js não encontrado"
     
+    # Desinstalar Claude Code (@anthropic-ai/claude-code)
+    echo -e "${YELLOW}Removendo Claude Code...${NC}"
+    npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || echo "Claude Code npm não encontrado"
+    rm -rf ~/.claude 2>/dev/null || echo "Diretório .claude não encontrado"
+    
+    # Desinstalar Antigravity
+    echo -e "${YELLOW}Removendo Antigravity...${NC}"
+    pip3 uninstall -y antigravity 2>/dev/null || echo "Antigravity pip não encontrado"
+    pip uninstall -y antigravity 2>/dev/null || echo "Antigravity pip não encontrado"
+    
+    # Desinstalar Fastfetch
+    echo -e "${YELLOW}Removendo Fastfetch...${NC}"
+    sudo apt remove -y fastfetch 2>/dev/null || echo "Fastfetch não encontrado"
+    
+    # Desinstalar FreeRDP 3 (freerdp3/xfreerdp3)
+    echo -e "${YELLOW}Removendo FreeRDP 3...${NC}"
+    sudo apt remove -y freerdp3 2>/dev/null || echo "FreeRDP 3 não encontrado"
+    sudo apt remove -y xfreerdp3 2>/dev/null || echo "xfreerdp3 não encontrado"
+    
     # Desinstalar yt-dlp
     echo -e "${YELLOW}Removendo yt-dlp...${NC}"
     sudo apt remove -y yt-dlp 2>/dev/null || echo "yt-dlp não encontrado"
@@ -250,6 +272,8 @@ remove_custom_files() {
     rm -f ~/Applications/cursor.AppImage 2>/dev/null || echo "Cursor não encontrado"
     rm -f ~/.local/share/applications/cursor.desktop 2>/dev/null || echo "Desktop file do Cursor não encontrado"
     rm -f ~/.local/share/icons/cursor.svg 2>/dev/null || echo "Ícone do Cursor não encontrado"
+    rm -rf ~/.cursor 2>/dev/null || echo "Diretório .cursor não encontrado"
+    rm -rf ~/.config/cursor 2>/dev/null || echo "Configuração do Cursor não encontrada"
     
     # Remover Osu!
     echo -e "${YELLOW}Removendo Osu!...${NC}"

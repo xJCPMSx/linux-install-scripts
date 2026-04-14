@@ -11,7 +11,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🖥️ Linux Install Scripts - Interface Gráfica${NC}"
+echo -e "${BLUE}🖥️ Instalador Gráfico - v1.1-stable${NC}"
 echo "============================================="
 
 # Configurar variáveis de ambiente para corrigir transparência
@@ -156,6 +156,10 @@ list_programs() {
         programs+="• Java (OpenJDK) - Linguagem de programação\n"
         programs+="• Node.js - Runtime JavaScript\n"
         programs+="• Compiladores (GCC, G++, Make, CMake)\n\n"
+        programs+="🤖 FERRAMENTAS DE IA:\n"
+        programs+="• Claude Code - Assistente de programação\n"
+        programs+="• Antigravity - Ferramenta de OSINT\n"
+        programs+="• Cursor - Editor com IA integrada\n\n"
         programs+="🌐 NAVEGADORES:\n"
         programs+="• Google Chrome\n"
         programs+="• Brave Browser\n"
@@ -208,6 +212,10 @@ list_programs() {
         programs+="• Java (OpenJDK) - Linguagem de programação\n"
         programs+="• Node.js - Runtime JavaScript\n"
         programs+="• Compiladores (GCC, G++, Make, CMake)\n\n"
+        programs+="<b>🤖 Ferramentas de IA:</b>\n"
+        programs+="• Claude Code - Assistente de programação\n"
+        programs+="• Antigravity - Ferramenta de OSINT\n"
+        programs+="• Cursor - Editor com IA integrada\n\n"
         programs+="<b>🌐 Navegadores:</b>\n"
         programs+="• Google Chrome\n"
         programs+="• Brave Browser\n"
