@@ -1741,6 +1741,11 @@ node --version
 
 echo ""
 echo "Versão do npm:"
+# Corrigir prefix do npm antes da verificação final
+if [ -f "$HOME/.npmrc" ]; then
+    sed -i '/^prefix=/d' "$HOME/.npmrc" 2>/dev/null || true
+fi
+unset npm_config_prefix 2>/dev/null || true
 npm --version
 
 echo ""
