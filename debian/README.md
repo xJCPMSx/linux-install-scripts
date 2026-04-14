@@ -258,6 +258,262 @@ sudo systemctl enable wg-quick@wg0
 sudo wg show
 ```
 
+## 🔐 Ferramentas de Segurança - Guia Completo
+
+### **🛡️ Nmap - Scanner de Rede**
+
+O Nmap é a ferramenta padrão para reconhecimento de rede e scanning de portas.
+
+```bash
+# Scan básico de portas
+nmap 192.168.1.1
+
+# Scan de portas específicas
+nmap -p 22,80,443 192.168.1.1
+
+# Scan completo com detecção de serviços e versões
+nmap -sV -sC -p- 192.168.1.1
+
+# Scan de rede inteira
+nmap -sP 192.168.1.0/24
+
+# Scan stealthy (SYN)
+nmap -sS 192.168.1.1
+
+# Scan UDP
+nmap -sU 192.168.1.1
+
+# Detectar sistema operacional
+nmap -O 192.168.1.1
+
+# Output para arquivo
+nmap -oN scan.txt 192.168.1.1
+```
+
+### **📡 Wireshark - Analisador de Pacotes**
+
+Capture e analise tráfego de rede em tempo real.
+
+```bash
+# Iniciar Wireshark (modo gráfico)
+sudo wireshark
+
+# Captura de interface específica
+sudo wireshark -i eth0
+
+# Captura com filtro específico
+sudo wireshark -i eth0 -f "port 80"
+
+# Salvar captura para arquivo
+sudo wireshark -i eth0 -w captura.pcap
+
+# Análise via CLI (tshark)
+sudo tshark -i eth0 -c 100
+```
+
+### **🔓 Hydra - Brute Force**
+
+Ferramenta de força bruta para testes de autenticação.
+
+```bash
+# Brute force em SSH
+hydra -l usuario -P wordlist.txt ssh://192.168.1.1
+
+# Brute force em HTTP POST
+hydra -l admin -P wordlist.txt 192.168.1.1 http-post-form "/login:user=^USER^&pass=^PASS^:F=incorrect"
+
+# Brute force em FTP
+hydra -l ftp -P wordlist.txt ftp://192.168.1.1
+
+# Brute force em MySQL
+hydla -l root -P wordlist.txt 192.168.1.1 mysql
+
+# Usar arquivo de usuários
+hydra -L usuarios.txt -P wordlist.txt ssh://192.168.1.1
+```
+
+### **💉 SQLMap - SQL Injection**
+
+Automatiza a detecção e exploração de vulnerabilidades SQL Injection.
+
+```bash
+# Testar URL para SQLi
+sqlmap -u "http://alvo.com/pagina.php?id=1"
+
+# Enumeração de databases
+sqlmap -u "http://alvo.com/pagina.php?id=1" --dbs
+
+# Listar tabelas de uma database
+sqlmap -u "http://alvo.com/pagina.php?id=1" -D nome_db --tables
+
+# Extrair dados de uma tabela
+sqlmap -u "http://alvo.com/pagina.php?id=1" -D nome_db -T usuarios --dump
+
+# Obter shell interativo
+sqlmap -u "http://alvo.com/pagina.php?id=1" --os-shell
+
+# Usar Tor para anonimato
+sqlmap -u "http://alvo.com/pagina.php?id=1" --tor --tor-type=SOCKS5
+```
+
+## 🔍 Ferramentas de OSINT - Guia Completo
+
+### **📂 Localização das Ferramentas**
+
+As ferramentas OSINT são instaladas em `~/osint-tools/` e disponíveis via PATH:
+
+```
+~/osint-tools/
+├── sherlock/          # Sherlock
+├── theHarvester/     # theHarvester
+├── maigret/           # Maigret
+├── holehe/            # Holehe
+├── GHunt/             # GHunt
+├── phoneinfoga/       # PhoneInfoga
+└── spiderfoot/        # SpiderFoot
+```
+
+**Ferramentas disponíveis globalmente:**
+- Sherlock, Maigret, Holehe: `python3 ~/osint-tools/ferramenta.py`
+- theHarvester: `theHarvester` (global via pip)
+- SpiderFoot: `sf` (global via pip)
+
+### **🔎 Sherlock - Busca de Username**
+
+Encontre contas em redes sociais por username.
+
+```bash
+# Busca básica
+python3 ~/osint-tools/sherlock/sherlock.py usuario
+
+# Busca com saída em JSON
+python3 ~/osint-tools/sherlock/sherlock.py usuario --json
+
+# Busca com threading paralelo
+python3 ~/osint-tools/sherlock/sherlock.py usuario --timeout 1
+
+# Buscar em todas as redes
+python3 ~/osint-tools/sherlock/sherlock.py usuario --output resultados.txt
+```
+
+### **🌐 theHarvester - Coleta de Emails**
+
+Colete emails, subdomínios e IPs de fontes públicas.
+
+```bash
+# Coleta básica de emails
+theHarvester -d exemplo.com -b google
+
+# Múltiplas fontes
+theHarvester -d exemplo.com -b google,bing,linkedin
+
+# Coleta de subdomínios
+theHarvester -d exemplo.com -b shodan -n
+
+# Salvar resultados
+theHarvester -d exemplo.com -b all -f resultados.html
+
+# Limite de resultados
+theHarvester -d exemplo.com -b google -l 100
+```
+
+### **🎯 Maigret - Busca Avançada de Username**
+
+Versão avançada do Sherlock com mais plataformas.
+
+```bash
+# Busca básica
+python3 ~/osint-tools/maigret/maigret.py usuario
+
+# Busca detalhada com screenshots
+python3 ~/osint-tools/maigret/maigret.py usuario -v
+
+# Busca sem progresso bar
+python3 ~/osint-tools/maigret/maigret.py usuario --no-progress
+
+# Salvar em JSON
+python3 ~/osint-tools/maigret/maigret.py usuario --json -o resultados.json
+
+# Usar proxy
+python3 ~/osint-tools/maigret/maigret.py usuario --proxy socks5://127.0.0.1:9050
+```
+
+### **📧 Holehe - Verificação de Email**
+
+Verifique se um email existe em mais de 120 serviços.
+
+```bash
+# Verificação básica
+python3 ~/osint-tools/holehe/holehe.py email@exemplo.com
+
+# Saída em JSON
+python3 ~/osint-tools/holehe/holehe.py email@exemplo.com --json
+
+# Apenas serviços que encontraram
+python3 ~/osint-tools/holehe/holehe.py email@exemplo.com --found
+
+# Timeout personalizado
+python3 ~/osint-tools/holehe/holehe.py email@exemplo.com --timeout 5
+```
+
+### **📱 GHunt - OSINT de Contas Google**
+
+Extraia informações de contas Google pelo email ou ID.
+
+```bash
+# Informações por email
+python3 ~/osint-tools/GHunt/ghunt.py email@exemplo.com
+
+# Informações por ID do Google
+python3 ~/osint-tools/GHunt/ghunt.py 1182...ID
+
+# MODO interativo
+python3 ~/osint-tools/GHunt/ghunt.py
+
+# Check de cookies (necessário para algumas funções)
+python3 ~/osint-tools/GHunt/ghunt.py --check
+```
+
+### **📞 PhoneInfoga - OSINT de Telefone**
+
+Colete informações sobre números de telefone.
+
+```bash
+# Scan básico
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n +5511999999999
+
+# Scan com reconhecimento completo
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n +5511999999999 -i
+
+# Apenas informações falsas (VoIP)
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n +5511999999999 --use-numverify
+
+# Formato específico
+python3 ~/osint-tools/phoneinfoga/phoneinfoga.py -n "+55 11 99999-9999" -f dados.json
+```
+
+### **🕷️ SpiderFoot - Automação OSINT**
+
+Interface web para OSINT automatizado.
+
+```bash
+# Iniciar interface web (porta 5001)
+sf -s 192.168.1.1
+
+# Módulo CLI
+sfcli -s 192.168.1.1 -m sfp_spider
+
+# Scan rápido
+sfcli -s example.com -M sfp_arin -M sfp_dnsresolv -M sfp_email
+
+# Exportar resultados
+sfcli -s example.com -f json > resultados.json
+```
+
+**Acesse:** http://localhost:5001 para interface gráfica
+
+---
+
 ## ⚙️ Configuração Personalizada
 
 Edite o arquivo `../config/config.conf` para personalizar a instalação:
