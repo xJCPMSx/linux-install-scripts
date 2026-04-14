@@ -202,14 +202,11 @@ optimize_gaming() {
         if [ "${CONFIGURE_MESA_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando performance do Mesa..."
             
-            # Configurar variáveis de ambiente para Mesa
-            echo 'export MESA_GL_VERSION_OVERRIDE=4.5' >> "${HOME}/.bashrc"
-            echo 'export MESA_GLSL_VERSION_OVERRIDE=450' >> "${HOME}/.bashrc"
-            echo 'export MESA_GLES_VERSION_OVERRIDE=3.2' >> "${HOME}/.bashrc"
-            
-            # Configurar para melhor performance
-            echo 'export MESA_GL_THREAD=1' >> "${HOME}/.bashrc"
-            echo 'export MESA_NO_ERROR=1' >> "${HOME}/.bashrc"
+            add_to_bashrc "export MESA_GL_VERSION_OVERRIDE=4.5"
+            add_to_bashrc "export MESA_GLSL_VERSION_OVERRIDE=450"
+            add_to_bashrc "export MESA_GLES_VERSION_OVERRIDE=3.2"
+            add_to_bashrc "export MESA_GL_THREAD=1"
+            add_to_bashrc "export MESA_NO_ERROR=1"
             
             echo "✓ Mesa configurado para performance"
         fi
@@ -218,10 +215,9 @@ optimize_gaming() {
         if [ "${OPTIMIZE_GPU_PERFORMANCE:-true}" = "true" ]; then
             echo "   Otimizando performance da GPU..."
             
-            # Configurar GPU para modo performance
-            echo 'export __GL_THREADED_OPTIMIZATIONS=1' >> "${HOME}/.bashrc"
-            echo 'export __GL_SYNC_TO_VBLANK=0' >> "${HOME}/.bashrc"
-            echo 'export __GL_YIELD="NOTHING"' >> "${HOME}/.bashrc"
+            add_to_bashrc "export __GL_THREADED_OPTIMIZATIONS=1"
+            add_to_bashrc "export __GL_SYNC_TO_VBLANK=0"
+            add_to_bashrc "export __GL_YIELD=NOTHING"
             
             echo "✓ GPU otimizada para performance"
         fi
@@ -230,9 +226,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_WINE_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando Wine para jogos..."
             
-            # Configurar Wine para melhor performance
-            echo 'export WINEDEBUG=-all' >> "${HOME}/.bashrc"
-            echo 'export WINEDLLOVERRIDES="dxgi=n;d3d11=n;d3d10=n;d3d9=n"' >> "${HOME}/.bashrc"
+            add_to_bashrc "export WINEDEBUG=-all"
+            add_to_bashrc "export WINEDLLOVERRIDES=dxgi\\;d3d11\\;d3d10\\;d3d9"
             
             echo "✓ Wine configurado para performance"
         fi
@@ -248,9 +243,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_STEAM_PERFORMANCE:-true}" = "true" ]; then
             echo "   Configurando Steam para performance..."
             
-            # Configurar Steam para melhor performance
-            echo 'export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"' >> "${HOME}/.bashrc"
-            echo 'export STEAM_COMPAT_DATA_PATH="$HOME/.steam/steam/steamapps/compatdata"' >> "${HOME}/.bashrc"
+            add_to_bashrc "export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam"
+            add_to_bashrc "export STEAM_COMPAT_DATA_PATH=$HOME/.steam/steam/steamapps/compatdata"
             
             echo "✓ Steam configurado para performance"
         fi
@@ -259,9 +253,8 @@ optimize_gaming() {
         if [ "${OPTIMIZE_LUTRIS_SETTINGS:-true}" = "true" ]; then
             echo "   Configurando Lutris..."
             
-            # Configurar Lutris para melhor performance
-            echo 'export LUTRIS_SKIP_INSTALLER_DLG=1' >> "${HOME}/.bashrc"
-            echo 'export LUTRIS_ENABLE_RUNTIME=0' >> "${HOME}/.bashrc"
+            add_to_bashrc "export LUTRIS_SKIP_INSTALLER_DLG=1"
+            add_to_bashrc "export LUTRIS_ENABLE_RUNTIME=0"
             
             echo "✓ Lutris configurado"
         fi
@@ -270,10 +263,9 @@ optimize_gaming() {
         if [ "${CONFIGURE_DXVK:-true}" = "true" ]; then
             echo "   Configurando DXVK..."
             
-            # Configurar DXVK para melhor performance
-            echo 'export DXVK_HUD=0' >> "${HOME}/.bashrc"
-            echo 'export DXVK_LOG_LEVEL=none' >> "${HOME}/.bashrc"
-            echo 'export DXVK_ASYNC=1' >> "${HOME}/.bashrc"
+            add_to_bashrc "export DXVK_HUD=0"
+            add_to_bashrc "export DXVK_LOG_LEVEL=none"
+            add_to_bashrc "export DXVK_ASYNC=1"
             
             echo "✓ DXVK configurado"
         fi
@@ -296,9 +288,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_OPENGL:-true}" = "true" ]; then
             echo "   Configurando OpenGL..."
             
-            # Configurar OpenGL para melhor performance
-            echo 'export __GL_SHADER_DISK_CACHE=1' >> "${HOME}/.bashrc"
-            echo 'export __GL_SHADER_DISK_CACHE_PATH="$HOME/.cache/mesa_shader_cache"' >> "${HOME}/.bashrc"
+            add_to_bashrc "export __GL_SHADER_DISK_CACHE=1"
+            add_to_bashrc "export __GL_SHADER_DISK_CACHE_PATH=$HOME/.cache/mesa_shader_cache"
             
             echo "✓ OpenGL configurado"
         fi
@@ -330,9 +321,8 @@ optimize_gaming() {
         if [ "${CONFIGURE_GAMING_MOUSE:-true}" = "true" ]; then
             echo "   Configurando mouse para jogos..."
             
-            # Configurar mouse para melhor responsividade
-            echo 'export MOUSE_DPI=800' >> "${HOME}/.bashrc"
-            echo 'export MOUSE_POLLING_RATE=1000' >> "${HOME}/.bashrc"
+            add_to_bashrc "export MOUSE_DPI=800"
+            add_to_bashrc "export MOUSE_POLLING_RATE=1000"
             
             echo "✓ Mouse configurado para jogos"
         fi
@@ -341,9 +331,8 @@ optimize_gaming() {
         if [ "${ENABLE_GAMING_KEYBOARD:-true}" = "true" ]; then
             echo "   Configurando teclado para jogos..."
             
-            # Configurar teclado para melhor responsividade
-            echo 'export KEYBOARD_REPEAT_RATE=30' >> "${HOME}/.bashrc"
-            echo 'export KEYBOARD_REPEAT_DELAY=250' >> "${HOME}/.bashrc"
+            add_to_bashrc "export KEYBOARD_REPEAT_RATE=30"
+            add_to_bashrc "export KEYBOARD_REPEAT_DELAY=250"
             
             echo "✓ Teclado configurado para jogos"
         fi
@@ -1749,8 +1738,8 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Alias para Spotify
     if flatpak list --user 2>/dev/null | grep -q "com.spotify.Client"; then
         echo "   Configurando alias para Spotify..."
-        if ! grep -q "alias spotify=" ~/.bashrc 2>/dev/null; then
-            echo 'alias spotify="flatpak run com.spotify.Client"' >> "${HOME}/.bashrc"
+        if ! grep -q "alias spotify=" "$BASHRC" 2>/dev/null; then
+            add_to_bashrc 'alias spotify="flatpak run com.spotify.Client"'
             echo "   ✓ Alias do Spotify adicionado"
         else
             echo "   ✓ Alias do Spotify já existe"
@@ -1760,8 +1749,8 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Alias para Brave Browser
     if flatpak list --user 2>/dev/null | grep -q "com.brave.Browser"; then
         echo "   Configurando alias para Brave Browser..."
-        if ! grep -q "alias brave=" ~/.bashrc 2>/dev/null; then
-            echo 'alias brave="flatpak run com.brave.Browser"' >> "${HOME}/.bashrc"
+        if ! grep -q "alias brave=" "$BASHRC" 2>/dev/null; then
+            add_to_bashrc 'alias brave="flatpak run com.brave.Browser"'
             echo "   ✓ Alias do Brave Browser adicionado"
         else
             echo "   ✓ Alias do Brave Browser já existe"
@@ -1771,8 +1760,8 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     # Alias para Google Chrome
     if flatpak list --user 2>/dev/null | grep -q "com.google.Chrome"; then
         echo "   Configurando alias para Google Chrome..."
-        if ! grep -q "alias google-chrome=" ~/.bashrc 2>/dev/null; then
-            echo 'alias google-chrome="flatpak run com.google.Chrome"' >> "${HOME}/.bashrc"
+        if ! grep -q "alias google-chrome=" "$BASHRC" 2>/dev/null; then
+            add_to_bashrc 'alias google-chrome="flatpak run com.google.Chrome"'
             echo "   ✓ Alias do Google Chrome adicionado"
         else
             echo "   ✓ Alias do Google Chrome já existe"
@@ -1781,12 +1770,10 @@ if [ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$DESKTOP_SESSION" = "plasma" ]; then
     
     # Adicionar variáveis Qt para corrigir problemas de tema
     echo "   Configurando variáveis Qt..."
-    if ! grep -q "QT_QPA_PLATFORM" ~/.bashrc 2>/dev/null; then
-        {
-            echo 'export QT_QPA_PLATFORM=xcb'
-            echo 'export QT_AUTO_SCREEN_SCALE_FACTOR=0'
-            echo 'export QT_SCALE_FACTOR=1'
-        } >> "${HOME}/.bashrc"
+    if ! grep -q "QT_QPA_PLATFORM" "$BASHRC" 2>/dev/null; then
+        add_to_bashrc "export QT_QPA_PLATFORM=xcb"
+        add_to_bashrc "export QT_AUTO_SCREEN_SCALE_FACTOR=0"
+        add_to_bashrc "export QT_SCALE_FACTOR=1"
         echo "   ✓ Variáveis Qt configuradas"
     else
         echo "   ✓ Variáveis Qt já configuradas"
