@@ -282,6 +282,7 @@ optimize_gaming() {
                 echo "✓ Vulkan já está instalado"
             else
                 echo "   Habilitando Vulkan..."
+                # shellcheck disable=SC1091
                 source /etc/os-release
                 # Se for Debian 13 ou superior (ou Ubuntu muito recente), usa o novo pacote
                 if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
