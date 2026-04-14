@@ -2,8 +2,12 @@
 
 # Script de Detecção Automática e Instalação
 # Detecta a distribuição Linux e executa o script apropriado
+# Versão: 1.1-stable
 
 set -e
+
+# Variável global de versão
+VERSION="1.1-stable"
 
 # Cores para output
 RED='\033[0;31m'
@@ -36,7 +40,7 @@ show_help() {
 
 # Função para exibir versão
 show_version() {
-    echo -e "${CYAN}Auto-Install Linux Scripts v1.0-beta${NC}"
+    echo -e "${CYAN}Auto-Install Linux Scripts v${VERSION}${NC}"
     echo -e "${BLUE}Data: $(date)${NC}"
     echo -e "${BLUE}Sistema: $(uname -s) $(uname -r)${NC}"
 }
@@ -48,7 +52,7 @@ show_header() {
     echo -e "${CYAN}========================================${NC}"
     echo -e "${BLUE}📅 Data: $(date)${NC}"
     echo -e "${BLUE}🐧 Sistema: $(uname -s) $(uname -r)${NC}"
-    echo -e "${BLUE}🔧 Versão: Auto-Detection v1.0-beta${NC}"
+    echo -e "${BLUE}🔧 Versão: Auto-Detection v${VERSION}${NC}"
     echo ""
 }
 

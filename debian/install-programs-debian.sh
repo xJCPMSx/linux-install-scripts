@@ -470,11 +470,24 @@ check_success "sistema"
 
 # ============================================
 # Instalação de dependências essenciais para Debian 13
-# Atualizado: removido neofetch (obsoleto), software-properties-common (desnecessário)
-# Adicionado: fastfetch, python3-pip, nodejs, npm
+# Atualizado: software-properties-common removido (desnecessário)
+# Adicionado: python3-pip, nodejs, npm
 # ============================================
 echo "Instalando dependências essenciais..."
-apt_install curl wget gnupg apt-transport-https ca-certificates fastfetch python3-pip
+
+# ============================================
+# Lógica condicional Fastfetch/Neofetch
+# Fastfetch: Debian 13+ e Ubuntu 24.04+
+# Neofetch: sistemas legados (Debian 11/12, Ubuntu 20.04/22.04)
+# ============================================
+source /etc/os-release
+if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
+    echo "   Detectado sistema moderno: Instalando Fastfetch..."
+    apt_install curl wget gnupg apt-transport-https ca-certificates fastfetch python3-pip
+else
+    echo "   Detectado sistema legado: Instalando Neofetch..."
+    apt_install curl wget gnupg apt-transport-https ca-certificates neofetch python3-pip
+fi
 check_success "dependências essenciais"
 
 # Instalar Node.js e npm
@@ -509,7 +522,7 @@ check_success "dependências de desenvolvimento"
 
 # Instalar ferramentas adicionais úteis
 echo "Instalando ferramentas adicionais..."
-apt_install vim nano htop tree fastfetch unzip tar file which pkg-config autoconf automake libtool
+apt_install vim nano htop tree unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
 # Instalar ferramentas divertidas e úteis
