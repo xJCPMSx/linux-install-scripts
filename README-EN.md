@@ -2,691 +2,128 @@
 
 [![Linux](https://img.shields.io/badge/Linux-Supported-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 [![openSUSE](https://img.shields.io/badge/openSUSE-Supported-blue.svg)](https://www.opensuse.org/)
-[![Debian](https://img.shields.io/badge/Debian-Supported-red.svg)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-Supported-orange.svg)](https://ubuntu.com/)
+[![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0--beta-orange.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+[![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
 ## 🌍 Languages / Idiomas
 
 - [🇺🇸 English](README-EN.md) *(Current)*
 - [🇧🇷 Português](README.md)
 
-## ⚠️ **BETA VERSION - TESTING**
-This is a beta version for testing. Features may change before the final release.
-
 ## 📋 Description
-Collection of automated scripts for installing essential programs on different Linux distributions, including compilers, development tools, browsers, code editors, and applications.
 
-## 🐧 Supported Distributions
+Collection of automated scripts for installing essential programs on different Linux distributions, including compilers, development tools, AI tools, browsers, code editors, and applications.
+
+## ✅ Supported Distributions
 
 ### **openSUSE**
-- **openSUSE Leap 15.3+**
-- **openSUSE Tumbleweed**
-- **SUSE Linux Enterprise**
+- ✅ **openSUSE Leap 15.3+**
+- ✅ **openSUSE Tumbleweed**
+- ✅ **SUSE Linux Enterprise**
 
 ### **Debian/Ubuntu**
-- **Debian 11+** (Bullseye, Bookworm)
-- **Ubuntu 20.04+** (LTS and non-LTS)
-- **Linux Mint 20+**
-- **Pop!_OS 20.04+**
-- **Elementary OS 6+**
-- **Zorin OS 16+**
-- **Kali Linux Rolling**
+- ✅ **Debian 11+** (Bullseye, Bookworm, **Trixie**)
+- ✅ **Ubuntu 20.04+** (LTS and non-LTS)
+- ✅ **Linux Mint 20+**
+- ✅ **Pop!_OS 20.04+**
+- ✅ **Elementary OS 6+**
+- ✅ **Zorin OS 16+**
+- ✅ **Kali Linux Rolling**
 
-## 🎯 Installed Programs
+## 🎯 Available Scripts
 
-### 🔧 **Development Tools**
-- **Compilers:** GCC, G++, Make, CMake, Ninja
-- **Languages:** Java (OpenJDK), Node.js, npm
-- **Version Control:** Git with SSH
-- **Editors:** VSCode, Cursor (AI-powered editor)
-
-### 🌐 **Browsers**
-- **Google Chrome** - Main browser
-- **Brave Browser** - Privacy-focused browser
-- **Firefox** - Alternative browser
-
-### 🎮 **Gaming Platforms**
-- **Steam** - Largest PC gaming platform
-- **Lutris** - Game manager (Steam, GOG, Epic, Emulators, etc.)
-- **Heroic Games Launcher** - Client for Epic Games Store and GOG
-- **WinBoat** - Run Windows apps natively on Linux
-- **Osu!** - Rhythm game
-
-## 🎉 Fun and Useful Tools
-
-- **fortune** - Random quote generator
-- **cowsay** - Talking cow (ASCII art)
-- **cmatrix** - Matrix effect in terminal
-- **nyancat** - Animated rainbow cat
-
-### **Usage Examples:**
-```bash
-# Random quotes with cow
-fortune | cowsay
-
-# Matrix effect
-cmatrix
-
-# Animated rainbow cat
-nyancat
-
-# Combining tools
-fortune | cowsay -f dragon
-```
-
-### 🎵 **Multimedia**
-- **Spotify** - Music streaming (via Flatpak)
-- **yt-dlp** - Video downloader (youtube-dl successor)
-
-### 🎉 **Fun Tools**
-- **fortune** - Random quote generator
-- **cowsay** - Talking cow (ASCII art)
-- **cmatrix** - Matrix effect in terminal
-- **nyancat** - Animated rainbow cat
-
-#### **💡 Usage Tips:**
-```bash
-# Random quotes with cow
-fortune | cowsay
-
-# Matrix effect
-cmatrix
-
-# Animated rainbow cat
-nyancat
-
-# Combining tools
-fortune | cowsay -f dragon
-
-# If cowsay freezes terminal, try:
-cowsay "short message"
-# or use timeout:
-timeout 5 cowsay "message"
-```
-
-### 🛠️ **Tools**
-- **AnyDesk** - Remote access
-- **Docker & Docker Compose** - Containerization
-- **Official Huion Driver** - Graphics tablet driver
-- **WireGuard** - Modern and secure VPN
-
-### 🔒 **Security Tools (Kali Linux)**
-- **Nmap** - Advanced network scanner
-- **Wireshark** - Network packet analysis
-- **John the Ripper** - Password cracking
-- **Hydra** - Authentication brute force
-- **Aircrack-ng** - WiFi security auditing
-- **SQLMap** - SQL injection detection and exploitation
-- **Nikto** - Web vulnerability scanner
-- **Hashcat** - GPU-accelerated hash cracking
-- **Gobuster** - Directory/DNS enumeration
-- **ffuf** - Fast web fuzzing
-
-### 🔍 **OSINT Tools**
-- **Sherlock** - Username search across 400+ social networks
-- **theHarvester** - Email, subdomain, and information gathering
-- **Recon-ng** - Complete reconnaissance framework
-- **SpiderFoot** - OSINT automation
-- **GHunt** - Google account OSINT
-- **PhoneInfoga** - Phone number OSINT
-- **Maigret** - Advanced username search across 2500+ sites
-- **Holehe** - Email verification across 120+ sites
-
-## 🚀 How to Use
-
-### **🎯 Automatic Installation (Recommended):**
+### **🖥️ Automatic Installation:**
 ```bash
 # Automatic distribution detection
-wget https://raw.githubusercontent.com/xJCPMSx/linux-install-scripts/main/auto-install.sh
-chmod +x auto-install.sh
+git clone https://github.com/xJCPMSx/linux-install-scripts.git
+cd linux-install-scripts
 ./auto-install.sh
 ```
 
 ### **📋 Manual Installation by Distribution:**
 
-#### **openSUSE:**
+| Distribution | Script | Status |
+|--------------|--------|--------|
+| **Debian/Ubuntu** | `debian/install-programs-debian.sh` | ✅ Stable v1.1 |
+| **openSUSE** | `opensuse/install-programs-opensuse.sh` | ✅ Stable |
+
+### **🗑️ Uninstallation:**
 ```bash
-cd opensuse
-chmod +x install-programs-opensuse.sh
-./install-programs-opensuse.sh
+./uninstall.sh
 ```
 
-#### **Debian/Ubuntu:**
-```bash
-cd debian
-chmod +x install-programs-debian.sh
-./install-programs-debian.sh
-```
+## 🗂️ Project Structure
 
-## 📁 Project Structure
 ```
-linux-install-scripts/
-├── 🎯 auto-install.sh                  # Automatic detection
-├── 🗑️ uninstall.sh                     # Uninstallation script
-├── 📄 LICENSE                           # MIT License
-├── 📋 CHANGELOG.md                     # Version history
-├── 📖 README.md                        # Documentation (Portuguese)
-├── 📖 README-EN.md                     # Documentation (English)
-├── 🔧 config/
-│   └── config.conf                     # Configuration
-├── 🐳 docker/
-│   ├── Dockerfile
-│   └── docker-compose.yml
-├── opensuse/
-│   ├── install-programs-opensuse.sh
-│   ├── huion/                          # Huion Driver
+.
+├── auto-install.sh           # Automatic distribution detection
+├── CHANGELOG.md              # Version history
+├── config/
+│   └── config.conf           # Customizable settings
+├── debian/
+│   ├── huion/                # Official Huion driver
+│   ├── install-programs-debian.sh
+│   ├── README-EN.md
 │   └── README.md
-└── debian/
-    ├── install-programs-debian.sh
-    ├── huion/                          # Huion Driver
-    └── README.md
+├── docker/
+│   ├── docker-compose.yml
+│   └── Dockerfile
+├── gui-install.sh            # Graphical interface
+├── LICENSE
+├── opensuse/
+│   ├── huion/
+│   ├── install-programs-opensuse.sh
+│   ├── README-EN.md
+│   └── README.md
+├── README-EN.md
+├── README.md
+└── uninstall.sh              # Uninstallation script
 ```
 
-## 🔧 Features
-
-### **🎯 Basic Features:**
-- ✅ **Automatic detection** - Identifies distribution and runs appropriate script
-- ✅ **Smart installation** - Doesn't reinstall existing programs
-- ✅ **Multi-distribution support** - openSUSE, Debian, Ubuntu and derivatives
-- ✅ **Robust checks** - Detects installations in different ways
-- ✅ **Intelligent fallback** - Multiple installation options
-- ✅ **Enhanced verification** - Detects apps via command, dpkg, flatpak, snap
-- ✅ **New OSINT tool** - Holehe for email verification
-- ✅ **Intel Graphics Optimization** - Automatic detection and configuration of kernel parameters (`i915.enable_psr=0`) and drivers to prevent freezes.
-- ✅ **Customizable configuration** - `config/config.conf` file to control installations
-
-### **🔒 Security:**
-- ✅ **Automatic GPG verification** - For repositories
-- ✅ **Security audit** - Using Snyk and CodeQL
-- ✅ **CI/CD** - Automated tests on every commit
-
-## ⚙️ Custom Configuration
-
-### **📝 Configuration File:**
-The `config/config.conf` file allows you to customize which programs to install:
-
-```ini
-[FUN_TOOLS]
-# Fun Tools
-INSTALL_FUN_TOOLS=true
-INSTALL_FORTUNE=true
-INSTALL_COWSAY=true
-INSTALL_CMATRIX=true
-INSTALL_NYANCAT=true
-
-[OSINT]
-# OSINT Tools
-INSTALL_OSINT_TOOLS=true
-INSTALL_HOLEHE=true
-INSTALL_SHERLOCK=true
-# ... other tools
-```
-
-### **💡 How to Use:**
-1. Edit `config/config.conf` before running the script
-2. Set `false` for programs you don't want to install
-3. Run the script normally - it will respect your configurations
-
-### **🔧 Automatic Optimizations:**
-```ini
-[KDE_OPTIMIZATIONS]
-# KDE Plasma Optimizations
-DISABLE_KDE_WALLET=true          # Disable KDE Wallet
-OPTIMIZE_KDE_PERFORMANCE=true    # Optimize performance
-CONFIGURE_KDE_THEME=true         # Configure Breeze theme
-
-[SYSTEM_OPTIMIZATIONS]
-# System Optimizations
-ENABLE_TRIM=true                 # Enable TRIM for SSDs
-OPTIMIZE_SWAP=true              # Optimize swap settings
-DISABLE_UNNECESSARY_SERVICES=true # Disable unnecessary services
-OPTIMIZE_BOOT_TIME=true         # Optimize boot time
-
-[GAMING_OPTIMIZATIONS]
-# Gaming-specific optimizations
-ENABLE_GAMING_OPTIMIZATIONS=true # Enable gaming optimizations
-INSTALL_MESA_DRIVERS=true       # Install optimized Mesa drivers (includes Intel fixes)
-CONFIGURE_MESA_PERFORMANCE=true # Configure Mesa for performance
-OPTIMIZE_GPU_PERFORMANCE=true   # Optimize GPU performance
-CONFIGURE_WINE_PERFORMANCE=true  # Configure Wine for gaming
-ENABLE_GAMEMODE=true            # Enable GameMode
-CONFIGURE_STEAM_PERFORMANCE=true # Configure Steam for performance
-OPTIMIZE_LUTRIS_SETTINGS=true   # Optimize Lutris settings
-CONFIGURE_DXVK=true             # Configure DXVK for better performance
-ENABLE_VULKAN=true              # Enable Vulkan support
-CONFIGURE_OPENGL=true           # Configure OpenGL for performance
-OPTIMIZE_MEMORY_GAMING=true     # Optimize memory for gaming
-DISABLE_COMPOSITOR_GAMING=true  # Disable compositor during gaming
-CONFIGURE_GAMING_MOUSE=true     # Configure mouse for gaming
-ENABLE_GAMING_KEYBOARD=true     # Configure keyboard for gaming
-```
-
-### **🎮 Gaming Optimizations:**
-The script includes specific optimizations to improve gaming performance:
-
-#### **🔧 Drivers and Performance:**
-- **Mesa drivers** optimized for better compatibility
-- **GPU settings** for performance mode
-- **Vulkan** enabled for modern games
-- **OpenGL** configured for better performance
-
-#### **🎯 Gaming Platforms:**
-- **Steam** configured for better performance
-- **Lutris** optimized for non-Steam games
-- **Wine** configured for Windows games
-- **DXVK** enabled for DirectX → Vulkan conversion
-
-#### **⚡ GameMode:**
-- **GameMode** installed and configured
-- **CPU priority** optimized during gaming
-- **CPU governor** adjusted for performance
-
-#### **🖱️ Peripherals:**
-- **Mouse** configured for better responsiveness
-- **Keyboard** optimized for gaming
-- **Compositor** disabled during gaming (KDE)
-
-#### **💾 Memory:**
-- **Swap** optimized for gaming
-- **Shader cache** enabled
-- **Memory settings** adjusted for gaming
-
-## 🎮 Osu! - Rhythm Game
-
-### **🔧 Automatic Installation:**
-- **Downloaded** to `~/Applications/osu.AppImage`
-- **Desktop icon** automatically created
-- **Game launcher** in applications menu
-- **Executable permission** configured
-
-### **💡 Basic Usage:**
-```bash
-# Run Osu!
-~/Applications/osu.AppImage
-
-# Or search for "osu!" in applications menu
-```
-
-### **🎨 Huion Tablet Configuration:**
-- Configure tablet in Huion driver
-- In Osu!, set **Raw Input: OFF**
-- Works perfectly with official Huion driver
-
-## 🐳 Docker and Docker Compose
-
-### **🔧 Automatic Installation:**
-- **Docker Engine** - Latest stable version
-- **Docker Compose** - Integrated with Docker
-- **Automatic initialization** - Docker service starts at boot
-- **User configuration** - No need for sudo
-
-### **🔧 Automatic Fixes:**
-- **KDE** - Automatic fixes for theme issues
-- **Flatpak** - Permission optimization for KDE
-- **Qt** - Environment variables configuration
-- **Aliases** - Automatic command creation (e.g., `spotify`)
-
-### **💡 Basic Usage:**
-```bash
-# Check version
-docker --version
-docker compose version
-
-# Run a container
-docker run hello-world
-
-# Using Docker Compose
-docker compose up -d
-```
-
-### **⚠️ Important:**
-After installation, **log out and log in** for Docker to work without sudo.
-
-## 🎨 Official Huion Driver
-
-### **🔧 Automatic Installation:**
-- **Official driver** from Huion
-- **udev rules** configured for USB access
-- **Desktop icon** created automatically
-- **User added** to `dialout` group
-
-### **💡 How to Use:**
-```bash
-# Search "Huion Tablet" in applications menu
-# Or run:
-huiontablet
-```
-
-### **🎮 Configuration for Osu!:**
-For best performance in games like Osu!:
-- Open Huion driver
-- Configure pressure and keys
-- In Osu!: **Raw Input: OFF**
-
-## 📺 yt-dlp - Video Download
-
-### **🔧 Installation:**
-- **youtube-dl successor** more updated and maintained
-- **Multi-platform support** (YouTube, Vimeo, Twitch, SoundCloud, etc.)
-- **Installation via pip** (always latest version)
-
-### **💡 Basic Usage:**
-```bash
-# Download video
-yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
-
-# Download audio only (MP3)
-yt-dlp -x --audio-format mp3 "VIDEO_URL"
-
-# Download at specific quality
-yt-dlp -f "best[height<=720]" "VIDEO_URL"
-
-# Download complete playlist
-yt-dlp "PLAYLIST_URL"
-```
-
-## 🔒 WireGuard - Modern VPN
-
-### **🔧 Automatic Installation:**
-- **wireguard-tools** - Complete package
-- **Modern and fast** - Uses latest cryptographic algorithms
-- **Easy configuration** - Simple setup files
-- **Automatic startup** - Can be configured to start at boot
-
-### **💡 Basic Usage:**
-```bash
-# Generate keys
-sudo wg genkey | tee privatekey | wg pubkey > publickey
-
-# Configuration file: /etc/wireguard/wg0.conf
-# Edit with your configuration:
-sudo nano /etc/wireguard/wg0.conf
-
-# Start VPN
-sudo wg-quick up wg0
-
-# Stop VPN
-sudo wg-quick down wg0
-
-# Enable at boot
-sudo systemctl enable wg-quick@wg0
-```
-
-### **📋 Configuration Example:**
-```ini
-[Interface]
-PrivateKey = YOUR_PRIVATE_KEY
-Address = 10.0.0.2/24
-DNS = 1.1.1.1
-
-[Peer]
-PublicKey = SERVER_PUBLIC_KEY
-Endpoint = vpn.example.com:51820
-AllowedIPs = 0.0.0.0/0
-PersistentKeepalive = 25
-```
-
-## ⚙️ Custom Configuration
-
-Edit the `config/config.conf` file to customize the installation:
-- Select which programs to install
-- Configure repositories
-- Set preferred versions
-- Define custom paths
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-- Open issues
-- Submit pull requests
-- Suggest new features
-- Report bugs
-- Improve documentation
-
-## 📞 Support and Information
-
-- 🔗 **Repository**: https://github.com/xJCPMSx/linux-install-scripts
-- 📋 **Issues**: https://github.com/xJCPMSx/linux-install-scripts/issues
-- 📖 **Full Documentation**: README.md
-- 💬 **Discussions**: GitHub Discussions
-
-## 🔒 Security Tools (Kali Linux)
-
-### **🔧 Automatic Installation:**
-- **Professional tools** from Kali Linux
-- **Penetration testing** and security auditing
-- **Automatic installation** of all essential tools
-- **Educational:** For learning and authorized ethical testing
-
-### **⚠️ IMPORTANT WARNING:**
-> **Ethical Use:** These tools are for educational purposes and testing on authorized systems only. Unauthorized use may be illegal. Use responsibly!
-
-### **💡 Usage Examples:**
-
-#### **Nmap - Network Scanner:**
-```bash
-# Basic scan
-nmap 192.168.1.0/24
-
-# Scan with service detection
-nmap -sV 192.168.1.1
-
-# Complete scan
-nmap -A -T4 192.168.1.1
-```
-
-#### **Wireshark - Packet Analysis:**
-```bash
-# Start GUI
-wireshark
-
-# Command-line capture
-tshark -i eth0
-```
-
-#### **Hydra - Brute Force:**
-```bash
-# SSH brute force
-hydra -l user -P passwords.txt ssh://192.168.1.1
-
-# FTP brute force
-hydra -l admin -P wordlist.txt ftp://192.168.1.1
-```
-
-#### **SQLMap - SQL Injection:**
-```bash
-# Test URL for SQL injection
-sqlmap -u "http://example.com/page?id=1" --dbs
-
-# Dump database
-sqlmap -u "http://example.com/page?id=1" -D database --dump
-```
-
-## 🔍 OSINT Tools
-
-### **🔧 Automatic Installation:**
-- **Open Source Intelligence** (OSINT)
-- **Tools installed** in `~/osint-tools/`
-- **Digital investigation** and reconnaissance
-- **Automated collection** of public information
-
-### **💡 Usage Examples:**
-
-#### **Sherlock - Username Search:**
-```bash
-# Search username on social networks
-cd ~/osint-tools/sherlock
-python3 sherlock/sherlock.py username
-
-# Save results to file
-python3 sherlock/sherlock.py username -o results.txt
-```
-
-#### **theHarvester - Email Collection:**
-```bash
-# Search emails from a domain
-cd ~/osint-tools/theHarvester
-python3 theHarvester.py -d example.com -b google
-
-# Search multiple sources
-python3 theHarvester.py -d example.com -b all
-```
-
-#### **Maigret - Advanced Search:**
-```bash
-# Search username across 2500+ sites
-maigret username
-
-# Search with HTML output
-maigret username --html
-
-# Search with specific tags
-maigret username --tags gaming,social
-```
-
-#### **Holehe - Email Verification:**
-```bash
-# Check if email is registered on sites
-holehe email@example.com
-
-# Check multiple emails
-holehe email1@example.com email2@example.com
-
-# Use with custom timeout
-holehe --timeout 10 email@example.com
-```
-
-#### **GHunt - Google OSINT:**
-```bash
-# Investigate Google email
-ghunt email target@gmail.com
-
-# Investigate phone number
-ghunt phone +5511999999999
-```
-
-#### **PhoneInfoga - Phone OSINT:**
-```bash
-# Investigate phone number
-~/osint-tools/phoneinfoga/phoneinfoga scan -n "+5511999999999"
-
-# Web interface
-~/osint-tools/phoneinfoga/phoneinfoga serve
-# Access: http://localhost:8080
-```
-
-#### **SpiderFoot - OSINT Automation:**
-```bash
-# Start web interface
-cd ~/osint-tools/spiderfoot
-python3 sf.py -l 127.0.0.1:5001
-# Access: http://127.0.0.1:5001
-```
-
-### **📁 Tools Location:**
-```
-~/osint-tools/
-├── sherlock/          # Username search
-├── theHarvester/      # Email collection
-├── recon-ng/          # Reconnaissance framework
-├── spiderfoot/        # OSINT automation
-└── phoneinfoga/       # Phone OSINT
-
-# Tools installed via pipx (globally available):
-├── holehe/            # Email verification
-├── maigret/           # Advanced username search
-├── ghunt/             # Google OSINT
-└── sqlmap/            # SQL injection
-```
-
-## 🪟 WinBoat - Run Windows Apps on Linux
-
-### **🔧 Automatic Installation:**
-- **Elegant interface** for running Windows on Linux
-- **Automated Windows installation** through the interface
-- **Seamless integration** with your Linux desktop
-- **Run any app** that works on Windows
-- **Open source** (MIT license)
-
-### **💡 Features:**
-
-#### **Elegant Interface:**
-- Intuitive interface that integrates Windows into Linux
-- Native Linux desktop experience
-- Dashboard with all functionalities
-
-#### **Automated Installation:**
-- Simple Windows installation process
-- Configure preferences and specifications
-- Let WinBoat handle the rest
-
-#### **Run Any App:**
-- Productivity tools (Office, Adobe Suite)
-- Professional applications (Affinity, Acrobat)
-- Games that don't work on Wine/Proton
-- Windows software in native OS windows
-
-#### **Filesystem Integration:**
-- Home directory mounted in Windows
-- Easily share files between systems
-- Transparent access to your Linux files
-
-#### **Advanced Features:**
-- USB passthrough (experimental since v0.8.0)
-- Smartcard passthrough
-- Resource monitoring
-- Peripheral support via USB
-
-### **💡 Basic Usage:**
-```bash
-# Run WinBoat
-~/Applications/WinBoat.AppImage
-
-# Or search for "WinBoat" in applications menu
-```
-
-### **📝 Use Cases:**
-- **Office 365:** Works perfectly ✅
-- **Adobe Suite:** Photoshop, Illustrator, Premiere
-- **Affinity:** Photo, Designer, Publisher
-- **Paint Tool Sai:** Versions that don't work on Wine
-- **AeroChat, Acrobat:** Windows-specific apps
-
-### **🔗 Comparison:**
-
-#### **vs Wine/CrossOver:**
-- Runs apps that don't work well on Wine
-- Full Windows desktop available
-- Better compatibility with Windows software
-
-#### **vs WinApps:**
-- Fully automated setup
-- Unified and cohesive interface
-- Complete experience without manual configuration
-- No need to edit configuration files
-
-### **⚠️ Notes:**
-- **GPU Passthrough:** Planned for future versions
-- **Anti-cheat:** Games with kernel anti-cheat don't work (block virtualization)
-- **Podman:** Support planned (currently requires Docker)
-
-### **📖 More Information:**
-- Website: https://www.winboat.app/
-- GitHub: https://github.com/WinBoat-App/WinBoat
-- License: MIT (Open Source)
-
-## 📝 License
-
-MIT License - See [LICENSE](LICENSE) file for details
-
-## 🙏 Acknowledgments
-
-Thanks to all contributors and the open source community!
+## 🎯 Key Features
+
+### **🚀 Smart Installation:**
+- ✅ Automatic Linux distribution detection
+- ✅ Selective installation - only non-installed programs
+- ✅ Robust fallback - multiple sources (repositories, Flatpak, Snap, AppImage)
+- ✅ Automatic cleanup of repository conflicts
+- ✅ Informative messages throughout the process
+
+### **🤖 AI Tools (v1.1-stable):**
+- ✅ Antigravity - AI tool via Python/PIP
+- ✅ Claude Code - Official Anthropic CLI
+- ✅ OpenCode - Development extensions
+
+### **🔒 Security & OSINT:**
+- ✅ Nmap, Wireshark, John, Hydra, Aircrack-ng
+- ✅ SQLMap, Nikto, Hashcat, Gobuster, ffuf
+- ✅ SpiderFoot, Sherlock, theHarvester, GHunt, Holehe
+
+### **🎮 Gaming Optimization:**
+- ✅ Steam, Lutris, Heroic, Osu!, WinBoat
+- ✅ GameMode, DXVK, Vulkan (backward compatible)
+- ✅ GPU and Memory optimization
+
+### **🔧 Automatic Configuration:**
+- ✅ Docker and Docker Compose with user in docker group
+- ✅ Official Huion Driver for tablets
+- ✅ WireGuard VPN
+- ✅ Automatic TRIM for SSDs
+- ✅ Java, Git, Node.js automatically configured
+
+## 📝 Important Notes
+
+- ✅ Scripts tested and functional
+- ✅ Backward compatibility with Debian 11, Ubuntu 20.04+
+- ✅ Full Debian 13 (Trixie) support
+- ⚠️ Reboot recommended after Docker and Huion Driver
+
+## 📄 License
+
+This project is under MIT license. See [LICENSE](LICENSE) for more details.
 
 ---
 
-**⚠️ Note:** This is beta software. Test in a non-production environment first.
-
-**Made with ❤️ for the Linux community**
+**🎉 Scripts developed to facilitate development environment setup on Linux!**

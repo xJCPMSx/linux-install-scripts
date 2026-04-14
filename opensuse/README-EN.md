@@ -4,7 +4,7 @@
 [![Leap](https://img.shields.io/badge/Leap-15.3+-green.svg)](https://www.opensuse.org/)
 [![Tumbleweed](https://img.shields.io/badge/Tumbleweed-Supported-blue.svg)](https://www.opensuse.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0--beta-orange.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+[![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
 ## 🌍 Languages / Idiomas
 
@@ -13,283 +13,88 @@
 
 ## 📋 Description
 
-Automated script for installing essential programs on openSUSE, including compilers, development tools, browsers, code editors, and applications.
+Automated script for installing essential programs on openSUSE, including compilers, development tools, AI tools, browsers, code editors, and applications.
+
+## ✅ Supported Distributions
+
+- **openSUSE Leap 15.3+**
+- **openSUSE Tumbleweed**
+- **SUSE Linux Enterprise**
 
 ## 🎯 Installed Programs
 
+### 🤖 **AI Tools (New in v1.1-stable)**
+- **Antigravity** - AI tool via Python/PIP
+- **Claude Code** - Official Anthropic CLI for AI-assisted software engineering
+
 ### 🔧 **Development Tools**
 - **Compilers:** GCC, G++, Make, CMake, Ninja
-- **Languages:** Java (OpenJDK), Node.js, npm
-- **Version Control:** Git with SSH
-- **Editors:** VSCode (with extensions), Cursor (AI-powered editor)
+- **Languages:** Java (OpenJDK), Node.js, npm, Python3
+- **Version Control:** Git
+- **Editors:** VSCode, Cursor (AI)
 
 ### 🌐 **Browsers**
 - **Google Chrome** - Main browser
-- **Brave Browser** - Privacy-focused browser
+- **Brave Browser** - Privacy-focused browser (via Flatpak)
 - **Firefox** - Alternative browser
 
 ### 🎮 **Gaming Platforms**
 - **Steam** - Largest PC gaming platform
-- **Lutris** - Game manager (Steam, GOG, Epic, Emulators, etc.)
-- **Heroic Games Launcher** - Client for Epic Games Store and GOG
-- **Osu!** - Rhythm game (configured for Huion tablets)
+- **Lutris** - Game manager
+- **Heroic Games Launcher** - Epic Games and GOG client
+- **Osu!** - Rhythm game
 
 ### 🎵 **Multimedia**
-- **Spotify** - Music streaming (via Flatpak)
+- **Spotify** - Music streaming
 - **yt-dlp** - Video download
 
 ### 🛠️ **Tools**
 - **AnyDesk** - Remote access
-- **Docker & Docker Compose** - Containerization
-- **Official Huion Driver** - Graphics tablet driver
-- **WireGuard** - Modern and secure VPN
+- **Docker and Docker Compose** - Containerization
+- **WireGuard** - Modern VPN
+- **Fastfetch** - System information
+
+### 🔒 **Security & OSINT**
+- **Nmap, Wireshark, John the Ripper, Hydra**
+- **SQLMap, Nikto, Hashcat, Gobuster**
+- **SpiderFoot, Sherlock, theHarvester, GHunt**
 
 ## 🚀 How to Use
 
-### **Quick Installation:**
+### **📋 Installation:**
 ```bash
 cd opensuse
 chmod +x install-programs-opensuse.sh
 ./install-programs-opensuse.sh
 ```
 
-## 📋 Prerequisites
-- **System:** openSUSE Leap 15.3+ or Tumbleweed
-- **Permissions:** Sudo access
-- **Connection:** Stable internet
+## ⚙️ Configuration
 
-## 🔧 Features
+Edit `../config/config.conf` to customize:
 
-### **Automatic Installation:**
-- ✅ Required repositories
-- ✅ GPG keys
-- ✅ System dependencies
-- ✅ Main programs
-- ✅ Basic configurations
-- ✅ Enhanced verification - detects apps via command, zypper, flatpak, snap
-- ✅ New OSINT tool - Holehe for email verification
-
-### **Included Configurations:**
-- ✅ Java as default alternative
-- ✅ Git with authentication
-- ✅ SSH keys for GitHub/GitLab
-- ✅ Docker without sudo
-- ✅ VSCode extensions
-- ✅ Desktop icons
-
-## 🎮 Osu! - Rhythm Game
-
-### **🔧 Automatic Installation:**
-- **Downloaded** to `~/Applications/osu.AppImage`
-- **Desktop icon** automatically created
-- **Executable permission** configured
-- **Game launcher** in applications menu
-
-### **💡 How to Use:**
-```bash
-# Run Osu!
-~/Applications/osu.AppImage
-
-# Or search "osu!" in applications menu
-```
-
-### **🎨 Configuration with Huion Tablet:**
-For best performance with Huion tablets:
-1. Open Official Huion Driver
-2. Configure tablet in driver
-3. In Osu!: **Options → Input → Raw Input: OFF**
-4. Works perfectly!
-
-### **⚠️ Important:**
-- Official Huion driver is recommended for osu!
-- Configure **Raw Input: OFF** in osu! settings
-- Driver is automatically installed by this script
-
-## 🐳 Docker and Docker Compose
-
-### **🔧 Automatic Installation:**
-- **Docker Engine** - Latest stable version for openSUSE Tumbleweed
-- **Docker Compose** - Integrated with Docker (v2)
-- **Automatic initialization** - Docker service starts at boot
-- **User configuration** - Added to docker group (no sudo needed)
-
-### **💡 How to Use:**
-```bash
-# Check version
-docker --version
-docker compose version
-
-# Run a container
-docker run hello-world
-
-# Using Docker Compose
-docker compose up -d
-```
-
-### **⚠️ Important:**
-After installation, **log out and log in** for Docker to work without sudo.
-
-## 🎨 Official Huion Driver
-
-### **🔧 Automatic Installation:**
-- **Driver files** included in repository (`opensuse/huion/`)
-- **Installation script** embedded in main script
-- **No external downloads needed**
-- **udev rules** configured automatically
-- **Desktop icon** created in applications menu
-- **User added** to `dialout` group
-
-### **💡 How to Use:**
-```bash
-# Search "Huion Tablet" in applications menu
-# Configure your tablet settings
-# Compatible with all recent Huion models
-```
-
-### **🎮 Configuration for Osu!:**
-For best performance in games like Osu!:
-- Open Huion driver from applications menu
-- Configure pressure and shortcut keys
-- In Osu!: **Raw Input: OFF**
-- Perfect tablet performance!
-
-### **⚠️ Note about compatibility:**
-Official Huion driver installed for better compatibility with Huion tablets.
-For games like osu!, set **Raw Input: OFF** in game settings.
-
-## 📺 yt-dlp - Video Download
-
-### **🔧 Installation:**
-- **youtube-dl successor** more updated and maintained
-- **Multi-platform support** (YouTube, Vimeo, Twitch, SoundCloud, etc.)
-- **Installation via pip** (always latest version)
-
-### **💡 Basic Usage:**
-```bash
-# Download video
-yt-dlp "https://www.youtube.com/watch?v=VIDEO_ID"
-
-# Download audio only (MP3)
-yt-dlp -x --audio-format mp3 "VIDEO_URL"
-
-# Download at specific quality
-yt-dlp -f "best[height<=720]" "VIDEO_URL"
-
-# Download complete playlist
-yt-dlp "PLAYLIST_URL"
-```
-
-## 🔒 WireGuard - Modern VPN
-
-### **🔧 Automatic Installation:**
-- **wireguard-tools** - Complete WireGuard package
-- **Modern and fast** - Uses latest cryptographic algorithms
-- **Easy configuration** - Simple setup files
-- **Automatic startup** - Can be configured to start at boot
-
-### **💡 Basic Usage:**
-```bash
-# Generate keys
-sudo wg genkey | tee privatekey | wg pubkey > publickey
-
-# Configuration file: /etc/wireguard/wg0.conf
-# Edit with your configuration:
-sudo nano /etc/wireguard/wg0.conf
-
-# Start VPN
-sudo wg-quick up wg0
-
-# Stop VPN
-sudo wg-quick down wg0
-
-# Check status
-sudo wg show
-
-# Enable at boot
-sudo systemctl enable wg-quick@wg0
-```
-
-### **📋 Configuration Example:**
 ```ini
-[Interface]
-PrivateKey = YOUR_PRIVATE_KEY
-Address = 10.0.0.2/24
-DNS = 1.1.1.1
-
-[Peer]
-PublicKey = SERVER_PUBLIC_KEY
-Endpoint = vpn.example.com:51820
-AllowedIPs = 0.0.0.0/0
-PersistentKeepalive = 25
+[INSTALLATION]
+INSTALL_ANYDESK=true
+INSTALL_SPOTIFY=true
+INSTALL_VSCODE=true
+INSTALL_CHROME=true
+INSTALL_BRAVE=true
+INSTALL_FIREFOX=true
+INSTALL_JAVA=true
+INSTALL_NODEJS=true
+INSTALL_STEAM=true
+INSTALL_DOCKER=true
+INSTALL_ANTIGRAVITY=true
+INSTALL_CLAUDE_CODE=true
 ```
 
-### **🔗 More Information:**
-- [Official WireGuard documentation](https://www.wireguard.com/)
-- Configuration: `/etc/wireguard/`
-- Modern replacement for OpenVPN
+## 📝 Notes
 
-## ⚙️ Custom Configuration
+- ✅ Support for openSUSE Leap and Tumbleweed
+- ✅ Automatic gaming optimization
+- ✅ Backward compatibility maintained
+- ⚠️ Reboot recommended after Docker
 
-The script detects existing installations and doesn't reinstall:
-- Programs already installed
-- Repositories already added
-- Configurations already made
+## 📄 License
 
-## 🔍 Verification
-
-After installation, verify:
-```bash
-# Java
-java -version
-
-# Node.js
-node -v
-npm -v
-
-# Git
-git --version
-
-# Docker
-docker --version
-
-# WireGuard
-wg --version
-```
-
-## 🛠️ Manual Configurations
-
-### **Git:**
-```bash
-# If not configured automatically
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
-### **SSH Keys:**
-```bash
-# If not created automatically
-ssh-keygen -t ed25519 -C "your.email@example.com"
-```
-
-## 🎯 What to Do After Installation
-
-1. **Restart the system** to ensure all drivers work correctly
-2. **Configure Git** with your credentials (if needed)
-3. **Test installed programs**
-4. **Icons** for Cursor, Osu!, and Huion Tablet will appear in menu after restarting graphical environment
-5. **To use Docker without sudo**, log out and log in again
-6. **Configure Official Huion Driver** for your graphics tablet (recommended for osu!)
-
-## 📞 Support and Information
-
-- 🔗 **Repository**: https://github.com/xJCPMSx/linux-install-scripts
-- 📋 **Issues**: https://github.com/xJCPMSx/linux-install-scripts/issues
-- 📖 **Full Documentation**: ../README.md
-
-## 📝 License
-
-MIT License - See [LICENSE](../LICENSE) file for details
-
----
-
-**Made with ❤️ for the openSUSE community**
+MIT - See [LICENSE](../LICENSE)

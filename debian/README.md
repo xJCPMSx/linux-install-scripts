@@ -1,11 +1,9 @@
 # Script de Instalação Automática - Debian/Ubuntu
 
-[![Debian](https://img.shields.io/badge/Debian-Supported-red.svg)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-Supported-orange.svg)](https://ubuntu.com/)
-[![Linux Mint](https://img.shields.io/badge/Linux%20Mint-Supported-green.svg)](https://linuxmint.com/)
-[![Kali](https://img.shields.io/badge/Kali-Supported-purple.svg)](https://www.kali.org/)
+[![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0--beta-orange.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+[![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
 ## 🌍 Languages / Idiomas
 
@@ -14,36 +12,76 @@
 
 ## 📋 Descrição
 
-Script automatizado para instalação de programas essenciais em sistemas baseados em Debian/Ubuntu, incluindo compiladores, ferramentas de desenvolvimento, navegadores, editores de código e aplicativos.
+Script automatizado para instalação de programas essenciais em sistemas baseados em Debian/Ubuntu, incluindo compiladores, ferramentas de desenvolvimento, ferramentas de IA, navegadores, editores de código e aplicativos.
+
+## ✅ Distribuições Suportadas
+
+- **Debian:** 11 (Bullseye), 12 (Bookworm), 13 (Trixie)
+- **Ubuntu:** 20.04+, 22.04+, 24.04+
+- **Linux Mint:** 20+
+- **Pop!_OS:** 20.04+
+- **Elementary OS:** 6+
+- **Zorin OS:** 16+
+- **Kali Linux:** Rolling
 
 ## 🎯 Programas Instalados
 
+### 🤖 **Ferramentas de IA (Novas na v1.1-stable)**
+- **Antigravity** - Ferramenta de IA via Python/PIP
+- **Claude Code** - CLI oficial da Anthropic para engenharia de software assistida por IA
+- **OpenCode** - Extensões para desenvolvimento (opcional)
+
 ### 🔧 **Ferramentas de Desenvolvimento**
 - **Compiladores:** GCC, G++, Make, CMake, Ninja, build-essential
-- **Linguagens:** Java (OpenJDK com fallback 11→17→21), Node.js, npm
+- **Linguagens:** Java (OpenJDK com fallback automático), Node.js, npm, Python3, pip
 - **Controle de Versão:** Git
-- **Editores:** VSCode (via Flatpak), Cursor (AI)
+- **Editores:** VSCode (via Flatpak), Cursor (AppImage - Editor com IA)
 
 ### 🌐 **Navegadores**
 - **Google Chrome** - Navegador principal (.deb oficial)
 - **Brave Browser** - Navegador privado (via Flatpak)
 - **Firefox** - Navegador alternativo
 
-### 🎮 **Plataformas de Jogos**
+### 🎮 **Plataformas de Jogos & Otimização**
 - **Steam** - Maior plataforma de distribuição de jogos para PC
 - **Lutris** - Gerenciador de jogos (Steam, GOG, Epic, Emuladores, etc.)
 - **Heroic Games Launcher** - Cliente para Epic Games Store e GOG
 - **Osu!** - Jogo de ritmo (AppImage)
+- **WinBoat** - Executa aplicativos Windows no Linux
+- **GameMode** - Otimização de performance para jogos
+- **DXVK** - Compatibilidade DirectX para Vulkan
+- **Vulkan** - API gráfica moderna (retrocompatível com Debian 11/12)
 
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música (Flatpak→Snap→Repositório com fallback)
-- **yt-dlp** - Download de vídeos
+- **yt-dlp** - Download de vídeos (sucessor do youtube-dl)
 
-### 🛠️ **Ferramentas**
+### 🛠️ **Ferramentas & Drivers**
 - **AnyDesk** - Acesso remoto (.deb oficial)
 - **Docker e Docker Compose** - Containerização
-- **Driver Oficial da Huion** - Driver para tablets Huion
+- **Driver Oficial da Huion** - Driver para tablets Huion (Kamvas, Inspiroy, etc.)
 - **WireGuard** - VPN moderna e segura
+- **FreeRDP 3** - Protocolo RDP moderno (essencial para WinBoat no Debian 13)
+- **Fastfetch** - Ferramenta de informações do sistema (padrão no Debian 13, fallback para Neofetch em sistemas antigos)
+
+### 🔒 **Segurança & OSINT (Kali Linux Tools)**
+- **Nmap** - Scanner de rede
+- **Wireshark** - Analisador de pacotes
+- **John the Ripper** - Quebra de senhas
+- **Hydra** - Brute force
+- **Aircrack-ng** - Segurança WiFi
+- **SQLMap** - SQL Injection
+- **Nikto** - Scanner web
+- **Hashcat** - Quebra de hash
+- **Gobuster** - Directory/DNS bruteforce
+- **ffuf** - Fuzzing web
+- **SpiderFoot** - Automação OSINT
+- **Sherlock** - Busca de username em redes sociais
+- **theHarvester** - Coleta de emails e informações
+- **GHunt** - OSINT de contas Google
+- **PhoneInfoga** - OSINT de números de telefone
+- **Maigret** - Busca avançada de username
+- **Holehe** - Verificação de email em mais de 120 sites
 
 ## 🚀 Como Usar
 
@@ -76,38 +114,57 @@ chmod +x install-programs-debian.sh
 - **Sistema:** Debian 11+, Ubuntu 20.04+, Linux Mint 20+, Pop!_OS 20.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
 - **Permissões:** Acesso sudo
 - **Conexão:** Internet estável
-- **Espaço:** ~2GB para instalação completa
+- **Espaço:** ~3GB para instalação completa
 
 ## 🎯 Características Principais
 
 ### **🚀 Instalação Inteligente:**
 - ✅ **Detecção automática** da distribuição Debian/Ubuntu
+- ✅ **Suporte completo ao Debian 13 (Trixie)** com correções de GPG e repositórios
 - ✅ **Instalação seletiva** - apenas programas não instalados
 - ✅ **Fallback robusto** - múltiplas fontes (repositórios, Flatpak, Snap, AppImage, .deb)
-- ✅ **Limpeza automática** de conflitos de repositórios (remove repos problemáticos)
+- ✅ **Retrocompatibilidade** - mantém suporte a Debian 11, Ubuntu 20.04+
+- ✅ **Limpeza automática** de conflitos de repositórios
 - ✅ **Mensagens informativas** durante todo o processo
-- ✅ **Verificações aprimoradas** - detecta apps via comando, dpkg, flatpak, snap
-- ✅ **Nova ferramenta OSINT** - Holehe para verificação de emails
 
 ### **🔧 Configuração Automática:**
-- ✅ **Repositórios** oficiais adicionados (Chrome via .deb)
+- ✅ **Repositórios** oficiais adicionados (Chrome, Docker, etc.)
 - ✅ **Chaves GPG** importadas automaticamente
-- ✅ **Java** com fallback múltiplo (11→17→21→default)
+- ✅ **Java** com fallback múltiplo automático
 - ✅ **Git** preparado para uso com SSH
 - ✅ **Docker** com usuário adicionado ao grupo
 - ✅ **Extensões VSCode** instaladas automaticamente
-- ✅ **Ícones** criados para Cursor e Osu!
+- ✅ **Otimização automática** para jogos (GameMode, DXVK, Vulkan)
+- ✅ **Habilitar TRIM** automaticamente para SSDs
+- ✅ **Desabilitar serviços desnecessários** (bluetooth, cups, avahi-daemon)
 
-### **📦 Gerenciadores de Pacotes:**
-- ✅ **APT** - Gerenciador nativo do Debian/Ubuntu
-- ✅ **Flatpak** - Aplicações universais via Flathub
-- ✅ **Snap** - Aplicações containerizadas (quando necessário)
+## 🗂️ Estrutura do Projeto
 
-### **🛠️ Resolução de Problemas:**
-- ✅ **VSCode via Flatpak** - Evita conflitos de repositórios
-- ✅ **Spotify com fallback triplo** - Flatpak→Snap→Repositório
-- ✅ **Java não encontrado** - Fallback automático para múltiplas versões
-- ✅ **Conflitos de repositórios** - Limpeza automática integrada
+```
+.
+├── auto-install.sh           # Detecção automática de distribuição
+├── CHANGELOG.md              # Histórico de versões
+├── config/
+│   └── config.conf           # Configurações personalizáveis
+├── debian/
+│   ├── huion/                # Driver oficial da Huion
+│   ├── install-programs-debian.sh
+│   ├── README-EN.md
+│   └── README.md
+├── docker/
+│   ├── docker-compose.yml
+│   └── Dockerfile
+├── gui-install.sh            # Interface gráfica
+├── LICENSE
+├── opensuse/
+│   ├── huion/
+│   ├── install-programs-opensuse.sh
+│   ├── README-EN.md
+│   └── README.md
+├── README-EN.md
+├── README.md
+└── uninstall.sh              # Script de desinstalação
+```
 
 ## 🐳 Docker e Docker Compose
 
@@ -125,9 +182,6 @@ docker compose version
 
 # Executar container de teste
 docker run hello-world
-
-# Usar Docker Compose
-docker compose up -d
 ```
 
 **⚠️ Importante:** Faça logout/login (ou reboot) após a instalação para usar Docker sem sudo.
@@ -143,7 +197,7 @@ docker compose up -d
 
 ### **💡 Modelos Suportados:**
 - INSPIROY H430P, H640P, H950P, H1060P
-- KAMVAS GT-191, GT-221, Pro 16, Pro 22
+- KAMVAS GT-191, GT-221, Pro 16, Pro 22, Pro 24
 - E muitos outros modelos Huion
 
 ### **📝 Como usar:**
@@ -213,16 +267,19 @@ Edite o arquivo `../config/config.conf` para personalizar a instalação:
 INSTALL_ANYDESK=true
 INSTALL_SPOTIFY=true
 INSTALL_VSCODE=true
-INSTALL_CURSOR=false
+INSTALL_CURSOR=true
 INSTALL_CHROME=true
-INSTALL_BRAVE=false
-INSTALL_FIREFOX=false
+INSTALL_BRAVE=true
+INSTALL_FIREFOX=true
 INSTALL_JAVA=true
 INSTALL_NODEJS=true
 INSTALL_OSU=true
+INSTALL_STEAM=true
 INSTALL_DOCKER=true
 INSTALL_HUION_DRIVER=true
 INSTALL_YTDLP=true
+INSTALL_ANTIGRAVITY=true
+INSTALL_CLAUDE_CODE=true
 ```
 
 Depois execute:
@@ -244,17 +301,19 @@ cd ..
 
 - ✅ **Instalação inteligente** - Detecta programas já instalados
 - ✅ **Múltiplas tentativas** - Tenta diferentes métodos de instalação
+- ✅ **Retrocompatibilidade** - Suporte a Debian 11, Ubuntu 20.04+
+- ✅ **Suporte Debian 13 (Trixie)** - Correções completas de repositórios e GPG
+- ✅ **Fastfetch** como padrão (Neofetch fallback em sistemas antigos)
+- ✅ **FreeRDP 3** - Compatibilidade com Debian 13
 - ⚠️ **Reboot recomendado** após instalação do Docker e Driver Huion
-- ✅ **Logs detalhados** para troubleshooting
 - ⚠️ **VSCode:** Instalado via Flatpak para evitar conflitos
 - ⚠️ **Spotify:** Fallback triplo (Flatpak→Snap→Repositório)
-- ⚠️ **Java:** Fallback múltiplo (11→17→21→default)
+- ⚠️ **Java:** Fallback múltiplo automático
 
 ## 🔗 Links Úteis
 
 - **Repositório:** https://github.com/xJCPMSx/linux-install-scripts
 - **Issues:** https://github.com/xJCPMSx/linux-install-scripts/issues
-- **Documentação Principal:** [README.md](../README.md)
 
 ## 📄 Licença
 
