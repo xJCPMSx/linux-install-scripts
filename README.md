@@ -5,7 +5,7 @@
 [![Debian](https://img.shields.io/badge/Debian-Supported-red.svg)](https://www.debian.org/)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-Supported-orange.svg)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0--beta-orange.svg)](https://github.com/xJCPMSx/linux-install-scripts)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
 ## 🌍 Languages / Idiomas
 
@@ -57,6 +57,35 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 ### 🎵 **Multimídia**
 - **Spotify** - Streaming de música
 - **yt-dlp** - Download de vídeos
+
+### 🕵️ **OSINT (Open Source Intelligence)**
+- **SpiderFoot** - Automação de OSINT
+- **Sherlock** - Busca de usernames em redes sociais
+- **theHarvester** - Coleta de informações de emails
+- **Recon-ng** - Framework de reconhecimento web
+- **GHunt** - OSINT de contas Google
+- **PhoneInfoga** - OSINT de números de telefone
+- **Holehe** - OSINT de emails
+
+### 🔐 **Segurança e Pentesting**
+- **Nmap** - Scanner de rede
+- **Wireshark** - Análise de pacotes
+- **John the Ripper** - Quebra de senhas
+- **Hydra** - Brute force de senhas
+- **Aircrack-ng** - Segurança WiFi
+- **SQLMap** - SQL Injection
+- **Nikto** - Scanner web
+- **Hashcat** - Quebra de hash
+- **Gobuster** - Directory/DNS bruteforce
+- **ffuf** - Fuzzing web
+
+### 🎮 **Otimizações para Jogos**
+- **Drivers Mesa** otimizados
+- **GameMode** - Otimização de recursos
+- **Configurações DXVK** para DirectX no Linux
+- **Otimizações de memória** para jogos
+- **Steam/Lutris/Heroic** configurados
+- **Desativar compositor** durante jogos
 
 ### 🎉 **Ferramentas Divertidas**
 - **fortune** - Gerador de frases aleatórias
