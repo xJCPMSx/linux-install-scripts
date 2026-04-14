@@ -97,6 +97,10 @@ cd linux-install-scripts
 - ✅ Claude Code - Official Anthropic CLI for AI-assisted software engineering
 - ✅ OpenCode - Development extensions
 
+### **💻 Code Editors:**
+- ✅ VSCode - Editor via Flatpak
+- ✅ Cursor - AI-powered editor (AppImage)
+
 ### **🖥️ System Tools:**
 - ✅ Fastfetch/Neofetch - System information (automatic detection)
 - ✅ yt-dlp - Video download

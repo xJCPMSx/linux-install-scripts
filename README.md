@@ -97,6 +97,10 @@ cd linux-install-scripts
 - ✅ Claude Code - CLI oficial da Anthropic para engenharia de software assistida por IA
 - ✅ OpenCode - Extensões de desenvolvimento
 
+### **💻 Editores de Código:**
+- ✅ VSCode - Editor via Flatpak
+- ✅ Cursor - Editor com IA (AppImage)
+
 ### **🖥️ Ferramentas do Sistema:**
 - ✅ Fastfetch/Neofetch - Informações do sistema (detecção automática)
 - ✅ yt-dlp - Download de vídeos
