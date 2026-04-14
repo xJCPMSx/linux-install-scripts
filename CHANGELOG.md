@@ -5,6 +5,36 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.1-stable] - 2026-04-14
+
+### Adicionado
+- **Ferramentas de IA** (Novas na v1.1-stable)
+  - Antigravity: Instalação via Python/PIP
+  - OpenCode Extensions: Suporte à instalação via npm global
+  - Claude Code: Instalação global via npm (`npm install -g @anthropic-ai/claude-code`)
+  - Variáveis de configuração em `config/config.conf`:
+    - `INSTALL_ANTIGRAVITY=true/false`
+    - `INSTALL_OPENCODE=true/false`
+    - `INSTALL_CLAUDE_CODE=true/false`
+
+- **Frontend Não-Interativo**
+  - Adicionado `export DEBIAN_FRONTEND=noninteractive` nos scripts Debian
+  - Evita erros de 'dialog' e 'debconf' durante atualizações (especialmente libc6)
+
+### Changed
+- **Versão atualizada para v1.1-stable**
+  -Scripts atualizados de v1.0-beta para v1.1-stable
+
+### Fixed
+- **Correção Crítica: Repositório Cursor (Debian 13 - Trixie)**
+  - Corrigida falha na verificação OpenPGP (sqv)
+  - Adicionada lógica para baixar chave GPG do Cursor antes do apt update
+  - Comando: `curl -fsSL https://downloads.cursor.com/aptrepo/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/anysphere.gpg > /dev/null`
+  - Sintaxe do repositório atualizada para usar `[signed-by=/usr/share/keyrings/anysphere.gpg]`
+  - Limpeza de chaves do keyrings atualizada para incluir `anysphere.gpg`
+
+---
+
 ## [1.1.0] - 2026-04-14
 
 ### Adicionado

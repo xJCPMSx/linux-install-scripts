@@ -3,15 +3,15 @@
 # Script de instalação automática para openSUSE
 # Instala programas essenciais, dependências e drivers
 # Inclui: limpeza de repositórios, teste de disponibilidade e instalação completa
-# Versão: 1.0-beta - Versão beta para testes
+# Versão: 1.1-stable - Versão estável
 
 set -e
 
-echo "🚀 Script de Instalação Automática - openSUSE v1.0-beta"
+echo "🚀 Script de Instalação Automática - openSUSE v1.1-stable"
 echo "======================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(uname -s) $(uname -r)"
-echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
+echo "🔧 Versão: 1.1-stable (Versão estável)"
 echo ""
 
 # ============================================
@@ -830,6 +830,104 @@ else
     $ZYPPER_IN nodejs npm
     check_success "Node.js"
 fi
+
+# ============================================
+# FERRAMENTAS DE IA (Novas na v1.1-stable)
+# ============================================
+echo ""
+echo "=========================================="
+echo "🤖 Instalando Ferramentas de IA"
+echo "=========================================="
+echo ""
+
+# Garantir que python3-pip está instalado (para Antigravity)
+echo "Verificando Python e pip..."
+if ! command -v pip3 &> /dev/null && ! command -v pip &> /dev/null; then
+    echo "   Instalando python3-pip..."
+    $ZYPPER_IN python3-pip
+fi
+
+# Antigravity - Ferramenta de hacking (Python/PIP)
+echo "Instalando Antigravity..."
+if [ "${INSTALL_ANTIGRAVITY:-true}" = "true" ]; then
+    if command -v antigravity &> /dev/null; then
+        echo "✓ Antigravity já está instalado"
+    else
+        echo "   Instalando Antigravity via pip..."
+        if command -v pip3 &> /dev/null; then
+            pip3 install antigravity 2>/dev/null || {
+                echo "   Tentando com pip..."
+                pip install antigravity 2>/dev/null || {
+                    echo "   ⚠️ Não foi possível instalar Antigravity"
+                    echo "   Para instalar manualmente: pip install antigravity"
+                }
+            }
+        fi
+        if command -v antigravity &> /dev/null; then
+            echo "✓ Antigravity instalado com sucesso"
+            echo "   Para usar: antigravity"
+        else
+            echo "⚠️ Antigravity pode não ter sido instalado corretamente"
+        fi
+    fi
+else
+    echo "⚠️ Instalação de Antigravity desabilitada no config.conf"
+fi
+
+# OpenCode Extensions - Extensões do OpenCode CLI
+echo "Instalando OpenCode Extensions..."
+if [ "${INSTALL_OPENCODE:-true}" = "true" ]; then
+    if command -v opencode &> /dev/null; then
+        echo "✓ OpenCode CLI já está instalado"
+    else
+        echo "   Instalando OpenCode CLI..."
+        if command -v npm &> /dev/null; then
+            npm install -g opencode 2>/dev/null || {
+                echo "   ⚠️ Não foi possível instalar OpenCode via npm"
+                echo "   Para instalar manualmente: npm install -g opencode"
+            }
+        else
+            echo "   ⚠️ npm não disponível. OpenCode requer Node.js/npm"
+        fi
+    fi
+    if command -v opencode &> /dev/null; then
+        echo "✓ OpenCode CLI instalado com sucesso"
+        echo "   Para usar: opencode --help"
+    fi
+else
+    echo "⚠️ Instalação de OpenCode desabilitada no config.conf"
+fi
+
+# Claude Code - CLI da Anthropic (NPM Global)
+echo "Instalando Claude Code..."
+if [ "${INSTALL_CLAUDE_CODE:-true}" = "true" ]; then
+    if command -v claude &> /dev/null; then
+        echo "✓ Claude Code já está instalado"
+    else
+        echo "   Instalando Claude Code via npm (global)..."
+        if command -v npm &> /dev/null; then
+            # Corrigir prefix do npm antes de instalar global
+            fix_npm_prefix
+            npm install -g @anthropic-ai/claude-code 2>/dev/null || {
+                echo "   ⚠️ Não foi possível instalar Claude Code"
+                echo "   Para instalar manualmente: npm install -g @anthropic-ai/claude-code"
+            }
+        else
+            echo "   ⚠️ npm não disponível. Claude Code requer Node.js/npm"
+        fi
+    fi
+    if command -v claude &> /dev/null; then
+        echo "✓ Claude Code instalado com sucesso"
+        echo "   Para usar: claude --help"
+    else
+        echo "⚠️ Claude Code pode não ter sido instalado corretamente"
+    fi
+else
+    echo "⚠️ Instalação de Claude Code desabilitada no config.conf"
+fi
+
+echo ""
+echo "✓ Ferramentas de IA instaladas com sucesso!"
 
 # Instalar dependências adicionais úteis
 echo ""

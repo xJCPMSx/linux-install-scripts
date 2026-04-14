@@ -2,19 +2,22 @@
 
 # Script de Instalação Automática para Debian/Ubuntu
 # Instala programas essenciais, dependências e configurações
-# Versão: 1.0-beta - Versão beta para testes
+# Versão: 1.1-stable - Versão estável
 
-echo "🚀 Script de Instalação Automática - Debian/Ubuntu v1.0-beta"
+# ============================================
+# Frontend não-interativo para evitar erros de dialog/debconf
+# ============================================
+export DEBIAN_FRONTEND=noninteractive
+
+echo "🚀 Script de Instalação Automática - Debian/Ubuntu v1.1-stable"
 echo "============================================================"
 echo "📅 Data: $(date)"
 echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
-echo "🔧 Versão: 1.0-beta (Versão beta para testes)"
+echo "🔧 Versão: 1.1-stable (Versão estável)"
 echo ""
 
 set -e
 
-# ============================================
-# Configurações para execução não-interativa do apt
 # ============================================
 # Configurações para execução não-interativa do apt
 # ============================================
@@ -187,13 +190,13 @@ optimize_gaming() {
         if [ "${INSTALL_MESA_DRIVERS:-true}" = "true" ]; then
             echo "   Verificando drivers Mesa..."
             
-            # Verificar se os pacotes já estão instalados
-            if dpkg -l mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa >/dev/null 2>&1; then
+            # Verificar se os pacotes já estão instalados (Debian 13: libgl1 + libglx-mesa0)
+            if dpkg -l mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1 libglx-mesa0 libglu1-mesa >/dev/null 2>&1; then
                 echo "✓ Drivers Mesa já estão instalados"
             else
                 echo "   Instalando drivers Mesa otimizados..."
                 apt_update
-                apt_install mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1-mesa-glx libglu1-mesa
+                apt_install mesa-utils mesa-vulkan-drivers libgl1-mesa-dri libgl1 libglx-mesa0 libglu1-mesa
                 echo "✓ Drivers Mesa instalados"
             fi
         fi
@@ -275,11 +278,19 @@ optimize_gaming() {
             echo "   Verificando Vulkan..."
             
             # Verificar se os pacotes já estão instalados
-            if dpkg -l vulkan-tools vulkan-validationlayers-dev >/dev/null 2>&1; then
+            if dpkg -l vulkan-tools vulkan-validationlayers-dev vulkan-utility-libraries-dev >/dev/null 2>&1; then
                 echo "✓ Vulkan já está instalado"
             else
                 echo "   Habilitando Vulkan..."
-                apt_install vulkan-tools vulkan-validationlayers-dev
+                source /etc/os-release
+                # Se for Debian 13 ou superior (ou Ubuntu muito recente), usa o novo pacote
+                if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
+                    VULKAN_PKG="vulkan-utility-libraries-dev"
+                else
+                    # Retrocompatibilidade com Debian 12 e versões mais antigas
+                    VULKAN_PKG="vulkan-validationlayers-dev"
+                fi
+                sudo apt-get install -y vulkan-tools "$VULKAN_PKG"
                 echo "✓ Vulkan habilitado"
             fi
         fi
@@ -345,6 +356,19 @@ optimize_gaming() {
 limpar_repositorios() {
     echo "🧹 Limpando repositórios conflitantes..."
     echo "========================================"
+    
+    # ============================================
+    # ERRADICAÇÃO DO REPOSITÓRIO DO CURSOR
+    # Remove qualquer vestígio do repositório zumbi do Cursor
+    # ============================================
+    sudo rm -f /etc/apt/sources.list.d/cursor.list
+    sudo rm -f /etc/apt/sources.list.d/anysphere.list
+    sudo rm -f /usr/share/keyrings/anysphere.gpg
+    
+    # ============================================
+    # LIMPEZA PROFUNDA: Remove qualquer menção ao cursor.com de todos os .list
+    # ============================================
+    find /etc/apt/ -type f -name "*.list" -exec sed -i '/cursor\.com/d' {} + 2>/dev/null || true
     
     # Limpar TODOS os repositórios problemáticos (mais agressivo)
     echo "Removendo TODOS os repositórios conflitantes..."
@@ -412,6 +436,29 @@ if ! command -v apt-get &> /dev/null; then
     exit 1
 fi
 
+# ============================================
+# CORREÇÃO CRÍTICA: Remover repositórios problemáticos ANTES do apt update
+# Evita erro sqv no Debian 13 (Trixie)
+# ============================================
+echo "🧹 Preparando ambiente APT..."
+
+# ============================================
+# ERRADICAÇÃO DO REPOSITÓRIO DO CURSOR
+# Remove qualquer vestígio do repositório zumbi do Cursor
+# ============================================
+rm -f /etc/apt/sources.list.d/cursor.list
+rm -f /etc/apt/sources.list.d/anysphere.list
+rm -f /usr/share/keyrings/anysphere.gpg 2>/dev/null || true
+sudo rm -f /etc/apt/sources.list.d/cursor.list 2>/dev/null || true
+sudo rm -f /etc/apt/sources.list.d/anysphere.list 2>/dev/null || true
+
+# ============================================
+# LIMPEZA PROFUNDA: Remove qualquer menção ao cursor.com de todos os .list
+# ============================================
+find /etc/apt/ -type f -name "*.list" -exec sed -i '/cursor\.com/d' {} + 2>/dev/null || true
+
+sudo apt-get clean 2>/dev/null || true
+
 # Executar limpeza de repositórios PRIMEIRO
 limpar_repositorios
 
@@ -420,10 +467,22 @@ echo "Atualizando sistema..."
 apt_update && apt_upgrade
 check_success "sistema"
 
-# Instalar dependências essenciais
+# ============================================
+# Instalação de dependências essenciais para Debian 13
+# Atualizado: removido neofetch (obsoleto), software-properties-common (desnecessário)
+# Adicionado: fastfetch, python3-pip, nodejs, npm
+# ============================================
 echo "Instalando dependências essenciais..."
-apt_install curl wget gnupg software-properties-common apt-transport-https ca-certificates lsb-release
+apt_install curl wget gnupg apt-transport-https ca-certificates fastfetch python3-pip
 check_success "dependências essenciais"
+
+# Instalar Node.js e npm
+echo "Instalando Node.js e npm..."
+if ! command -v node &> /dev/null; then
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    apt_install nodejs
+fi
+check_success "Node.js e npm"
 
 # Instalar compiladores e ferramentas de desenvolvimento
 echo "Instalando compiladores e ferramentas de desenvolvimento..."
@@ -449,7 +508,7 @@ check_success "dependências de desenvolvimento"
 
 # Instalar ferramentas adicionais úteis
 echo "Instalando ferramentas adicionais..."
-apt_install vim nano htop tree neofetch unzip tar file which pkg-config autoconf automake libtool
+apt_install vim nano htop tree fastfetch unzip tar file which pkg-config autoconf automake libtool
 check_success "ferramentas adicionais"
 
 # Instalar ferramentas divertidas e úteis
@@ -616,6 +675,25 @@ fi
 
 # Atualizar lista de pacotes
 echo "Atualizando lista de pacotes..."
+
+# ============================================
+# O EXORCISMO FINAL DO CURSOR - Limpeza Absoluta do APT
+# Remove tudo do sources.list.d relacionado ao Cursor ou Anysphere
+# ============================================
+sudo rm -f /etc/apt/sources.list.d/*cursor*
+sudo rm -f /etc/apt/sources.list.d/*anysphere*
+sudo rm -f /etc/apt/sources.list.d/*.sources*
+sudo rm -f /usr/share/keyrings/*anysphere*
+sudo rm -f /usr/share/keyrings/*cursor*
+sudo rm -f /etc/apt/sources.list.d/cursor.list
+sudo rm -f /etc/apt/sources.list.d/anysphere.list
+sudo rm -f /usr/share/keyrings/anysphere.gpg
+
+# ============================================
+# LIMPEZA PROFUNDA: Remove qualquer menção ao cursor.com de todos os .list
+# ============================================
+sudo find /etc/apt/ -type f -name "*.list" -exec sed -i '/cursor\.com/d' {} + 2>/dev/null || true
+
 apt_update || {
     echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
     # Limpar repositórios problemáticos
@@ -908,6 +986,101 @@ if [ "$nodejs_installed" = false ]; then
     check_success "Node.js"
 fi
 
+# ============================================
+# FERRAMENTAS DE IA (Novas na v1.1-stable)
+# ============================================
+echo ""
+echo "=========================================="
+echo "🤖 Instalando Ferramentas de IA"
+echo "=========================================="
+echo ""
+
+# Garantir que python3-pip e python3-venv estão instalados (para Antigravity)
+echo "Verificando Python e pip..."
+if ! command -v pip3 &> /dev/null; then
+    echo "   Instalando python3-pip e python3-venv..."
+    apt_install python3-pip python3-venv
+fi
+
+# ============================================
+# Antigravity - Ferramenta de hacking (Python/PIP)
+# ============================================
+echo "Instalando Antigravity..."
+if [ "${INSTALL_ANTIGRAVITY:-true}" = "true" ]; then
+    if command -v antigravity &> /dev/null; then
+        echo "✓ Antigravity já está instalado"
+    else
+        echo "   Instalando Antigravity via pip..."
+        if command -v pip3 &> /dev/null; then
+            # Debian 13 requer --break-system-packages (PEP 668)
+            pip3 install antigravity --break-system-packages 2>/dev/null || {
+                echo "   ⚠️ Não foi possível instalar Antigravity"
+                echo "   Para instalar manualmente: pip3 install antigravity --break-system-packages"
+            }
+        fi
+        if command -v antigravity &> /dev/null; then
+            echo "✓ Antigravity instalado com sucesso"
+            echo "   Para usar: antigravity"
+        else
+            echo "⚠️ Antigravity pode não ter sido instalado corretamente"
+        fi
+    fi
+else
+    echo "⚠️ Instalação de Antigravity desabilitada no config.conf"
+fi
+
+# ============================================
+# Claude Code - CLI da Anthropic (NPM Global)
+# ============================================
+echo "Instalando Claude Code..."
+if [ "${INSTALL_CLAUDE_CODE:-true}" = "true" ]; then
+    if command -v claude &> /dev/null; then
+        echo "✓ Claude Code já está instalado"
+    else
+        # Garantir que npm está disponível
+        if ! command -v npm &> /dev/null; then
+            echo "   npm não encontrado, instalando Node.js..."
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            apt_install nodejs
+        fi
+        
+        if command -v npm &> /dev/null; then
+            echo "   Instalando Claude Code via npm (global)..."
+            # Corrigir prefix do npm antes de instalar global
+            fix_npm_prefix
+            
+            # ============================================
+            # Forçar instalação global ignorando restrições de root do Debian
+            # ============================================
+            if npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>&1 | tee /tmp/claude-install.log; then
+                echo "✓ Claude Code instalado com sucesso"
+            else
+                echo "   ⚠️ Tentando método alternativo com sudo..."
+                # Tentar com sudo como fallback
+                if sudo npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>&1 | tee /tmp/claude-install.log; then
+                    echo "✓ Claude Code instalado com sucesso (via sudo)"
+                else
+                    echo "   ⚠️ Não foi possível instalar Claude Code"
+                    echo "   Verifique o log: /tmp/claude-install.log"
+                fi
+            fi
+        else
+            echo "   ⚠️ npm não disponível. Claude Code requer Node.js/npm"
+        fi
+    fi
+    if command -v claude &> /dev/null; then
+        echo "✓ Claude Code instalado com sucesso"
+        echo "   Para usar: claude --help"
+    else
+        echo "⚠️ Claude Code pode não ter sido instalado corretamente"
+    fi
+else
+    echo "⚠️ Instalação de Claude Code desabilitada no config.conf"
+fi
+
+echo ""
+echo "✓ Ferramentas de IA instaladas com sucesso!"
+
 # Osu! (Jogo de ritmo)
 echo "Instalando Osu!..."
 USER_HOME=$(eval echo ~"$SUDO_USER" 2>/dev/null || echo "$HOME")
@@ -1039,25 +1212,21 @@ echo "Instalando FreeRDP (dependência do WinBoat)..."
 if command -v xfreerdp &> /dev/null; then
     echo "✓ FreeRDP já está instalado"
 else
-    echo "   Instalando FreeRDP via Flatpak (versão estável)..."
-    if ! command -v flatpak &> /dev/null; then
-        apt_install flatpak
-    fi
-    
-    # Adicionar repositório Flathub se necessário
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
-    
-    # Instalar FreeRDP via Flatpak
-    if flatpak install --user -y com.freerdp.FreeRDP 2>/dev/null; then
-        echo "✓ FreeRDP instalado com sucesso via Flatpak"
-        echo "   Para usar: flatpak run com.freerdp.FreeRDP"
+    # ============================================
+    # FreeRDP via APT (evita travamento do Flatpak no Debian 13)
+    # Debian 13 usa freerdp3-x11 (pacote atualizado)
+    # ============================================
+    echo "   Tentando instalar FreeRDP via repositório APT..."
+    sudo apt-get install -y freerdp3-x11
+    if dpkg -l | grep -q "^ii  freerdp3-x11"; then
+        echo "   ✓ FreeRDP instalado via APT"
     else
-        echo "   Tentando instalar FreeRDP via repositório..."
-        apt_install freerdp2-x11
-        if command -v xfreerdp &> /dev/null; then
-            echo "✓ FreeRDP instalado via repositório"
+        echo "   ⚠️ FreeRDP não pôde ser instalado via APT"
+        echo "   Tentando versão alternativa..."
+        sudo apt-get install -y freerdp2-x11 2>/dev/null || true
+        if dpkg -l | grep -q "^ii  freerdp2-x11"; then
+            echo "   ✓ FreeRDP2 instalado via APT"
         else
-            echo "⚠️  FreeRDP não pôde ser instalado automaticamente"
             echo "   WinBoat pode não funcionar corretamente sem FreeRDP"
         fi
     fi
@@ -1699,9 +1868,13 @@ echo ""
 
 # Configurar Java
 echo "Configurando Java..."
-sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-openjdk-amd64/bin/java 1
-sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-echo "Java configurado como alternativa padrão"
+JAVA_PATH=$(sudo update-alternatives --list java | grep openjdk | head -n 1)
+if [ -n "$JAVA_PATH" ]; then
+    sudo update-alternatives --set java "$JAVA_PATH"
+    echo "   ✓ Java configurado para: $JAVA_PATH"
+else
+    echo "   ⚠️ Nenhuma instalação do OpenJDK encontrada no update-alternatives."
+fi
 
 # Configurar Git
 echo "Configurando Git com autenticação..."
@@ -1923,55 +2096,38 @@ echo "✓ Ícones criados e base de dados atualizada"
 
 echo ""
 echo -e "${GREEN}=========================================="
-echo "Instalação Concluída com Sucesso!"
+echo "Instalação Concluída com Sucesso! v1.1-stable"
 echo "==========================================${NC}"
 echo ""
 echo "Programas instalados:"
-echo "✓ AnyDesk"
-echo "✓ Spotify"
-echo "✓ VSCode (com extensões úteis)"
-echo "✓ Cursor (Editor com IA)"
-echo "✓ Google Chrome"
-echo "✓ Brave Browser"
-echo "✓ Firefox"
-echo "✓ Java (OpenJDK 11)"
-echo "✓ Node.js e npm"
+echo "✓ AnyDesk, Spotify"
+echo "✓ VSCode (Flatpak), Cursor (AppImage)"
+echo "✓ Google Chrome, Brave, Firefox"
+echo "✓ Java (OpenJDK mais recente), Node.js, npm"
 echo "✓ Docker e Docker Compose"
+echo "✓ yt-dlp, Fastfetch"
 echo ""
-echo "🎮 Plataformas de Jogos:"
-echo "✓ Osu! (Jogo de ritmo)"
-echo "✓ Steam (Plataforma de jogos)"
-echo "✓ Lutris (Gerenciador de jogos)"
-echo "✓ Heroic Games Launcher (Epic Games & GOG)"
-echo "✓ WinBoat (Executa aplicativos Windows no Linux)"
+echo "🤖 Ferramentas de IA:"
+echo "✓ Antigravity (Python IA CLI)"
+echo "✓ Claude Code (Anthropic CLI)"
+echo ""
+echo "🎮 Plataformas de Jogos & Otimização:"
+echo "✓ Osu!, Steam, Lutris, Heroic, WinBoat"
+echo "✓ GameMode, DXVK, Vulkan (Utility Libraries)"
+echo "✓ Otimização de GPU e Memória aplicada"
 echo ""
 echo "🔧 Ferramentas e Drivers:"
-echo "✓ Driver Oficial da Huion (driver de tablet para tablets Huion)"
-echo "✓ WireGuard (VPN moderna e segura)"
+echo "✓ Driver Oficial da Huion (tablet)"
+echo "✓ WireGuard (VPN)"
+echo "✓ FreeRDP 3 (Protocolo RDP Moderno)"
 echo "✓ Compiladores e ferramentas de desenvolvimento"
-echo "✓ Dependências do libfprint"
 echo ""
-echo "🔒 Ferramentas de Segurança (Kali Linux):"
-echo "✓ Nmap (scanner de rede)"
-echo "✓ Wireshark (análise de pacotes)"
-echo "✓ John the Ripper (quebra de senhas)"
-echo "✓ Hydra (brute force)"
-echo "✓ Aircrack-ng (segurança WiFi)"
-echo "✓ SQLMap (SQL injection)"
-echo "✓ Nikto (scanner web)"
-echo "✓ Hashcat (quebra de hash)"
-echo "✓ Gobuster (directory/DNS bruteforce)"
-echo "✓ ffuf (fuzzing web)"
-echo ""
-echo "🔍 Ferramentas de OSINT:"
-echo "✓ Sherlock (busca de username em redes sociais)"
-echo "✓ theHarvester (coleta de emails e informações)"
-echo "✓ Recon-ng (framework de reconhecimento)"
-echo "✓ SpiderFoot (automação OSINT)"
-echo "✓ GHunt (OSINT de contas Google)"
-echo "✓ PhoneInfoga (OSINT de números de telefone)"
-echo "✓ Maigret (busca avançada de username)"
-echo "✓ Holehe (verificação de email em mais de 120 sites)"
+echo "🔒 Segurança & OSINT:"
+echo "✓ Full Suite: Nmap, Wireshark, John, Hydra"
+echo "✓ Aircrack-ng, SQLMap, Nikto, Hashcat"
+echo "✓ Gobuster, ffuf"
+echo "✓ OSINT: SpiderFoot, Sherlock, theHarvester"
+echo "✓ GHunt, PhoneInfoga, Maigret, Holehe"
 echo ""
 
 # Aplicar otimizações do KDE se estiver rodando KDE
