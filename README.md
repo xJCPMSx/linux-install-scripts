@@ -24,7 +24,7 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 - ✅ **SUSE Linux Enterprise**
 
 ### **Debian/Ubuntu**
-- ✅ **Debian 11+** (Bullseye, Bookworm, **Trixie**)
+- ✅ **Debian 11+** (Bullseye, Bookworm, Trixie)
 - ✅ **Ubuntu 20.04+** (LTS e não-LTS)
 - ✅ **Linux Mint 20+**
 - ✅ **Pop!_OS 20.04+**
