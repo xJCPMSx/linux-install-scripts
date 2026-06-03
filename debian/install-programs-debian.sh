@@ -463,6 +463,12 @@ sudo apt-get clean 2>/dev/null || true
 # Executar limpeza de repositórios PRIMEIRO
 limpar_repositorios
 
+# Migrar fontes APT para novo formato (Ubuntu 26.04+)
+if [[ "$ID" == "ubuntu" ]] && [ ! -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+    echo "   Migrando fontes APT para novo formato..."
+    sudo apt modernize-sources -y 2>/dev/null || true
+fi
+
 # Atualizar sistema
 echo "Atualizando sistema..."
 apt_update && apt_upgrade
@@ -964,6 +970,8 @@ if [ "$java_installed" = false ]; then
             echo "⚠️  OpenJDK 17 não encontrado, tentando OpenJDK 21..."
             if apt_install openjdk-21-jdk openjdk-21-jre; then
                 echo "✓ Java OpenJDK 21 instalado"
+            elif apt_install openjdk-25-jdk openjdk-25-jre; then
+                echo "✓ Java OpenJDK 25 instalado"
             else
                 echo "⚠️  Nenhuma versão do OpenJDK encontrada, tentando instalação genérica..."
                 apt_install default-jdk default-jre
