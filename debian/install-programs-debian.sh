@@ -609,10 +609,10 @@ echo "Instalando yt-dlp..."
 if ! command -v yt-dlp &> /dev/null; then
     # Tentar instalar via pip primeiro (mais atualizado)
     if command -v pip3 &> /dev/null; then
-        pip3 install --user yt-dlp
+        pip3 install --user yt-dlp --break-system-packages
         echo "✓ yt-dlp instalado via pip3"
     elif command -v pip &> /dev/null; then
-        pip install --user yt-dlp
+        pip install --user yt-dlp --break-system-packages
         echo "✓ yt-dlp instalado via pip"
     else
         # Fallback para apt (pode estar desatualizado)
