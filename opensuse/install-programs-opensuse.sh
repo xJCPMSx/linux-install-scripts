@@ -565,26 +565,21 @@ echo "Instalando programas principais..."
 
 # AnyDesk (verificar disponibilidade)
 echo "Instalando AnyDesk..."
-# Verificar se já está instalado
 if command -v anydesk &> /dev/null; then
     echo "✓ AnyDesk já está instalado"
+elif flatpak list --user 2>/dev/null | grep -q "com.anydesk.Anydesk"; then
+    echo "✓ AnyDesk já está instalado (Flatpak)"
 else
-    if zypper search anydesk 2>/dev/null | grep -q "anydesk"; then
-        $ZYPPER_IN anydesk
+    echo "   Instalando via Flatpak..."
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    if flatpak install --user -y flathub com.anydesk.Anydesk; then
+        echo "✓ AnyDesk instalado via Flatpak"
         check_success "AnyDesk"
     else
-        echo "⚠️  AnyDesk não encontrado nos repositórios"
-        echo "   Instalando via download direto..."
-        # Download e instalação manual do AnyDesk
-        if wget -O anydesk.rpm https://download.anydesk.com/opensuse/anydesk-6.3.2-1.x86_64.rpm; then
-            $ZYPPER_IN anydesk.rpm
-            rm anydesk.rpm
-            check_success "AnyDesk (via download)"
-        else
-            echo "✗ Erro ao baixar AnyDesk"
-            echo "   Você pode instalar manualmente de: https://anydesk.com/"
-        fi
+        echo "✗ Erro ao instalar AnyDesk"
+        echo "   Você pode instalar manualmente de: https://anydesk.com/"
     fi
+fi
 fi
 
 # Spotify (via Flatpak)

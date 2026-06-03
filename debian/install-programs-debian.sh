@@ -726,13 +726,20 @@ echo "Instalando programas principais..."
 
 # AnyDesk
 echo "Instalando AnyDesk..."
-if ! command -v anydesk &> /dev/null; then
-    wget -O anydesk.deb https://download.anydesk.com/linux/anydesk_6.3.2-1_amd64.deb
-    sudo dpkg -i anydesk.deb || apt_install -f -y
-    rm anydesk.deb
-    check_success "AnyDesk"
-else
+if command -v anydesk &> /dev/null; then
     echo "✓ AnyDesk já está instalado"
+elif flatpak list --user 2>/dev/null | grep -q "com.anydesk.Anydesk"; then
+    echo "✓ AnyDesk já está instalado (Flatpak)"
+else
+    echo "   Instalando via Flatpak..."
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    if flatpak install --user -y flathub com.anydesk.Anydesk; then
+        echo "✓ AnyDesk instalado via Flatpak"
+        check_success "AnyDesk"
+    else
+        echo "✗ Erro ao instalar AnyDesk"
+        echo "   Você pode instalar manualmente de: https://anydesk.com/"
+    fi
 fi
 
 # Spotify via Flatpak
