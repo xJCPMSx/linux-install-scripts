@@ -612,6 +612,7 @@ if ! command -v docker &> /dev/null; then
     # Instalar dependências
     apt_install ca-certificates curl gnupg lsb-release
     
+    # shellcheck source=/dev/null
     source /etc/os-release
     if [[ "$ID" == "debian" ]]; then
         DOCKER_REPO="https://download.docker.com/linux/debian"
