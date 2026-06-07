@@ -16,7 +16,7 @@ echo "🐧 Sistema: $(lsb_release -d | cut -f2)"
 echo "🔧 Versão: 1.1-stable (Versão estável)"
 echo ""
 
-set -e
+# Nao usar set -e: check_success() gerencia falhas gracefulmente
 
 # ============================================
 # Configurações para execução não-interativa do apt
@@ -27,6 +27,7 @@ apt_install() {
         -o Dpkg::Options::="--force-confdef" \
         -o Dpkg::Options::="--force-confold" \
         install "$@"
+    return $?
 }
 
 apt_remove() {
@@ -237,9 +238,13 @@ optimize_gaming() {
         
         # Habilitar GameMode
         if [ "${ENABLE_GAMEMODE:-true}" = "true" ]; then
-            echo "   Habilitando GameMode..."
-            apt_install gamemode libgamemode0
-            echo "✓ GameMode instalado e habilitado"
+            if ! command -v gamemoderun &> /dev/null; then
+                echo "   Habilitando GameMode..."
+                apt_install gamemode libgamemode0
+                echo "✓ GameMode instalado e habilitado"
+            else
+                echo "✓ GameMode ja instalado"
+            fi
         fi
         
         # Configurar Steam
@@ -323,10 +328,13 @@ optimize_gaming() {
             echo "   Configurando desabilitação do compositor durante jogos..."
             
             # Configurar KWin para desabilitar compositor durante jogos
-            kwriteconfig5 --file kwinrc --group Compositing --key DisableTearingCheck true
-            kwriteconfig5 --file kwinrc --group Compositing --key GLCore true
-            
-            echo "✓ Compositor configurado para jogos"
+            if command -v kwriteconfig5 &> /dev/null; then
+                kwriteconfig5 --file kwinrc --group Compositing --key DisableTearingCheck true
+                kwriteconfig5 --file kwinrc --group Compositing --key GLCore true
+                echo "✓ Compositor configurado para jogos"
+            else
+                echo "⚠️  kwriteconfig5 não encontrado (KDE não detectado), pulando configuração do compositor"
+            fi
         fi
         
         # Configurar mouse para jogos
@@ -375,26 +383,23 @@ limpar_repositorios() {
     echo "Removendo TODOS os repositórios conflitantes..."
     sudo rm -f /etc/apt/sources.list.d/vscode.list
     sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+    sudo rm -f /etc/apt/sources.list.d/google-chrome.sources
     sudo rm -f /etc/apt/sources.list.d/brave-browser-release.list
+    sudo rm -f /etc/apt/sources.list.d/brave-browser-release.sources
     sudo rm -f /etc/apt/sources.list.d/spotify.list
+    sudo rm -f /etc/apt/sources.list.d/spotify.sources
     sudo rm -f /etc/apt/sources.list.d/microsoft.list
-    sudo rm -f /etc/apt/sources.list.d/*.list
     
-    # Limpar TODAS as chaves GPG conflitantes (mais agressivo)
-    echo "Removendo TODAS as chaves GPG conflitantes..."
+    # Limpar chaves GPG de terceiros (preservando chaves do sistema)
+    echo "Removendo chaves GPG de terceiros..."
     sudo rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/google.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/brave-browser-archive-keyring.gpg
     sudo rm -f /etc/apt/trusted.gpg.d/spotify.gpg
-    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
+    # NÃO remover todas as chaves (preserva chaves do sistema como ubuntu-keyring)
     
-    # Limpar TODAS as chaves do keyrings (mais agressivo)
-    echo "Removendo TODAS as chaves do keyrings..."
-    sudo rm -f /usr/share/keyrings/microsoft.gpg
-    sudo rm -f /usr/share/keyrings/google.gpg
-    sudo rm -f /usr/share/keyrings/brave-browser-archive-keyring.gpg
-    sudo rm -f /usr/share/keyrings/spotify.gpg
-    sudo rm -f /usr/share/keyrings/*.gpg
+    # Limpar chaves do keyrings de terceiros (preservando chaves do sistema)
+    echo "Removendo chaves do keyrings de terceiros..."
     
     # Limpar cache do apt
     echo "Limpando cache do apt..."
@@ -404,10 +409,8 @@ limpar_repositorios() {
     # Forçar atualização sem repositórios externos
     echo "Testando atualização básica..."
     apt_update --allow-releaseinfo-change || {
-        echo "⚠️  Ainda há conflitos, limpando mais agressivamente..."
-        sudo rm -f /etc/apt/sources.list.d/*.list
-        sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
-        sudo rm -f /usr/share/keyrings/*.gpg
+        echo "⚠️  Ainda há conflitos, limpando cache e tentando novamente..."
+        # Preservar chaves do sistema, apenas limpar cache
         sudo apt clean
         sudo apt-get autoclean
         echo "Tentando novamente..."
@@ -464,9 +467,24 @@ sudo apt-get clean 2>/dev/null || true
 limpar_repositorios
 
 # Migrar fontes APT para novo formato (Ubuntu 26.04+)
-if [[ "$ID" == "ubuntu" ]] && [ ! -f /etc/apt/sources.list.d/ubuntu.sources ]; then
-    echo "   Migrando fontes APT para novo formato..."
-    sudo apt modernize-sources -y 2>/dev/null || true
+if grep -q "ID=ubuntu" /etc/os-release 2>/dev/null && [ ! -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+    echo "   Criando fontes APT para Ubuntu..."
+    UBUNTU_CODENAME=$(lsb_release -cs 2>/dev/null || grep -oP 'UBUNTU_CODENAME=\K.*' /etc/os-release)
+    UBUNTU_CODENAME=${UBUNTU_CODENAME:-resolute}
+    sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null <<-UBUNTU_EOF
+Types: deb
+URIs: http://archive.ubuntu.com/ubuntu/
+Suites: $UBUNTU_CODENAME $UBUNTU_CODENAME-updates $UBUNTU_CODENAME-security
+Components: main universe restricted multiverse
+Architectures: amd64
+Signed-By: /etc/apt/trusted.gpg.d/ubuntu-keyring-2018-archive.gpg
+UBUNTU_EOF
+    # Restaurar chave do archive do Ubuntu se foi removida
+    if [ ! -f /etc/apt/trusted.gpg.d/ubuntu-keyring-2018-archive.gpg ]; then
+        echo "   Restaurando chave GPG do Ubuntu..."
+        gpg --keyserver keyserver.ubuntu.com --recv-keys 0x871920D1991BC93C 2>/dev/null
+        gpg --export 0x871920D1991BC93C | sudo tee /etc/apt/trusted.gpg.d/ubuntu-keyring-2018-archive.gpg > /dev/null
+    fi
 fi
 
 # Atualizar sistema
@@ -480,6 +498,7 @@ check_success "sistema"
 # Adicionado: python3-pip, nodejs, npm
 # ============================================
 echo "Instalando dependências essenciais..."
+apt_install libfuse2
 
 # ============================================
 # Lógica condicional Fastfetch/Neofetch
@@ -489,13 +508,21 @@ echo "Instalando dependências essenciais..."
 # shellcheck disable=SC1091
 source /etc/os-release
 if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
-    echo "   Detectado sistema moderno: Instalando Fastfetch..."
-    apt_install curl wget gnupg apt-transport-https ca-certificates fastfetch python3-pip
+    if ! command -v fastfetch &> /dev/null; then
+        echo "   Detectado sistema moderno: Instalando Fastfetch..."
+        apt_install curl wget gnupg apt-transport-https ca-certificates fastfetch python3-pip
+    else
+        echo "✓ Fastfetch ja instalado"
+    fi
 else
-    echo "   Detectado sistema legado: Instalando Neofetch..."
-    apt_install curl wget gnupg apt-transport-https ca-certificates neofetch python3-pip
+    if ! command -v neofetch &> /dev/null; then
+        echo "   Detectado sistema legado: Instalando Neofetch..."
+        apt_install curl wget gnupg apt-transport-https ca-certificates neofetch python3-pip
+    else
+        echo "✓ Neofetch ja instalado"
+    fi
 fi
-check_success "dependências essenciais"
+check_success "dependencias essenciais"
 
 # Instalar Node.js e npm
 echo "Instalando Node.js e npm..."
@@ -506,30 +533,39 @@ fi
 check_success "Node.js e npm"
 
 # Instalar compiladores e ferramentas de desenvolvimento
-echo "Instalando compiladores e ferramentas de desenvolvimento..."
-apt_install build-essential gcc g++ make cmake ninja-build git
+if ! command -v gcc &> /dev/null || ! command -v git &> /dev/null; then
+    echo "Instalando compiladores e ferramentas de desenvolvimento..."
+    apt_install build-essential gcc g++ make cmake ninja-build git
+else
+    echo "✓ Compiladores e git ja instalados"
+fi
 check_success "compiladores"
 
 # Instalar dependências de desenvolvimento
-echo "Instalando dependências de desenvolvimento..."
-# Instalar pacotes básicos primeiro
-apt_install libglib2.0-dev libcairo2-dev libssl-dev gtk-doc-tools
+if ! dpkg -l libglib2.0-dev &>/dev/null; then
+    echo "Instalando dependências de desenvolvimento..."
+    apt_install libglib2.0-dev libcairo2-dev libssl-dev gtk-doc-tools
 
-# Tentar instalar pacotes específicos com fallbacks
-echo "   Instalando libgusb-dev..."
-apt_install libgusb-dev || echo "⚠️  libgusb-dev não encontrado, continuando..."
+    echo "   Instalando libgusb-dev..."
+    apt_install libgusb-dev || echo "⚠️  libgusb-dev nao encontrado, continuando..."
 
-echo "   Instalando libgirepository1.0-dev..."
-apt_install libgirepository1.0-dev || echo "⚠️  libgirepository1.0-dev não encontrado, continuando..."
+    echo "   Instalando libgirepository1.0-dev..."
+    apt_install libgirepository1.0-dev || echo "⚠️  libgirepository1.0-dev nao encontrado, continuando..."
 
-echo "   Instalando libgudev-1.0-dev..."
-apt_install libgudev-1.0-dev || apt_install libudev-dev || echo "⚠️  libgudev não encontrado, continuando..."
-
-check_success "dependências de desenvolvimento"
+    echo "   Instalando libgudev-1.0-dev..."
+    apt_install libgudev-1.0-dev || apt_install libudev-dev || echo "⚠️  libgudev nao encontrado, continuando..."
+else
+    echo "✓ Dependencias de desenvolvimento ja instaladas"
+fi
+check_success "dependencias de desenvolvimento"
 
 # Instalar ferramentas adicionais úteis
-echo "Instalando ferramentas adicionais..."
-apt_install vim nano htop tree unzip tar file which pkg-config autoconf automake libtool
+if ! command -v htop &> /dev/null; then
+    echo "Instalando ferramentas adicionais..."
+    apt_install vim nano htop tree unzip tar file which pkg-config autoconf automake libtool
+else
+    echo "✓ Ferramentas adicionais ja instaladas"
+fi
 check_success "ferramentas adicionais"
 
 # Instalar ferramentas divertidas e úteis
@@ -575,12 +611,21 @@ if ! command -v docker &> /dev/null; then
     # Instalar dependências
     apt_install ca-certificates curl gnupg lsb-release
     
+    source /etc/os-release
+    if [[ "$ID" == "debian" ]]; then
+        DOCKER_REPO="https://download.docker.com/linux/debian"
+        DOCKER_GPG_URL="https://download.docker.com/linux/debian/gpg"
+    else
+        DOCKER_REPO="https://download.docker.com/linux/ubuntu"
+        DOCKER_GPG_URL="https://download.docker.com/linux/ubuntu/gpg"
+    fi
+
     # Adicionar chave GPG oficial do Docker
     sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    curl -fsSL "$DOCKER_GPG_URL" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     
     # Adicionar repositório do Docker
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] $DOCKER_REPO $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # Atualizar lista de pacotes
     apt_update
@@ -666,7 +711,7 @@ if sudo flatpak list | grep -q "com.visualstudio.code"; then
     echo "✓ VSCode já está instalado via Flatpak"
 else
     echo "Instalando VSCode via Flatpak..."
-    sudo flatpak install -y flathub com.visualstudio.code
+    sudo flatpak install --system -y flathub com.visualstudio.code
     check_success "VSCode (via Flatpak)"
 fi
 
@@ -703,27 +748,15 @@ echo "Atualizando lista de pacotes..."
 # ============================================
 sudo rm -f /etc/apt/sources.list.d/*cursor*
 sudo rm -f /etc/apt/sources.list.d/*anysphere*
-sudo rm -f /etc/apt/sources.list.d/*.sources*
-sudo rm -f /usr/share/keyrings/*anysphere*
-sudo rm -f /usr/share/keyrings/*cursor*
 sudo rm -f /etc/apt/sources.list.d/cursor.list
 sudo rm -f /etc/apt/sources.list.d/anysphere.list
+sudo rm -f /etc/apt/sources.list.d/*cursor*
+sudo rm -f /etc/apt/sources.list.d/*anysphere*
 sudo rm -f /usr/share/keyrings/anysphere.gpg
-
-# ============================================
-# LIMPEZA PROFUNDA: Remove qualquer menção ao cursor.com de todos os .list
-# ============================================
-sudo find /etc/apt/ -type f -name "*.list" -exec sed -i '/cursor\.com/d' {} + 2>/dev/null || true
 
 apt_update || {
     echo "⚠️  Erro ao atualizar lista de pacotes, tentando corrigir..."
-    # Limpar repositórios problemáticos
-    sudo rm -f /etc/apt/sources.list.d/*.list
-    sudo rm -f /etc/apt/trusted.gpg.d/*.gpg
-    sudo rm -f /usr/share/keyrings/*.gpg
-    echo "✓ Repositórios problemáticos removidos"
-    echo "Tentando atualizar novamente..."
-    apt_update
+    apt_update --allow-releaseinfo-change
 }
 
 
@@ -738,13 +771,13 @@ elif flatpak list --user 2>/dev/null | grep -q "com.anydesk.Anydesk"; then
     echo "✓ AnyDesk já está instalado (Flatpak)"
 else
     echo "   Instalando via Flatpak..."
-    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
     if flatpak install --user -y flathub com.anydesk.Anydesk; then
         echo "✓ AnyDesk instalado via Flatpak"
         check_success "AnyDesk"
     else
-        echo "✗ Erro ao instalar AnyDesk"
-        echo "   Você pode instalar manualmente de: https://anydesk.com/"
+        echo "⚠️  Falha ao instalar via Flatpak (servidor AnyDesk pode estar bloqueado)"
+        echo "   Tente instalar manualmente de: https://anydesk.com/"
     fi
 fi
 
@@ -778,7 +811,7 @@ fi
 if [ "$spotify_installed" = false ]; then
     echo "   Spotify não encontrado, instalando via Flatpak..."
     # Garantir que flathub está configurado para o usuário
-    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
     
     if flatpak install --user -y flathub com.spotify.Client; then
         echo "✓ Spotify instalado com sucesso"
@@ -794,51 +827,92 @@ fi
 echo "Instalando Cursor..."
 cursor_found=false
 
-# Verificar AppImage primeiro (mais comum e não executa)
-if [ -f "$HOME/Applications/cursor.AppImage" ] || [ -f "$HOME/Applications/Cursor.AppImage" ]; then
-    echo "✓ Cursor AppImage já está disponível"
-    cursor_found=true
-elif find "$HOME/Applications" -maxdepth 1 -name "*ursor*.AppImage" 2>/dev/null | grep -q "\.AppImage$"; then
-    echo "✓ Cursor AppImage já está disponível"
+# Verificar se o binário existe no PATH (instalação via .deb)
+if command -v cursor &>/dev/null; then
+    echo "✓ Cursor já está instalado (encontrado no PATH)"
     cursor_found=true
 fi
 
-# Verificar se Cursor está instalado (diretório .cursor ou .config/Cursor indica instalação)
+# Verificar instalação manual (extraída do AppImage)
 if [ "$cursor_found" = false ]; then
-    if [ -d "$HOME/.cursor" ] || [ -d "$HOME/.config/Cursor" ]; then
-        echo "✓ Cursor já está instalado (detectado diretório de configuração)"
+    if [ -f "$HOME/Applications/cursor/cursor" ]; then
+        echo "✓ Cursor já está instalado (extraído em ~/Applications/cursor/)"
         cursor_found=true
+        # Garantir permissões do sandbox
+        if [ -f "$HOME/Applications/cursor/chrome-sandbox" ]; then
+            CURRENT_PERMS=$(stat -c "%a" "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null)
+            if [ "$CURRENT_PERMS" != "4755" ]; then
+                echo "   Corrigindo permissões do sandbox..."
+                sudo chown root "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+                sudo chmod 4755 "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            fi
+        fi
     fi
 fi
 
-# Verificar instalação manual
+# Verificar AppImage
 if [ "$cursor_found" = false ]; then
-    if [ -f "/usr/local/bin/cursor" ] || [ -f "/opt/cursor/cursor" ]; then
-        echo "✓ Cursor já está instalado (instalação manual)"
-        cursor_found=true
+    CURSOR_APPIMAGE=""
+    if [ -f "$HOME/Applications/cursor.AppImage" ] && [ -s "$HOME/Applications/cursor.AppImage" ]; then
+        CURSOR_APPIMAGE="$HOME/Applications/cursor.AppImage"
+    elif [ -f "$HOME/Applications/Cursor.AppImage" ] && [ -s "$HOME/Applications/Cursor.AppImage" ]; then
+        CURSOR_APPIMAGE="$HOME/Applications/Cursor.AppImage"
+    else
+        CURSOR_APPIMAGE=$(find "$HOME/Applications" -maxdepth 1 -name "*ursor*.AppImage" -type f 2>/dev/null | head -1)
+    fi
+    if [ -n "$CURSOR_APPIMAGE" ]; then
+        echo "✓ Cursor AppImage encontrado. Extraindo e configurando..."
+        cd "$HOME/Applications"
+        "$CURSOR_APPIMAGE" --appimage-extract > /dev/null 2>&1
+        if [ -d squashfs-root ]; then
+            rm -f "$CURSOR_APPIMAGE"
+            mv squashfs-root cursor
+            sudo chown root "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            sudo chmod 4755 "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            echo "✓ Cursor extraído e configurado em ~/Applications/cursor/"
+            cursor_found=true
+        fi
+        cd "$OLDPWD"
     fi
 fi
 
-# Verificar se está no PATH (último recurso, usando type -P que não executa)
+# Verificar se foi instalado via .deb (dpkg) e o binário existe
 if [ "$cursor_found" = false ]; then
-    if type -P cursor &>/dev/null; then
-        echo "✓ Cursor já está instalado (encontrado no PATH)"
-        cursor_found=true
+    if dpkg -l | grep -q "cursor" 2>/dev/null; then
+        CURSOR_DEB_BIN=""
+        for p in /usr/bin/cursor /usr/local/bin/cursor /opt/cursor/cursor; do
+            if [ -f "$p" ] && [ -x "$p" ]; then
+                CURSOR_DEB_BIN="$p"
+                break
+            fi
+        done
+        if [ -n "$CURSOR_DEB_BIN" ]; then
+            echo "✓ Cursor já está instalado (pacote .deb)"
+            cursor_found=true
+        else
+            echo "⚠️  Pacote .deb do Cursor está registrado, mas o binário não foi encontrado. Reinstalando..."
+            sudo dpkg --purge cursor 2>/dev/null || sudo apt remove --purge -y cursor 2>/dev/null || true
+        fi
     fi
 fi
 
 # Se não encontrou nenhuma instalação, tentar instalar
 if [ "$cursor_found" = false ]; then
     echo "⚠️  Cursor não encontrado"
-    echo "   Baixando AppImage do Cursor..."
-    mkdir -p "$HOME/Applications"
-    if wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64; then
-        chmod +x "$HOME/Applications/cursor.AppImage"
-        echo "✓ Cursor AppImage baixado em $HOME/Applications/"
-        echo "   Para usar: $HOME/Applications/cursor.AppImage"
+    echo "   Baixando e instalando via .deb oficial..."
+    TMP_DEB=$(mktemp /tmp/cursor-XXXXXX.deb)
+    if wget -O "$TMP_DEB" https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/3.7; then
+        sudo dpkg -i "$TMP_DEB" || sudo apt install -f -y
+        rm -f "$TMP_DEB"
+        if command -v cursor &> /dev/null; then
+            echo "✓ Cursor instalado com sucesso"
+            echo "   Para usar: cursor"
+        else
+            echo "✗ Erro ao instalar o pacote .deb do Cursor"
+        fi
     else
-        echo "✗ Erro ao baixar Cursor AppImage"
-        echo "   Você pode baixar manualmente de: https://cursor.sh/"
+        echo "✗ Erro ao baixar o .deb do Cursor"
+        echo "   Baixe manualmente de: https://cursor.sh/"
     fi
 fi
 
@@ -900,7 +974,7 @@ if [ "$brave_installed" = false ]; then
     echo "   Brave Browser não encontrado, tentando instalação via Flatpak..."
     
     # Garantir que flathub está configurado para o usuário
-    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
     
     if flatpak install --user -y flathub com.brave.Browser; then
         echo "✓ Brave Browser instalado via Flatpak"
@@ -1035,24 +1109,21 @@ fi
 # ============================================
 # Antigravity - Ferramenta de hacking (Python/PIP)
 # ============================================
-echo "Instalando Antigravity..."
+echo "Instalando Antigravity (Google CLI)..."
 if [ "${INSTALL_ANTIGRAVITY:-true}" = "true" ]; then
-    if command -v antigravity &> /dev/null; then
+    if command -v antigravity &> /dev/null || [ -f "/usr/bin/antigravity" ]; then
         echo "✓ Antigravity já está instalado"
     else
-        echo "   Instalando Antigravity via pip..."
-        if command -v pip3 &> /dev/null; then
-            # Debian 13 requer --break-system-packages (PEP 668)
-            pip3 install antigravity --break-system-packages 2>/dev/null || {
-                echo "   ⚠️ Não foi possível instalar Antigravity"
-                echo "   Para instalar manualmente: pip3 install antigravity --break-system-packages"
-            }
-        fi
-        if command -v antigravity &> /dev/null; then
+        echo "   Adicionando repositório APT do Antigravity..."
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | sudo tee /etc/apt/sources.list.d/antigravity.list > /dev/null
+        sudo apt update
+        if sudo apt install -y antigravity; then
             echo "✓ Antigravity instalado com sucesso"
-            echo "   Para usar: antigravity"
+            echo "   Para usar: antigravity --help"
         else
-            echo "⚠️ Antigravity pode não ter sido instalado corretamente"
+            echo "⚠️  Falha ao instalar Antigravity"
         fi
     fi
 else
@@ -1082,16 +1153,17 @@ if [ "${INSTALL_CLAUDE_CODE:-true}" = "true" ]; then
             # ============================================
             # Forçar instalação global ignorando restrições de root do Debian
             # ============================================
-            if npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>&1 | tee /tmp/claude-install.log; then
+            # Instalar sem tee para evitar erro de permissão no log
+            npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>/dev/null
+            if command -v claude &> /dev/null; then
                 echo "✓ Claude Code instalado com sucesso"
             else
                 echo "   ⚠️ Tentando método alternativo com sudo..."
-                # Tentar com sudo como fallback
-                if sudo npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>&1 | tee /tmp/claude-install.log; then
+                sudo npm install -g @anthropic-ai/claude-code --unsafe-perm=true --allow-root --force 2>/dev/null
+                if command -v claude &> /dev/null; then
                     echo "✓ Claude Code instalado com sucesso (via sudo)"
                 else
                     echo "   ⚠️ Não foi possível instalar Claude Code"
-                    echo "   Verifique o log: /tmp/claude-install.log"
                 fi
             fi
         else
@@ -1118,7 +1190,7 @@ if ! sudo flatpak list | grep -q "com.github.ppy.osu" && [ ! -f "$USER_HOME/Appl
     echo "⚠️  Osu! não encontrado nos repositórios"
     echo "   Tentando instalação via Flatpak..."
     
-    if sudo flatpak install -y flathub com.github.ppy.osu; then
+    if sudo flatpak install --system -y flathub com.github.ppy.osu; then
         echo "✓ Osu! instalado via Flatpak"
     else
         echo "   Flatpak falhou, tentando download direto..."
@@ -1169,7 +1241,7 @@ if [ "$steam_installed" = false ]; then
         echo "   Para melhor compatibilidade, instale os drivers gráficos apropriados"
     else
         echo "✗ Erro ao instalar Steam via apt, tentando Flatpak..."
-        if sudo flatpak install -y flathub com.valvesoftware.Steam; then
+        if sudo flatpak install --system -y flathub com.valvesoftware.Steam; then
             echo "✓ Steam instalado via Flatpak"
         else
             echo "✗ Erro ao instalar Steam"
@@ -1208,7 +1280,7 @@ if [ "$lutris_installed" = false ]; then
         echo "   Lutris permite gerenciar jogos de várias plataformas (Steam, GOG, Epic, etc.)"
     else
         echo "✗ Erro ao instalar Lutris via apt, tentando Flatpak..."
-        if sudo flatpak install -y flathub net.lutris.Lutris; then
+        if sudo flatpak install --system -y flathub net.lutris.Lutris; then
             echo "✓ Lutris instalado via Flatpak"
         else
             echo "✗ Erro ao instalar Lutris"
@@ -1225,7 +1297,7 @@ if command -v heroic &> /dev/null || flatpak list --user 2>/dev/null | grep -q "
 else
     echo "   Instalando Heroic Games Launcher via Flatpak..."
     # Garantir que flathub está configurado para o usuário
-    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
     
     if flatpak install --user -y flathub com.heroicgameslauncher.hgl; then
         echo "✓ Heroic Games Launcher instalado com sucesso"
@@ -1825,6 +1897,8 @@ else
         apt_install pipx
         pipx ensurepath
     fi
+    # Dependencias para Pillow (jpeg, zlib, freetype)
+    apt_install libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev 2>/dev/null || true
     pipx install ghunt
     echo "✓ GHunt instalado com sucesso"
     echo "   Para usar: ghunt email <email>"
@@ -2056,32 +2130,41 @@ else
     echo "⚠️  VSCode não encontrado ou executando como root"
 fi
 
-# Criar ícones para aplicativos AppImage
+# Criar ícones para aplicativos
 echo "Criando ícones para aplicativos..."
 mkdir -p ~/.local/share/applications ~/.local/share/icons
 
-# Criar arquivo desktop para Cursor
-CURSOR_APPIMAGE=$(find "$HOME/Applications" -name "Cursor*.AppImage" -type f | head -1)
-if [ -n "$CURSOR_APPIMAGE" ]; then
+# Criar arquivo desktop para Cursor (sempre atualizar se instalado)
+CURSOR_EXEC=""
+if command -v cursor &> /dev/null; then
+    CURSOR_EXEC=$(command -v cursor)
+elif [ -f "$HOME/Applications/cursor/cursor" ]; then
+    CURSOR_EXEC="$HOME/Applications/cursor/cursor"
+elif [ -f "$HOME/Applications/cursor.AppImage" ] && [ -s "$HOME/Applications/cursor.AppImage" ]; then
+    CURSOR_EXEC="$HOME/Applications/cursor.AppImage --no-sandbox"
+fi
+if [ -n "$CURSOR_EXEC" ]; then
+    rm -f ~/.local/share/applications/cursor.desktop
     cat > ~/.local/share/applications/cursor.desktop << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Cursor
 Comment=AI-powered code editor
-Exec=$CURSOR_APPIMAGE
+Exec=$CURSOR_EXEC
 Icon=cursor
 Terminal=false
 Categories=Development;Utility;
 StartupNotify=true
-MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-dsrc;text/x-pascal;text/x-perl;text/x-python;application/x-php;application/x-httpd-php3;application/x-httpd-php4;application/x-httpd-php5;application/javascript;application/json;text/css;text/html;text/xml;text/x-sql;text/x-diff;
+StartupWMClass=Cursor
+MimeType=text/plain;
 EOF
     chmod +x ~/.local/share/applications/cursor.desktop
     echo "✓ Ícone do Cursor criado"
 fi
 
-# Criar arquivo desktop para Osu!
-if [ -f "$HOME/Applications/osu.AppImage" ]; then
+# Criar arquivo desktop para Osu! (caso AppImage, Flatpak já cria automático)
+if [ -f "$HOME/Applications/osu.AppImage" ] && [ ! -f ~/.local/share/applications/osu.desktop ]; then
     cat > ~/.local/share/applications/osu.desktop << EOF
 [Desktop Entry]
 Version=1.0
@@ -2098,30 +2181,50 @@ EOF
     echo "✓ Ícone do Osu! criado"
 fi
 
-# Criar ícones SVG
-cat > ~/.local/share/icons/cursor.svg << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="8" fill="#000000"/>
-  <path d="M16 20 L48 20 L48 44 L16 44 Z" fill="#00D4AA"/>
-  <path d="M20 24 L44 24 L44 40 L20 40 Z" fill="#FFFFFF"/>
-  <path d="M24 28 L40 28 L40 36 L24 36 Z" fill="#000000"/>
-  <circle cx="32" cy="32" r="4" fill="#00D4AA"/>
+# Criar ícones SVG (fallback caso o .deb não forneça)
+# Seguir padrão freedesktop.org: ~/.local/share/icons/<tema>/<tamanho>/apps/
+mkdir -p ~/.local/share/icons/hicolor/scalable/apps
+
+CREATE_CURSOR_ICON=false
+if [ ! -f /usr/share/icons/hicolor/scalable/apps/cursor.svg ] && \
+   [ ! -f ~/.local/share/icons/hicolor/scalable/apps/cursor.svg ] && \
+   [ ! -f ~/.local/share/icons/cursor.svg ]; then
+    CREATE_CURSOR_ICON=true
+fi
+
+if [ "$CREATE_CURSOR_ICON" = true ] || [ ! -f ~/.local/share/icons/hicolor/scalable/apps/cursor.svg ]; then
+    cat > ~/.local/share/icons/hicolor/scalable/apps/cursor.svg << 'EOF'
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#1a1a1a"/>
+  <path d="M24 16 L24 44 L30 38 L36 44 L36 38 L24 16Z" fill="white"/>
 </svg>
 EOF
+fi
 
-cat > ~/.local/share/icons/osu.svg << 'EOF'
+# Também manter no local antigo para compatibilidade (se não existir)
+if [ ! -f ~/.local/share/icons/cursor.svg ]; then
+    cp ~/.local/share/icons/hicolor/scalable/apps/cursor.svg ~/.local/share/icons/cursor.svg 2>/dev/null || true
+fi
+
+if [ ! -f ~/.local/share/icons/hicolor/scalable/apps/osu.svg ] && [ ! -f ~/.local/share/icons/osu.svg ]; then
+    cat > ~/.local/share/icons/hicolor/scalable/apps/osu.svg << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="32" r="30" fill="#FF69B4"/>
-  <circle cx="32" cy="32" r="20" fill="#FFFFFF"/>
-  <circle cx="32" cy="32" r="10" fill="#FF69B4"/>
-  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">osu!</text>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="128" cy="128" r="120" fill="#FF69B4"/>
+  <circle cx="128" cy="128" r="80" fill="#FFFFFF"/>
+  <circle cx="128" cy="128" r="40" fill="#FF69B4"/>
 </svg>
 EOF
+fi
 
-# Atualizar base de dados desktop
+if [ ! -f ~/.local/share/icons/osu.svg ]; then
+    cp ~/.local/share/icons/hicolor/scalable/apps/osu.svg ~/.local/share/icons/osu.svg 2>/dev/null || true
+fi
+
+# Atualizar base de dados desktop (local e sistema)
 update-desktop-database ~/.local/share/applications 2>/dev/null || true
+sudo update-desktop-database /usr/share/applications 2>/dev/null || true
+gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 echo "✓ Ícones criados e base de dados atualizada"
 
 echo ""

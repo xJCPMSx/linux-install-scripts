@@ -633,40 +633,54 @@ fi
 
 # Cursor (Editor com IA)
 echo "Instalando Cursor..."
-
-# Verificar se já está instalado (pacote ou AppImage)
 cursor_found=false
 
-# Verificar AppImage primeiro (mais comum e não executa)
-if [ -f "$HOME/Applications/cursor.AppImage" ] || [ -f "$HOME/Applications/Cursor.AppImage" ]; then
-    echo "✓ Cursor AppImage já está disponível"
-    cursor_found=true
-elif find "$HOME/Applications" -maxdepth 1 -name "*ursor*.AppImage" 2>/dev/null | grep -q "\.AppImage$"; then
-    echo "✓ Cursor AppImage já está disponível"
+# Verificar se o binário existe no PATH
+if type -P cursor &>/dev/null; then
+    echo "✓ Cursor já está instalado (encontrado no PATH)"
     cursor_found=true
 fi
 
-# Verificar se Cursor está instalado (diretório .cursor ou .config/Cursor indica instalação)
+# Verificar instalação extraída do AppImage
 if [ "$cursor_found" = false ]; then
-    if [ -d "$HOME/.cursor" ] || [ -d "$HOME/.config/Cursor" ]; then
-        echo "✓ Cursor já está instalado (detectado diretório de configuração)"
+    if [ -f "$HOME/Applications/cursor/cursor" ]; then
+        echo "✓ Cursor já está instalado (extraído em ~/Applications/cursor/)"
         cursor_found=true
+        # Garantir permissões do sandbox
+        if [ -f "$HOME/Applications/cursor/chrome-sandbox" ]; then
+            CURRENT_PERMS=$(stat -c "%a" "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null)
+            if [ "$CURRENT_PERMS" != "4755" ]; then
+                echo "   Corrigindo permissões do sandbox..."
+                sudo chown root "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+                sudo chmod 4755 "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            fi
+        fi
     fi
 fi
 
-# Verificar instalação manual
+# Verificar AppImage e extrair
 if [ "$cursor_found" = false ]; then
-    if [ -f "/usr/local/bin/cursor" ] || [ -f "/opt/cursor/cursor" ]; then
-        echo "✓ Cursor já está instalado (instalação manual)"
-        cursor_found=true
+    CURSOR_APPIMAGE=""
+    if [ -f "$HOME/Applications/cursor.AppImage" ] && [ -s "$HOME/Applications/cursor.AppImage" ]; then
+        CURSOR_APPIMAGE="$HOME/Applications/cursor.AppImage"
+    elif [ -f "$HOME/Applications/Cursor.AppImage" ] && [ -s "$HOME/Applications/Cursor.AppImage" ]; then
+        CURSOR_APPIMAGE="$HOME/Applications/Cursor.AppImage"
+    else
+        CURSOR_APPIMAGE=$(find "$HOME/Applications" -maxdepth 1 -name "*ursor*.AppImage" -type f 2>/dev/null | head -1)
     fi
-fi
-
-# Verificar se está no PATH (último recurso, usando type -P que não executa)
-if [ "$cursor_found" = false ]; then
-    if type -P cursor &>/dev/null; then
-        echo "✓ Cursor já está instalado (encontrado no PATH)"
-        cursor_found=true
+    if [ -n "$CURSOR_APPIMAGE" ]; then
+        echo "✓ Cursor AppImage encontrado. Extraindo e configurando..."
+        cd "$HOME/Applications"
+        "$CURSOR_APPIMAGE" --appimage-extract > /dev/null 2>&1
+        if [ -d squashfs-root ]; then
+            rm -f "$CURSOR_APPIMAGE"
+            mv squashfs-root cursor
+            sudo chown root "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            sudo chmod 4755 "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            echo "✓ Cursor extraído e configurado em ~/Applications/cursor/"
+            cursor_found=true
+        fi
+        cd "$OLDPWD"
     fi
 fi
 
@@ -677,8 +691,21 @@ if [ "$cursor_found" = false ]; then
     mkdir -p "$HOME/Applications"
     if wget -O "$HOME/Applications/cursor.AppImage" https://download.cursor.sh/linux/appImage/x64; then
         chmod +x "$HOME/Applications/cursor.AppImage"
-        echo "✓ Cursor AppImage baixado em $HOME/Applications/"
-        echo "   Para usar: $HOME/Applications/cursor.AppImage"
+        echo "✓ Cursor AppImage baixado"
+        echo "   Extraindo e configurando sandbox..."
+        cd "$HOME/Applications"
+        ./cursor.AppImage --appimage-extract > /dev/null 2>&1
+        if [ -d squashfs-root ]; then
+            rm -f "$HOME/Applications/cursor.AppImage"
+            mv squashfs-root cursor
+            sudo chown root "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            sudo chmod 4755 "$HOME/Applications/cursor/chrome-sandbox" 2>/dev/null || true
+            echo "✓ Cursor instalado em $HOME/Applications/cursor/"
+            echo "   Para usar: $HOME/Applications/cursor/cursor"
+        else
+            echo "⚠️  Extração falhou, usando AppImage diretamente com --no-sandbox"
+        fi
+        cd "$OLDPWD"
     else
         echo "✗ Erro ao baixar Cursor AppImage"
         echo "   Você pode baixar manualmente de: https://cursor.sh/"
@@ -842,27 +869,19 @@ if ! command -v pip3 &> /dev/null && ! command -v pip &> /dev/null; then
     $ZYPPER_IN python3-pip
 fi
 
-# Antigravity - Ferramenta de hacking (Python/PIP)
-echo "Instalando Antigravity..."
+# Antigravity - Google CLI
+echo "Instalando Antigravity (Google CLI)..."
 if [ "${INSTALL_ANTIGRAVITY:-true}" = "true" ]; then
-    if command -v antigravity &> /dev/null; then
+    if command -v antigravity &> /dev/null || command -v agy &> /dev/null || [ -f "$HOME/.local/bin/agy" ]; then
         echo "✓ Antigravity já está instalado"
     else
-        echo "   Instalando Antigravity via pip..."
-        if command -v pip3 &> /dev/null; then
-            pip3 install antigravity 2>/dev/null || {
-                echo "   Tentando com pip..."
-                pip install antigravity 2>/dev/null || {
-                    echo "   ⚠️ Não foi possível instalar Antigravity"
-                    echo "   Para instalar manualmente: pip install antigravity"
-                }
-            }
-        fi
-        if command -v antigravity &> /dev/null; then
+        echo "   Baixando e instalando Antigravity via script oficial..."
+        if curl -fsSL https://antigravity.google/cli/install.sh | bash; then
             echo "✓ Antigravity instalado com sucesso"
-            echo "   Para usar: antigravity"
+            echo "   Para usar: agy --help"
         else
-            echo "⚠️ Antigravity pode não ter sido instalado corretamente"
+            echo "⚠️  Falha ao instalar Antigravity"
+            echo "   Tente manualmente: curl -fsSL https://antigravity.google/cli/install.sh | bash"
         fi
     fi
 else
@@ -2057,19 +2076,26 @@ echo "Criando ícones para aplicativos..."
 mkdir -p ~/.local/share/applications ~/.local/share/icons
 
 # Criar arquivo desktop para Cursor
+CURSOR_EXTRACTED="$HOME/Applications/cursor/cursor"
 CURSOR_APPIMAGE=$(find "$HOME/Applications" -name "Cursor*.AppImage" -type f | head -1)
-if [ -n "$CURSOR_APPIMAGE" ]; then
+if [ -f "$CURSOR_EXTRACTED" ]; then
+    CURSOR_EXEC="$CURSOR_EXTRACTED"
+elif [ -n "$CURSOR_APPIMAGE" ]; then
+    CURSOR_EXEC="$CURSOR_APPIMAGE --no-sandbox"
+fi
+if [ -n "$CURSOR_EXEC" ]; then
     cat > ~/.local/share/applications/cursor.desktop << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Cursor
 Comment=AI-powered code editor
-Exec=$CURSOR_APPIMAGE
+Exec=$CURSOR_EXEC
 Icon=cursor
 Terminal=false
 Categories=Development;Utility;
 StartupNotify=true
+StartupWMClass=Cursor
 MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-dsrc;text/x-pascal;text/x-perl;text/x-python;application/x-php;application/x-httpd-php3;application/x-httpd-php4;application/x-httpd-php5;application/javascript;application/json;text/css;text/html;text/xml;text/x-sql;text/x-diff;
 EOF
     chmod +x ~/.local/share/applications/cursor.desktop
@@ -2095,31 +2121,32 @@ EOF
 fi
 
 
-# Criar ícones SVG
-cat > ~/.local/share/icons/cursor.svg << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="8" fill="#000000"/>
-  <path d="M16 20 L48 20 L48 44 L16 44 Z" fill="#00D4AA"/>
-  <path d="M20 24 L44 24 L44 40 L20 40 Z" fill="#FFFFFF"/>
-  <path d="M24 28 L40 28 L40 36 L24 36 Z" fill="#000000"/>
-  <circle cx="32" cy="32" r="4" fill="#00D4AA"/>
+# Criar ícones SVG (seguindo padrão freedesktop.org)
+mkdir -p ~/.local/share/icons/hicolor/scalable/apps
+
+cat > ~/.local/share/icons/hicolor/scalable/apps/cursor.svg << 'EOF'
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#1a1a1a"/>
+  <path d="M24 16 L24 44 L30 38 L36 44 L36 38 L24 16Z" fill="white"/>
 </svg>
 EOF
 
-cat > ~/.local/share/icons/osu.svg << 'EOF'
+cat > ~/.local/share/icons/hicolor/scalable/apps/osu.svg << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="32" r="30" fill="#FF69B4"/>
-  <circle cx="32" cy="32" r="20" fill="#FFFFFF"/>
-  <circle cx="32" cy="32" r="10" fill="#FF69B4"/>
-  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">osu!</text>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="128" cy="128" r="120" fill="#FF69B4"/>
+  <circle cx="128" cy="128" r="80" fill="#FFFFFF"/>
+  <circle cx="128" cy="128" r="40" fill="#FF69B4"/>
 </svg>
 EOF
 
+# Compatibilidade: manter cópia no local antigo
+cp ~/.local/share/icons/hicolor/scalable/apps/cursor.svg ~/.local/share/icons/cursor.svg 2>/dev/null || true
+cp ~/.local/share/icons/hicolor/scalable/apps/osu.svg ~/.local/share/icons/osu.svg 2>/dev/null || true
 
-# Atualizar base de dados desktop
+# Atualizar base de dados desktop e cache de ícones
 update-desktop-database ~/.local/share/applications 2>/dev/null || true
+gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 echo "✓ Ícones criados e base de dados atualizada"
 
 echo ""
