@@ -288,7 +288,8 @@ optimize_gaming() {
             else
                 echo "   Habilitando Vulkan..."
                 # shellcheck disable=SC1091
-                source /etc/os-release
+    # shellcheck source=/dev/null
+    source /etc/os-release
                 # Se for Debian 13 ou superior (ou Ubuntu muito recente), usa o novo pacote
                 if [[ "$ID" == "debian" && "${VERSION_ID%%.*}" -ge 13 ]] || [[ "$ID" == "ubuntu" && "${VERSION_ID%%.*}" -ge 24 ]]; then
                     VULKAN_PKG="vulkan-utility-libraries-dev"
@@ -862,7 +863,7 @@ if [ "$cursor_found" = false ]; then
     fi
     if [ -n "$CURSOR_APPIMAGE" ]; then
         echo "✓ Cursor AppImage encontrado. Extraindo e configurando..."
-        cd "$HOME/Applications"
+        cd "$HOME/Applications" || exit 1
         "$CURSOR_APPIMAGE" --appimage-extract > /dev/null 2>&1
         if [ -d squashfs-root ]; then
             rm -f "$CURSOR_APPIMAGE"
@@ -872,7 +873,7 @@ if [ "$cursor_found" = false ]; then
             echo "✓ Cursor extraído e configurado em ~/Applications/cursor/"
             cursor_found=true
         fi
-        cd "$OLDPWD"
+        cd "$OLDPWD" || true
     fi
 fi
 
@@ -1755,7 +1756,7 @@ if [ -d "$HOME/osint-tools/sherlock" ]; then
 else
     echo "   Clonando repositório do Sherlock..."
     git clone https://github.com/sherlock-project/sherlock.git "$HOME/osint-tools/sherlock"
-    cd "$HOME/osint-tools/sherlock"
+    cd "$HOME/osint-tools/sherlock" || exit 1
     python3 -m venv venv
     # shellcheck source=/dev/null
     source venv/bin/activate
@@ -1771,7 +1772,7 @@ EOF
     chmod +x "$HOME/osint-tools/sherlock/sherlock-run.sh"
     echo "✓ Sherlock instalado com sucesso"
     echo "   Para usar: ~/osint-tools/sherlock/sherlock-run.sh <username>"
-    cd - > /dev/null
+    cd - > /dev/null || true
     check_success "Sherlock"
 fi
 
@@ -1782,7 +1783,7 @@ if [ -d "$HOME/osint-tools/theHarvester" ]; then
 else
     echo "   Clonando repositório do theHarvester..."
     git clone https://github.com/laramies/theHarvester.git "$HOME/osint-tools/theHarvester"
-    cd "$HOME/osint-tools/theHarvester"
+    cd "$HOME/osint-tools/theHarvester" || exit 1
     python3 -m venv venv
     # shellcheck source=/dev/null
     source venv/bin/activate
@@ -1798,7 +1799,7 @@ EOF
     chmod +x "$HOME/osint-tools/theHarvester/theharvester-run.sh"
     echo "✓ theHarvester instalado com sucesso"
     echo "   Para usar: ~/osint-tools/theHarvester/theharvester-run.sh"
-    cd - > /dev/null
+    cd - > /dev/null || true
     check_success "theHarvester"
 fi
 
@@ -1809,7 +1810,7 @@ if command -v recon-ng &> /dev/null || [ -d "$HOME/osint-tools/recon-ng" ]; then
 else
     echo "   Clonando repositório do Recon-ng..."
     git clone https://github.com/lanmaster53/recon-ng.git "$HOME/osint-tools/recon-ng"
-    cd "$HOME/osint-tools/recon-ng"
+    cd "$HOME/osint-tools/recon-ng" || exit 1
     python3 -m venv venv
     # shellcheck source=/dev/null
     source venv/bin/activate
@@ -1825,7 +1826,7 @@ EOF
     chmod +x "$HOME/osint-tools/recon-ng/recon-ng-run.sh"
     echo "✓ Recon-ng instalado com sucesso"
     echo "   Para usar: ~/osint-tools/recon-ng/recon-ng-run.sh"
-    cd - > /dev/null
+    cd - > /dev/null || true
     check_success "Recon-ng"
 fi
 
@@ -1843,7 +1844,7 @@ else
     echo "   Clonando repositório do SpiderFoot..."
     mkdir -p "$HOME/osint-tools"
     git clone https://github.com/smicallef/spiderfoot.git "$HOME/osint-tools/spiderfoot"
-    cd "$HOME/osint-tools/spiderfoot"
+    cd "$HOME/osint-tools/spiderfoot" || exit 1
     
     echo "   Criando ambiente virtual..."
     python3 -m venv venv
@@ -1884,7 +1885,7 @@ EOF
         rm -rf "$HOME/osint-tools/spiderfoot"
         echo "   Nota: Python $PYTHON_VERSION pode não ser compatível com SpiderFoot"
     fi
-    cd - > /dev/null
+    cd - > /dev/null || true
 fi
 
 # GHunt (Google Account OSINT)
@@ -1912,7 +1913,7 @@ if command -v phoneinfoga &> /dev/null || [ -f "$HOME/osint-tools/phoneinfoga/ph
 else
     echo "   Baixando PhoneInfoga..."
     mkdir -p "$HOME/osint-tools/phoneinfoga"
-    cd "$HOME/osint-tools/phoneinfoga"
+    cd "$HOME/osint-tools/phoneinfoga" || exit 1
     
     # Detectar arquitetura
     ARCH=$(uname -m)
@@ -1927,7 +1928,7 @@ else
     rm phoneinfoga.tar.gz
     echo "✓ PhoneInfoga instalado com sucesso"
     echo "   Para usar: ~/osint-tools/phoneinfoga/phoneinfoga"
-    cd - > /dev/null
+    cd - > /dev/null || true
     check_success "PhoneInfoga"
 fi
 
