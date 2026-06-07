@@ -580,7 +580,6 @@ else
         echo "   Você pode instalar manualmente de: https://anydesk.com/"
     fi
 fi
-fi
 
 # Spotify (via Flatpak)
 echo "Instalando Spotify via Flatpak..."
