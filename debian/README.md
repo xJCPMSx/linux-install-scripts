@@ -1,7 +1,7 @@
 # Script de Instalação Automática - Debian/Ubuntu
 
 [![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-26.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
@@ -17,9 +17,9 @@ Script automatizado para instalação de programas essenciais em sistemas basead
 ## ✅ Distribuições Suportadas
 
 - **Debian:** 11 (Bullseye), 12 (Bookworm), 13 (Trixie)
-- **Ubuntu:** 20.04+, 22.04+, 24.04+
+- **Ubuntu:** 24.04+, 26.04+
 - **Linux Mint:** 20+
-- **Pop!_OS:** 20.04+
+- **Pop!_OS:** 24.04+
 - **Elementary OS:** 6+
 - **Zorin OS:** 16+
 - **Kali Linux:** Rolling
@@ -111,7 +111,7 @@ chmod +x install-programs-debian.sh
 
 ## 📋 Pré-requisitos
 
-- **Sistema:** Debian 11+, Ubuntu 20.04+, Linux Mint 20+, Pop!_OS 20.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
+- **Sistema:** Debian 11+, Ubuntu 24.04+, Linux Mint 20+, Pop!_OS 24.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
 - **Permissões:** Acesso sudo
 - **Conexão:** Internet estável
 - **Espaço:** ~3GB para instalação completa
@@ -123,7 +123,7 @@ chmod +x install-programs-debian.sh
 - ✅ **Suporte completo ao Debian 13 (Trixie)** com correções de GPG e repositórios
 - ✅ **Instalação seletiva** - apenas programas não instalados
 - ✅ **Fallback robusto** - múltiplas fontes (repositórios, Flatpak, Snap, AppImage, .deb)
-- ✅ **Retrocompatibilidade** - mantém suporte a Debian 11, Ubuntu 20.04+
+- ✅ **Retrocompatibilidade** - mantém suporte a Debian 11, Ubuntu 24.04+
 - ✅ **Limpeza automática** de conflitos de repositórios
 - ✅ **Mensagens informativas** durante todo o processo
 
@@ -557,7 +557,7 @@ cd ..
 
 - ✅ **Instalação inteligente** - Detecta programas já instalados
 - ✅ **Múltiplas tentativas** - Tenta diferentes métodos de instalação
-- ✅ **Retrocompatibilidade** - Suporte a Debian 11, Ubuntu 20.04+
+- ✅ **Retrocompatibilidade** - Suporte a Debian 11, Ubuntu 24.04+
 - ✅ **Suporte Debian 13 (Trixie)** - Correções completas de repositórios e GPG
 - ✅ **Fastfetch** como padrão (Neofetch fallback em sistemas antigos)
 - ✅ **FreeRDP 3** - Compatibilidade com Debian 13

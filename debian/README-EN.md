@@ -1,7 +1,7 @@
 # Automatic Installation Script - Debian/Ubuntu
 
 [![Debian](https://img.shields.io/badge/Debian-11%2B-13%2B-A80030?style=flat&logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-26.04%2B-E95420?style=flat&logo=ubuntu)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.1--stable-green.svg)](https://github.com/xJCPMSx/linux-install-scripts)
 
@@ -17,9 +17,9 @@ Automated script for installing essential programs on Debian/Ubuntu-based system
 ## ✅ Supported Distributions
 
 - **Debian:** 11 (Bullseye), 12 (Bookworm), 13 (Trixie)
-- **Ubuntu:** 20.04+, 22.04+, 24.04+
+- **Ubuntu:** 24.04+, 26.04+
 - **Linux Mint:** 20+
-- **Pop!_OS:** 20.04+
+- **Pop!_OS:** 24.04+
 - **Elementary OS:** 6+
 - **Zorin OS:** 16+
 - **Kali Linux:** Rolling
@@ -111,7 +111,7 @@ chmod +x install-programs-debian.sh
 
 ## 📋 Prerequisites
 
-- **System:** Debian 11+, Ubuntu 20.04+, Linux Mint 20+, Pop!_OS 20.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
+- **System:** Debian 11+, Ubuntu 24.04+, Linux Mint 20+, Pop!_OS 24.04+, Elementary OS 6+, Zorin OS 16+, Kali Linux Rolling
 - **Permissions:** sudo access
 - **Connection:** Stable internet
 - **Space:** ~3GB for complete installation
@@ -123,7 +123,7 @@ chmod +x install-programs-debian.sh
 - ✅ **Full Debian 13 (Trixie) support** with GPG and repository fixes
 - ✅ **Selective installation** - only non-installed programs
 - ✅ **Robust fallback** - multiple sources (repositories, Flatpak, Snap, AppImage, .deb)
-- ✅ **Backward compatibility** - maintains support for Debian 11, Ubuntu 20.04+
+- ✅ **Backward compatibility** - maintains support for Debian 11, Ubuntu 24.04+
 - ✅ **Automatic cleanup** of repository conflicts
 - ✅ **Informative messages** throughout the process
 
@@ -557,7 +557,7 @@ cd ..
 
 - ✅ **Smart installation** - Detects already installed programs
 - ✅ **Multiple attempts** - Tries different installation methods
-- ✅ **Backward compatibility** - Support for Debian 11, Ubuntu 20.04+
+- ✅ **Backward compatibility** - Support for Debian 11, Ubuntu 24.04+
 - ✅ **Debian 13 (Trixie) support** - Complete repository and GPG fixes
 - ✅ **Fastfetch** as default (Neofetch fallback on older systems)
 - ✅ **FreeRDP 3** - Debian 13 compatibility

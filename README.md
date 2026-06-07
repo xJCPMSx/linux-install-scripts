@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/Version-1.1--stable-green.svg" alt="Version">
   <img src="https://img.shields.io/badge/Linux-Supported-brightgreen.svg" alt="Linux">
   <img src="https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-A80030?logo=debian" alt="Debian">
-  <img src="https://img.shields.io/badge/Ubuntu-20.04%2B-E95420?logo=ubuntu" alt="Ubuntu">
+  <img src="https://img.shields.io/badge/Ubuntu-26.04%2B-E95420?logo=ubuntu" alt="Ubuntu">
   <img src="https://img.shields.io/badge/openSUSE-Supported-35B44A?logo=opensuse" alt="openSUSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </p>
@@ -28,9 +28,9 @@ Coleção de scripts automatizados para instalação de programas essenciais em 
 
 ### **Debian/Ubuntu**
 - ✅ **Debian 11+** (Bullseye, Bookworm, Trixie)
-- ✅ **Ubuntu 20.04+** (LTS e não-LTS)
+- ✅ **Ubuntu 26.04+** (LTS e não-LTS)
 - ✅ **Linux Mint 20+**
-- ✅ **Pop!_OS 20.04+**
+- ✅ **Pop!_OS 24.04+**
 - ✅ **Elementary OS 6+**
 - ✅ **Zorin OS 16+**
 - ✅ **Kali Linux Rolling**
@@ -229,9 +229,8 @@ O script detecta automaticamente o sistema operacional e instala a ferramenta de
 | Sistema | Ferramenta |
 |---------|------------|
 | **Debian 13+** | Fastfetch |
-| **Ubuntu 24.04+** | Fastfetch |
+| **Ubuntu 26.04+** | Fastfetch |
 | **Debian 11/12** | Neofetch (fallback) |
-| **Ubuntu 20.04/22.04** | Neofetch (fallback) |
 | **openSUSE** | Fastfetch |
 
 **Lógica implementada:**
@@ -249,7 +248,7 @@ fi
 ## 📝 Notas Importantes
 
 - ✅ Scripts testados e funcionais (v1.1-stable)
-- ✅ Retrocompatibilidade com Debian 11, Ubuntu 20.04+
+- ✅ Retrocompatibilidade com Debian 11, Ubuntu 24.04+
 - ✅ Suporte completo ao Debian 13 (Trixie)
 - ✅ Ferramentas de IA: Cursor, Antigravity, Claude Code
 - ✅ Fallback inteligente para Fastfetch/Neofetch
